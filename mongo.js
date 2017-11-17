@@ -1,11 +1,11 @@
 const MongoClient = require('mongodb').MongoClient;
-const MONGO_URL = "mongodb://localhost:27017/koala_db";
+const MONGO_URL = "mongodb://localhost:27017/hodl";
 
 
 module.exports = function (app) {
   MongoClient.connect(MONGO_URL)
       .then((connection) => {
-        app.people = connection.collection("people");
+        app.user = connection.collection("user");
         console.log("Database connection established")
       })
       .catch((err) => console.error(err))
