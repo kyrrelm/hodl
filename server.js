@@ -13,7 +13,7 @@ app.use(BodyParser());
 require("./mongo")(app);
 
 router.get("/", async function (ctx) {
-  ctx.body = {message: `Hello World!`}
+  ctx.body = {message: `Hello World! ${process.env.MONGODB_URI}`}
 });
 
 router.post("/", async function (ctx) {
