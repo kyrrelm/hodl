@@ -2,7 +2,8 @@ const Koa = require("koa");
 const Router = require("koa-router");
 const BodyParser = require("koa-bodyparser");
 const logger = require('koa-logger');
-const jwt = require("./jwt");
+const secure = require("./middleware/secure.js");
+const error = require("./middleware/error.js");
 const authResource = require('./resource/authResource.js');
 const userResource = require('./resource/userResource.js');
 
@@ -14,10 +15,15 @@ app.use(BodyParser());
 require("./mongo")(app);
 
 const router = new Router();
-const secureRouter = new Router();
-secureRouter.use(jwt.errorHandler());
 
-secureRouter.use(jwt.jwt());
+router.use(error.errorHandler());
+router.use(secure.apiKey());
+
+const secureRouter = new Router();
+
+secureRouter.use(error.errorHandler());
+secureRouter.use(secure.apiKey());
+secureRouter.use(secure.jwt());
 
 authResource.register(router);
 userResource.register(secureRouter);

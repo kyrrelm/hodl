@@ -1,4 +1,4 @@
-const jwt = require("../jwt");
+const secure = require('../middleware/secure.js');
 
 const path = '/auth';
 
@@ -10,7 +10,7 @@ module.exports.register =  (router) => {
 
     if (username === "user" && password === "pwd") {
       ctx.body = {
-        token: jwt.issue({
+        token: secure.issueJwt({
           user: "user",
           role: "admin"
         })
