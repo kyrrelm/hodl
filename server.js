@@ -3,9 +3,15 @@ const Router = require("koa-router");
 const BodyParser = require("koa-bodyparser");
 const logger = require('koa-logger');
 const ObjectID = require("mongodb").ObjectID;
+const jwt = require("./jwt");
 
 const app = new Koa();
+
 const router = new Router();
+
+const secureRouter = new Router();
+secureRouter.use(jwt.errorHandler());
+secureRouter.use(jwt.jwt());
 
 app.use(logger());
 app.use(BodyParser());
@@ -21,33 +27,34 @@ router.post("/", async function (ctx) {
   ctx.body = {message: `Hello ${name}!`}
 });
 
-router.get("/user", async function (ctx) {
+secureRouter.get("/user", async function (ctx) {
   ctx.body = await ctx.app.user.find().toArray();
 });
 
-router.get("/user/:id", async (ctx) => {
+secureRouter.get("/user/:id", async (ctx) => {
   ctx.body = await ctx.app.user.findOne({"_id": ObjectID(ctx.params.id)});
 });
 
-router.post("/user", async function (ctx) {
+secureRouter.post("/user", async function (ctx) {
   ctx.body = await ctx.app.user.insert(ctx.request.body);
 });
 
-router.put("/user/:id", async (ctx) => {
+secureRouter.put("/user/:id", async (ctx) => {
   let documentQuery = {"_id": ObjectID(ctx.params.id)}; // Used to find the document
   let valuesToUpdate = ctx.request.body;
   ctx.body = await ctx.app.user.updateOne(documentQuery, valuesToUpdate);
 });
 
-router.delete("/user/:id", async (ctx) => {
+secureRouter.delete("/user/:id", async (ctx) => {
   let documentQuery = {"_id": ObjectID(ctx.params.id)}; // Used to find the document
   ctx.body = await ctx.app.user.deleteOne(documentQuery);
 });
 
-router.get("/_ah/health", async function (ctx) {
+secureRouter.get("/_ah/health", async function (ctx) {
   ctx.body = {message: `Im good :)`}
 });
 
 app.use(router.routes()).use(router.allowedMethods());
+app.use(secureRouter.routes()).use(secureRouter.allowedMethods());
 
 app.listen(process.env.PORT || 8080);
