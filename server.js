@@ -22,8 +22,8 @@ router.use(secure.apiKey());
 const secureRouter = new Router();
 
 secureRouter.use(error.errorHandler());
-secureRouter.use(secure.apiKey());
-secureRouter.use(secure.jwt());
+//secureRouter.use(secure.apiKey());
+//secureRouter.use(secure.jwt());
 
 authResource.register(router);
 userResource.register(secureRouter);
