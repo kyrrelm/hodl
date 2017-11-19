@@ -7,6 +7,8 @@ const secure = require("./middleware/secure.js");
 const error = require("./middleware/error.js");
 const authResource = require('./resource/authResource.js');
 const userResource = require('./resource/userResource.js');
+const DISABLE_API_KEY = process.env.API_KEY || 'true';
+const DISABLE_JWT = process.env.API_KEY || 'true';
 
 const app = new Koa();
 
@@ -17,15 +19,18 @@ app.use(koaValidator());
 require("./mongo")(app);
 
 const router = new Router();
-
-router.use(error.errorHandler());
-router.use(secure.apiKey());
-
 const secureRouter = new Router();
 
+router.use(error.errorHandler());
 secureRouter.use(error.errorHandler());
-//secureRouter.use(secure.apiKey());
-//secureRouter.use(secure.jwt());
+
+if (DISABLE_API_KEY !== 'true') {
+  router.use(secure.apiKey());
+  secureRouter.use(secure.apiKey());
+}
+if (DISABLE_JWT !== 'true') {
+  secureRouter.use(secure.jwt());
+}
 
 authResource.register(router);
 userResource.register(secureRouter);
