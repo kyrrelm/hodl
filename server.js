@@ -7,8 +7,8 @@ const secure = require("./middleware/secure.js");
 const error = require("./middleware/error.js");
 const authResource = require('./resource/authResource.js');
 const userResource = require('./resource/userResource.js');
-const DISABLE_API_KEY = process.env.API_KEY || 'true';
-const DISABLE_JWT = process.env.API_KEY || 'true';
+const DISABLE_API_KEY = process.env.DISABLE_API_KEY || 'true';
+const DISABLE_JWT = process.env.DISABLE_JWT || 'true';
 
 const app = new Koa();
 
