@@ -6,7 +6,7 @@ module.exports.register =  (router) => {
 
   router.post(`${path}/register`, async (ctx) => {
 
-    validateUser(ctx);
+    await validateUser(ctx);
 
     let email = ctx.request.body.email;
     let password = ctx.request.body.password;
@@ -29,7 +29,7 @@ module.exports.register =  (router) => {
 
   router.post(path, async (ctx) => {
 
-    validateUser(ctx);
+    await validateUser(ctx);
 
     let email = ctx.request.body.email;
     let password = ctx.request.body.password;
