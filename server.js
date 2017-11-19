@@ -24,6 +24,9 @@ const secureRouter = new Router();
 router.use(error.errorHandler());
 secureRouter.use(error.errorHandler());
 
+console.log('DISABLE_API_KEY', DISABLE_API_KEY);
+console.log('DISABLE_JWT', DISABLE_JWT);
+
 if (DISABLE_API_KEY !== 'true') {
   router.use(secure.apiKey());
   secureRouter.use(secure.apiKey());
