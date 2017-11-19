@@ -1,7 +1,8 @@
 const Koa = require("koa");
 const Router = require("koa-router");
-const BodyParser = require("koa-bodyparser");
+const bodyParser = require("koa-bodyparser");
 const logger = require('koa-logger');
+const koaValidator = require('koa-async-validator');
 const secure = require("./middleware/secure.js");
 const error = require("./middleware/error.js");
 const authResource = require('./resource/authResource.js');
@@ -10,7 +11,8 @@ const userResource = require('./resource/userResource.js');
 const app = new Koa();
 
 app.use(logger());
-app.use(BodyParser());
+app.use(bodyParser());
+app.use(koaValidator());
 
 require("./mongo")(app);
 
