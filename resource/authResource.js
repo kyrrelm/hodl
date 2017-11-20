@@ -1,5 +1,6 @@
-const secure = require('../middleware/secure.js');
 const bcrypt = require('bcrypt');
+const secure = require('../middleware/secure.js');
+const validate = require('../utils.js').validate;
 
 const path = '/auth';
 
@@ -24,7 +25,7 @@ module.exports.register =  (router) => {
 
     ctx.body = {
       token: secure.issueJwt({
-        email,
+        _id: user._id,
         role: "user"
       })
     }
@@ -37,7 +38,7 @@ module.exports.register =  (router) => {
     let email = ctx.request.body.email;
     let password = ctx.request.body.password;
 
-    const user = await ctx.app.user.findOne({ email }, {email: true, hash: true});
+    const user = await ctx.app.user.findOne({ email }, {_id: true, email: true, hash: true});
 
     if(!user) {
       ctx.throw(409, 'Incorrect email or password');
@@ -50,7 +51,7 @@ module.exports.register =  (router) => {
 
     ctx.body = {
       token: secure.issueJwt({
-        email: user.email,
+        _id: user._id,
         role: "user"
       })
     }
@@ -60,7 +61,7 @@ module.exports.register =  (router) => {
 
 const validateUser = async (ctx) => {
 
-  validateFields(ctx, { email: 'string', password: 'string' });
+  validate(ctx, { email: 'string', password: 'string' }, false);
 
   ctx.sanitize('email').trim();
   ctx.sanitize('email').escape();
@@ -72,17 +73,4 @@ const validateUser = async (ctx) => {
   if (errors) {
     ctx.throw(400, 'Invalid email');
   }
-};
-
-
-const validateFields = (ctx, fields) => {
-  for (const key of Object.keys(fields)) {
-    console.log(key, fields[key]);
-    const value = ctx.request.body[key];
-    if(!value) {
-      ctx.throw(400, `field ${key} of type ${fields[key]} missing`);
-    }
-
-  }
-
 };

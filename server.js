@@ -7,8 +7,9 @@ const secure = require("./middleware/secure.js");
 const error = require("./middleware/error.js");
 const authResource = require('./resource/authResource.js');
 const userResource = require('./resource/userResource.js');
+const portfolioResource = require('./resource/portfolioResource.js');
 const DISABLE_API_KEY = process.env.DISABLE_API_KEY || 'true';
-const DISABLE_JWT = process.env.DISABLE_JWT || 'true';
+const DISABLE_JWT = process.env.DISABLE_JWT || 'false';
 
 const app = new Koa();
 
@@ -16,7 +17,7 @@ app.use(logger());
 app.use(bodyParser());
 app.use(koaValidator());
 
-require("./mongo")(app);
+require('./mongo')(app);
 
 const router = new Router();
 const secureRouter = new Router();
@@ -34,6 +35,7 @@ if (DISABLE_JWT !== 'true') {
 
 authResource.register(router);
 userResource.register(secureRouter);
+portfolioResource.register(secureRouter);
 
 router.get("/", async function (ctx) {
   ctx.body = {message: `Endepunkter på /auth og /user`}

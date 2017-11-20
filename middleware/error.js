@@ -5,7 +5,12 @@ module.exports.errorHandler = () => (ctx, next) => {
     if (err.status === 401) {
       ctx.status = 401;
       ctx.body = {
-        error: err.message || 'Not authorized'
+        error: err.message || 'Unauthorized'
+      };
+    } else if (err.status === 403) {
+      ctx.status = 403;
+      ctx.body = {
+        error: err.message || 'Forbidden'
       };
     } else if (err.status === 409) {
       ctx.status = 409;
