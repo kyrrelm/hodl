@@ -1,4 +1,5 @@
 const secure = require('../middleware/secure.js');
+const bcrypt = require('bcrypt');
 
 const path = '/auth';
 
@@ -17,7 +18,9 @@ module.exports.register =  (router) => {
       ctx.throw(409, 'Email already in use');
     }
 
-    await ctx.app.user.insert({email, password});
+    await bcrypt.hash(password, 10, function(err, hash) {
+      ctx.app.user.insert({email, hash});
+    });
 
     ctx.body = {
       token: secure.issueJwt({
@@ -34,10 +37,15 @@ module.exports.register =  (router) => {
     let email = ctx.request.body.email;
     let password = ctx.request.body.password;
 
-    const user = await ctx.app.user.findOne({ email, password }, {email});
+    const user = await ctx.app.user.findOne({ email }, {email: true, hash: true});
 
     if(!user) {
       ctx.throw(409, 'Incorrect email or password');
+    }
+    const passwordIsCorrect = bcrypt.compareSync(password, user.hash);
+
+    if(!passwordIsCorrect) {
+      return ctx.throw(409, 'Incorrect email or password2');
     }
 
     ctx.body = {

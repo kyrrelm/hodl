@@ -4,6 +4,7 @@
   "main": "server.js",
   "license": "MIT",
   "dependencies": {
+    "bcrypt": "^1.0.3",
     "jsonwebtoken": "^8.1.0",
     "koa": "^2.4.1",
     "koa-async-validator": "^0.1.2",
