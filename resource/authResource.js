@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const ObjectID = require('mongodb').ObjectID;
 const secure = require('../middleware/secure.js');
 const validate = require('../utils.js').validate;
 
@@ -19,13 +20,13 @@ module.exports.register =  (router) => {
       ctx.throw(409, 'Email already in use');
     }
 
-    await bcrypt.hash(password, 10, function(err, hash) {
-      ctx.app.user.insert({email, hash});
-    });
+    const hash = bcrypt.hashSync(password, 10);
+    const _id = new ObjectID();
+    await ctx.app.user.insert({_id, email, hash});
 
     ctx.body = {
       token: secure.issueJwt({
-        _id: user._id,
+        _id: _id.toString(),
         role: "user"
       })
     }
@@ -51,7 +52,7 @@ module.exports.register =  (router) => {
 
     ctx.body = {
       token: secure.issueJwt({
-        _id: user._id,
+        _id: user._id.toString(),
         role: "user"
       })
     }
@@ -61,7 +62,7 @@ module.exports.register =  (router) => {
 
 const validateUser = async (ctx) => {
 
-  validate(ctx, { email: 'string', password: 'string' }, false);
+  validate(ctx, { email: 'string', password: 'string' });
 
   ctx.sanitize('email').trim();
   ctx.sanitize('email').escape();

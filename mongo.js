@@ -6,6 +6,7 @@ module.exports = function (app) {
   MongoClient.connect(MONGO_URL)
       .then((connection) => {
         app.user = connection.collection("user");
+        app.portfolio = connection.collection("portfolio");
         console.log("Database connection established")
       })
       .catch((err) => console.error(err))

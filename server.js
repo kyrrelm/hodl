@@ -17,7 +17,7 @@ app.use(logger());
 app.use(bodyParser());
 app.use(koaValidator());
 
-require('./mongo')(app);
+require('./mongo.js')(app);
 
 const router = new Router();
 const secureRouter = new Router();

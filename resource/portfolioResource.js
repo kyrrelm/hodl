@@ -6,12 +6,14 @@ const path = '/portfolio';
 
 module.exports.register =  (router) => {
 
-  router.get(`${path}/:userId`, async (ctx) => {
-    ctx.body = await ctx.app.user.findOne({'_id': ObjectID(ctx.params.id)});
+  router.get(path, async (ctx) => {
+    ctx.body = await ctx.app.portfolio.find({ 'userId': ctx.state.user._id }).toArray();
   });
 
   router.post(path, async function (ctx) {
-    ctx.body = await ctx.app.user.insert(ctx.request.body);
+    //validate(ctx, ctx.request.body.userId);
+    const result = await ctx.app.portfolio.insert(ctx.request.body);
+    ctx.body = result.ops;
   });
 
   // router.put(`${path}/:id`, async (ctx) => {
