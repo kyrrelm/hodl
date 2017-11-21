@@ -1,4 +1,4 @@
-const ObjectID = require('mongodb').ObjectID;
+const fetch = require('node-fetch');
 const validate = require('../utils.js').validate;
 
 
@@ -7,7 +7,31 @@ const path = '/portfolio';
 module.exports.register =  (router) => {
 
   router.get(path, async (ctx) => {
-    ctx.body = await ctx.app.portfolio.find().toArray();
+    const portfolio = await ctx.app.portfolio.find().toArray();
+    const allCurrencies = [...new Set(portfolio.map(entry => entry.symbol))];
+
+    if(allCurrencies.length === 0) {
+      ctx.body = [];
+      return;
+    }
+
+    const currenciesString = allCurrencies.reduce((out, symbol) => `${out},${symbol}`);
+
+    const rates = await fetch(`https://min-api.cryptocompare.com/data/pricemulti?fsyms=${currenciesString}&tsyms=BTC,ETH,USD,EUR`)
+        .then(res => res.json())
+        .catch(err => console.log(err));
+
+    allCurrencies.forEach(currency => {
+      rates[currency].total = portfolio
+          .filter(entry => entry.symbol === currency)
+          .map(entry => entry.amount)
+          .reduce((tot, value) => tot + value);
+    });
+
+    ctx.body = {
+      holdings: rates,
+      portfolio,
+    };
   });
 
   router.post(path, async function (ctx) {
