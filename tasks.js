@@ -12,7 +12,6 @@ const updateCurrencies = (app) => {
       .then(json => {
         const currencies = Object
             .values(json.Data)
-            .filter(currency => parseInt(currency.SortOrder) <= 2)
             .map(currency =>
             {
               return {
