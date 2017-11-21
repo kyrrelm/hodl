@@ -3,7 +3,8 @@ const path = '/currency';
 module.exports.register =  (router) => {
 
   router.get(path, async (ctx) => {
-    ctx.body = await ctx.app.currency.find().toArray();
+    const currency = await ctx.app.currency.findOne();
+    ctx.body = currency.currencies;
   });
 
 };
