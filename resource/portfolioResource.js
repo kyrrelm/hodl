@@ -12,13 +12,19 @@ module.exports.register =  (router) => {
 
   router.post(path, async function (ctx) {
     ctx.request.body.userId = ctx.state.user._id;
-    validate(ctx, {code: 'string', amount: 'string'});
+    validate(ctx, {symbol: 'string', amount: 'string'});
 
     const userId = ctx.request.body.userId;
-    const code = ctx.request.body.code;
+    const symbol = ctx.request.body.symbol;
     const amount = ctx.request.body.amount;
 
-    await ctx.app.portfolio.insert({userId, code, amount});
+    const currencyExists = await ctx.app.currency.find({ currencies: { $elemMatch: { symbol }}}).limit(1).hasNext();
+
+    if (!currencyExists) {
+      ctx.throw(400, "Unsupported currency");
+    }
+
+    await ctx.app.portfolio.insert({userId, symbol, amount});
 
     ctx.body = true;
   });                                           
