@@ -1,16 +1,25 @@
 const fetch = require('node-fetch');
 
-module.exports.currencies = () => {
-  updateCurrencies();
+module.exports.currencies = (app) => {
+  updateCurrencies(app);
 
 };
 
-const updateCurrencies = () => {
+const updateCurrencies = (app) => {
   console.log("Updating currencies");
-  fetch('https://api.github.com/users/github')
-      .then(function(res) {
-        return res.json();
-      }).then(function(json) {
-    console.log(json);
-  });
+  fetch('https://www.cryptocompare.com/api/data/coinlist/')
+      .then(res => res.json())
+      .then(json => {
+        const currencies = Object
+            .values(json.Data)
+            .filter(currency => parseInt(currency.SortOrder) <= 10)
+            .map(currency =>
+            {
+              return {
+                symbol: currency.Symbol,
+                name: currency.CoinName,
+              }
+            });
+        app.currency.update({}, {$addToSet: {currencies: {$each: currencies}}}, {upsert: true});
+      }).catch(err => console.log(err));
 };

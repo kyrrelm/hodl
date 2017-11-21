@@ -9,18 +9,21 @@ const authResource = require('./resource/authResource.js');
 const userResource = require('./resource/userResource.js');
 const portfolioResource = require('./resource/portfolioResource.js');
 const tasks = require('./tasks.js');
+const mongo = require('./mongo.js');
 const DISABLE_API_KEY = process.env.DISABLE_API_KEY || 'true';
+
 const DISABLE_JWT = process.env.DISABLE_JWT || 'false';
 
 const app = new Koa();
-
 app.use(logger());
 app.use(bodyParser());
+
 app.use(koaValidator());
 
-require('./mongo.js')(app);
-
-tasks.currencies();
+mongo.connect(app)
+    .then(() =>
+        tasks.currencies(app)
+    );
 
 const router = new Router();
 const secureRouter = new Router();
