@@ -12,7 +12,7 @@ const updateCurrencies = (app) => {
       .then(json => {
         const currencies = Object
             .values(json.Data)
-            .filter(currency => parseInt(currency.SortOrder) <= 10)
+            .filter(currency => parseInt(currency.SortOrder) <= 100)
             .map(currency =>
             {
               return {

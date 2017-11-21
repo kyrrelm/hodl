@@ -8,6 +8,7 @@ const error = require("./middleware/error.js");
 const authResource = require('./resource/authResource.js');
 const userResource = require('./resource/userResource.js');
 const portfolioResource = require('./resource/portfolioResource.js');
+const currencyResource = require('./resource/currencyResource.js');
 const tasks = require('./tasks.js');
 const mongo = require('./mongo.js');
 const DISABLE_API_KEY = process.env.DISABLE_API_KEY || 'true';
@@ -42,6 +43,7 @@ if (DISABLE_JWT !== 'true') {
 authResource.register(router);
 userResource.register(secureRouter);
 portfolioResource.register(secureRouter);
+currencyResource.register(secureRouter);
 
 router.get("/", async function (ctx) {
   ctx.body = {message: `Endepunkter på /auth og /user`}
