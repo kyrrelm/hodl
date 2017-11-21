@@ -8,6 +8,7 @@ const error = require("./middleware/error.js");
 const authResource = require('./resource/authResource.js');
 const userResource = require('./resource/userResource.js');
 const portfolioResource = require('./resource/portfolioResource.js');
+const tasks = require('./tasks.js');
 const DISABLE_API_KEY = process.env.DISABLE_API_KEY || 'true';
 const DISABLE_JWT = process.env.DISABLE_JWT || 'false';
 
@@ -18,6 +19,8 @@ app.use(bodyParser());
 app.use(koaValidator());
 
 require('./mongo.js')(app);
+
+tasks.currencies();
 
 const router = new Router();
 const secureRouter = new Router();
