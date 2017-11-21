@@ -7,7 +7,7 @@ const path = '/portfolio';
 module.exports.register =  (router) => {
 
   router.get(path, async (ctx) => {
-    const allEntries = await ctx.app.portfolio.find().toArray();
+    ctx.body = await ctx.app.portfolio.find().toArray();
   });
 
   router.post(path, async function (ctx) {
