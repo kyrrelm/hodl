@@ -12,6 +12,9 @@ module.exports.validate = (ctx, fields, userId) => {
       if(!value) {
         ctx.throw(400, `field ${key} of type ${fields[key]} missing`);
       }
+      if(typeof ctx.request.body[key] !== fields[key]) {
+        ctx.throw(400, `field ${key} must be of type ${fields[key]}`);
+      }
 
     }
   }

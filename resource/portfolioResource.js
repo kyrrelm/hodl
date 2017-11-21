@@ -12,7 +12,7 @@ module.exports.register =  (router) => {
 
   router.post(path, async function (ctx) {
     ctx.request.body.userId = ctx.state.user._id;
-    validate(ctx, {symbol: 'string', amount: 'string'});
+    validate(ctx, {symbol: 'string', amount: 'number'});
 
     const userId = ctx.request.body.userId;
     const symbol = ctx.request.body.symbol;
