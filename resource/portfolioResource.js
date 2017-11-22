@@ -41,24 +41,35 @@ module.exports.register =  (router) => {
 
   router.get(path, async (ctx) => {
     const portfolio = await ctx.app.portfolio.find().toArray();
-    const allCurrencies = [...new Set(portfolio.map(entry => entry.symbol))];
 
-    if(allCurrencies.length === 0) {
+    if(portfolio.length === 0) {
       ctx.body = [];
       return;
     }
 
-    const currenciesString = allCurrencies.reduce((out, symbol) => `${out},${symbol}`);
+    const allCurrencies = [...new Set(portfolio.map(entry => entry.symbol))];
+
+    const balanceOverview = {};
+
+    //Add currencies to balanceOverview with balance !== 0
+    allCurrencies.forEach(currency => {
+      const balance = portfolio
+          .filter(entry => entry.symbol === currency)
+          .map(entry => entry.amount)
+          .reduce((tot, value) => tot + value);
+      if (balance !== 0) {
+        balanceOverview[currency] = { balance };
+      }
+    });
+
+    const currenciesString = Object.keys(balanceOverview).reduce((out, symbol) => `${out},${symbol}`);
 
     const rates = await fetch(`https://min-api.cryptocompare.com/data/pricemulti?fsyms=${currenciesString}&tsyms=BTC,ETH,USD,EUR`)
         .then(res => res.json())
         .catch(err => console.log(err));
 
-    allCurrencies.forEach(currency => {
-      rates[currency].balance = portfolio
-          .filter(entry => entry.symbol === currency)
-          .map(entry => entry.amount)
-          .reduce((tot, value) => tot + value);
+    Object.keys(balanceOverview).forEach(symbol => {
+      rates[symbol].balance = balanceOverview[symbol].balance;
     });
 
     ctx.body = rates;
