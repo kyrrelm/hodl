@@ -20,6 +20,16 @@ module.exports.register =  (router) => {
       ctx.throw(400, "Unsupported currency");
     }
 
+    const portfolioForSymbol = await ctx.app.portfolio.find({ userId, symbol }).toArray();
+
+    const balance = portfolioForSymbol
+        .map(entry => entry.amount)
+        .reduce((tot, value) => tot + value, 0);
+
+    if (balance + amount < 0) {
+      ctx.throw(400, `This will result in a negative balance of ${symbol}. Current balance: ${balance}, Attempted deposit: ${amount}`);
+    }
+
     await ctx.app.portfolio.insert({userId, symbol, amount});
 
     ctx.body = true;
@@ -41,7 +51,7 @@ module.exports.register =  (router) => {
         .catch(err => console.log(err));
 
     allCurrencies.forEach(currency => {
-      rates[currency].total = portfolio
+      rates[currency].balance = portfolio
           .filter(entry => entry.symbol === currency)
           .map(entry => entry.amount)
           .reduce((tot, value) => tot + value);
