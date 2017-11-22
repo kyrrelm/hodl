@@ -1,5 +1,5 @@
 const fetch = require('node-fetch');
-var Big = require('big.js');
+const Big = require('big.js');
 const validate = require('../utils.js').validate;
 
 
@@ -54,11 +54,11 @@ module.exports.register =  (router) => {
 
     //Add currencies to balanceOverview with balance !== 0
     allCurrencies.forEach(currency => {
-      const balance = portfolio
+      const balance = Big(portfolio
           .filter(entry => entry.symbol === currency)
           .map(entry => entry.amount)
-          .reduce((tot, value) => tot + value);
-      if (balance !== 0) {
+          .reduce((tot, value) => Big(tot).plus(Big(value))));
+      if (!balance.eq(0)) {
         balanceOverview[currency] = { balance };
       }
     });
