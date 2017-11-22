@@ -6,6 +6,25 @@ const path = '/portfolio';
 
 module.exports.register =  (router) => {
 
+  router.post(path, async function (ctx) {
+    ctx.request.body.userId = ctx.state.user._id;
+    validate(ctx, {symbol: 'string', amount: 'number'});
+
+    const userId = ctx.request.body.userId;
+    const symbol = ctx.request.body.symbol;
+    const amount = ctx.request.body.amount;
+
+    const currencyExists = await ctx.app.currency.find({ currencies: { $elemMatch: { symbol }}}).limit(1).hasNext();
+
+    if (!currencyExists) {
+      ctx.throw(400, "Unsupported currency");
+    }
+
+    await ctx.app.portfolio.insert({userId, symbol, amount});
+
+    ctx.body = true;
+  });
+
   router.get(path, async (ctx) => {
     const portfolio = await ctx.app.portfolio.find().toArray();
     const allCurrencies = [...new Set(portfolio.map(entry => entry.symbol))];
@@ -28,40 +47,17 @@ module.exports.register =  (router) => {
           .reduce((tot, value) => tot + value);
     });
 
-    ctx.body = {
-      holdings: rates,
-      portfolio,
-    };
+    ctx.body = rates;
   });
 
-  router.post(path, async function (ctx) {
-    ctx.request.body.userId = ctx.state.user._id;
-    validate(ctx, {symbol: 'string', amount: 'number'});
-
-    const userId = ctx.request.body.userId;
-    const symbol = ctx.request.body.symbol;
-    const amount = ctx.request.body.amount;
-
-    const currencyExists = await ctx.app.currency.find({ currencies: { $elemMatch: { symbol }}}).limit(1).hasNext();
-
-    if (!currencyExists) {
-      ctx.throw(400, "Unsupported currency");
+  router.get(`${path}/transactions`, async (ctx) => {
+    const symbolsString = ctx.request.query.symbols;
+    if (!symbolsString) {
+      ctx.body = await ctx.app.portfolio.find().toArray();
+      return;
     }
-
-    await ctx.app.portfolio.insert({userId, symbol, amount});
-
-    ctx.body = true;
-  });                                           
-
-  // router.put(`${path}/:id`, async (ctx) => {
-  //   let documentQuery = {'_id': ObjectID(ctx.params.id)}; // Used to find the document
-  //   let valuesToUpdate = ctx.request.body;
-  //   ctx.body = await ctx.app.user.updateOne(documentQuery, valuesToUpdate);
-  // });
-
-  // router.delete(`${path}/:id`, async (ctx) => {
-  //   let documentQuery = {'_id': ObjectID(ctx.params.id)}; // Used to find the document
-  //   ctx.body = await ctx.app.user.deleteOne(documentQuery);
-  // });
+    const symbols = symbolsString.split(',');
+    ctx.body = await ctx.app.portfolio.find({ symbol: { $in: symbols}}).toArray();
+  });
 
 };
