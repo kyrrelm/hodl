@@ -31,8 +31,12 @@ module.exports.register =  (router) => {
     }
 
     await ctx.app.portfolio.insert({userId, symbol, amount});
+    
 
-    ctx.body = true;
+    ctx.body = {
+      symbol,
+      balance: balance + amount,
+    };
   });
 
   router.get(path, async (ctx) => {
