@@ -1,4 +1,5 @@
 const fetch = require('node-fetch');
+var Big = require('big.js');
 const validate = require('../utils.js').validate;
 
 
@@ -8,11 +9,11 @@ module.exports.register =  (router) => {
 
   router.post(path, async function (ctx) {
     ctx.request.body.userId = ctx.state.user._id;
-    validate(ctx, {symbol: 'string', amount: 'number'});
+    validate(ctx, {symbol: 'string', amount: 'string'});
 
     const userId = ctx.request.body.userId;
     const symbol = ctx.request.body.symbol;
-    const amount = ctx.request.body.amount;
+    const amount = Big(ctx.request.body.amount);
 
     const currencyExists = await ctx.app.currency.find({ currencies: { $elemMatch: { symbol }}}).limit(1).hasNext();
 
@@ -24,18 +25,18 @@ module.exports.register =  (router) => {
 
     const balance = portfolioForSymbol
         .map(entry => entry.amount)
-        .reduce((tot, value) => tot + value, 0);
+        .reduce((tot, value) => Big(tot).plus(Big(value)), Big(0));
 
-    if (balance + amount < 0) {
+    if (balance.plus(amount).cmp(0) < 0) {
       ctx.throw(400, `This will result in a negative balance of ${symbol}. Current balance: ${balance}, Attempted deposit: ${amount}`);
     }
 
-    await ctx.app.portfolio.insert({userId, symbol, amount});
+    await ctx.app.portfolio.insert({userId, symbol, amount: amount.toString()});
     
 
     ctx.body = {
       symbol,
-      balance: balance + amount,
+      balance: balance.plus(amount),
     };
   });
 
