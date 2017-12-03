@@ -40,7 +40,10 @@ module.exports.register =  (router) => {
   });
 
   router.get(path, async (ctx) => {
-    const portfolio = await ctx.app.portfolio.find().toArray();
+
+    const userId = ctx.state.user._id;
+
+    const portfolio = await ctx.app.portfolio.find({ userId }).toArray();
 
     if(portfolio.length === 0) {
       ctx.body = [];
@@ -76,13 +79,16 @@ module.exports.register =  (router) => {
   });
 
   router.get(`${path}/transactions`, async (ctx) => {
+
+    const userId = ctx.state.user._id;
     const symbolsString = ctx.request.query.symbols;
+
     if (!symbolsString) {
-      ctx.body = await ctx.app.portfolio.find().toArray();
+      ctx.body = await ctx.app.portfolio.find({ userId }).toArray();
       return;
     }
     const symbols = symbolsString.split(',');
-    ctx.body = await ctx.app.portfolio.find({ symbol: { $in: symbols}}).toArray();
+    ctx.body = await ctx.app.portfolio.find({ userId, symbol: { $in: symbols}}).toArray();
   });
 
 };
