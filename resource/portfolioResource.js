@@ -8,10 +8,9 @@ const path = '/portfolio';
 module.exports.register =  (router) => {
 
   router.post(path, async function (ctx) {
-    ctx.request.body.userId = ctx.state.user._id;
     validate(ctx, {symbol: 'string', amount: 'string'});
 
-    const userId = ctx.request.body.userId;
+    const userId = ctx.state.user._id;
     const symbol = ctx.request.body.symbol;
     const amount = Big(ctx.request.body.amount);
 
@@ -52,7 +51,7 @@ module.exports.register =  (router) => {
 
     const balanceOverview = {};
 
-    //Add currencies to balanceOverview with balance !== 0
+    //Add currencies to balanceOverview if currency balance !== 0
     allCurrencies.forEach(currency => {
       const balance = Big(portfolio
           .filter(entry => entry.symbol === currency)

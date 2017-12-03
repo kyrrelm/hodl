@@ -6,7 +6,7 @@ module.exports.currencies = (app) => {
 };
 
 const updateCurrencies = (app) => {
-  console.log("Updating currencies");
+  console.log("Updating currencies...");
   fetch('https://www.cryptocompare.com/api/data/coinlist/')
       .then(res => res.json())
       .then(json => {
@@ -20,5 +20,6 @@ const updateCurrencies = (app) => {
               }
             });
         app.currency.update({}, {$addToSet: {currencies: {$each: currencies}}}, {upsert: true});
+        console.log("Done updating currencies");
       }).catch(err => console.log(err));
 };
