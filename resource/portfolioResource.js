@@ -87,6 +87,7 @@ module.exports.register =  (router) => {
       ctx.body = await ctx.app.portfolio.find({ userId }).toArray();
       return;
     }
+
     const symbols = symbolsString.split(',');
     ctx.body = await ctx.app.portfolio.find({ userId, symbol: { $in: symbols}}).toArray();
   });
