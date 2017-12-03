@@ -1,5 +1,7 @@
-const path = '/currency';
+const fetch = require('node-fetch');
 const validate = require('../utils.js').validate;
+
+const path = '/currency';
 
 module.exports.register =  (router) => {
 
@@ -8,17 +10,17 @@ module.exports.register =  (router) => {
     ctx.body = currency.currencies;
   });
 
-  router.post(`${path}/rates`, async (ctx) => {
+  router.get(`${path}/rates`, async (ctx) => {
 
-    validate(ctx, {symbols: 'array', amount: 'string'});
-    const currenciesString = Object.keys(balanceOverview).reduce((out, symbol) => `${out},${symbol}`);
+    const symbols = ctx.request.query.symbols;
 
-    const rates = await fetch(`https://min-api.cryptocompare.com/data/pricemulti?fsyms=${currenciesString}&tsyms=BTC,ETH,USD,EUR`)
+    if (!symbols) {
+      ctx.throw(400, `Query string symbols is missing. Example: symbols=ETH,BTC`);
+    }
+
+    ctx.body = await fetch(`https://min-api.cryptocompare.com/data/pricemulti?fsyms=${symbols}&tsyms=BTC,ETH,USD,EUR`)
         .then(res => res.json())
         .catch(err => console.log(err));
-
-    const currency = await ctx.app.currency.findOne();
-    ctx.body = currency.currencies;
   });
 
 };
