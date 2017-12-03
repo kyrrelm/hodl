@@ -9,10 +9,14 @@ module.exports.validate = (ctx, fields, userId) => {
     for (const key of Object.keys(fields)) {
       console.log(key, fields[key]);
       const value = ctx.request.body[key];
-      if(!value) {
+      if (!value) {
         ctx.throw(400, `field ${key} of type ${fields[key]} missing`);
       }
-      if(typeof ctx.request.body[key] !== fields[key]) {
+      if (fields[key] === 'array') {
+        if (!Array.isArray(ctx.request.body[key])) {
+          ctx.throw(400, `field ${key} must be of type ${fields[key]}`);
+        }
+      } else if (typeof ctx.request.body[key] !== fields[key]) {
         ctx.throw(400, `field ${key} must be of type ${fields[key]}`);
       }
 
