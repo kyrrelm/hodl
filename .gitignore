@@ -195,4 +195,7 @@ fabric.properties
 
 .DS_Store
 
+hodl-frontend/elm-stuff
+hodl-frontend/elm.js
+
 
