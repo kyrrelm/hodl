@@ -75,7 +75,14 @@ module.exports.register =  (router) => {
       rates[symbol].balance = balanceOverview[symbol].balance;
     });
 
-    ctx.body = rates;
+    const ratesArray = [];
+
+    Object.keys(rates).forEach(symbol => {
+      rates[symbol].symbol = symbol;
+      ratesArray.push(rates[symbol]);
+    });
+
+    ctx.body = ratesArray;
   });
 
   router.get(`${path}/transactions`, async (ctx) => {
