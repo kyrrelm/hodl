@@ -4,7 +4,6 @@ import Html exposing (Html, div, text)
 import Models exposing (Model, Symbol)
 import Msgs exposing (Msg)
 import Players.PortfolioPage
-import RemoteData
 
 
 view : Model -> Html Msg
