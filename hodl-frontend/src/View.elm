@@ -16,10 +16,10 @@ view model =
 page : Model -> Html Msg
 page model =
     case model.route of
-        Models.PlayersRoute ->
+        Models.PortfolioRoute ->
             Players.PortfolioPage.view model
 
-        Models.PlayerRoute id ->
+        Models.CurrencyRoute id ->
             notFoundView
 
         Models.NotFoundRoute ->

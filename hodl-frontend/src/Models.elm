@@ -24,15 +24,17 @@ type alias Symbol =
 
 type alias Currency =
     { symbol : Symbol
-    , balance : Float
-    , btc : Float
-    , eth : Float
-    , usd : Float
-    , eur : Float
+    , balance : String
+    , usdBalance : String
+    , eurBalance : String
+    , btc : String
+    , eth : String
+    , usd : String
+    , eur : String
     }
 
 
 type Route
-    = PlayersRoute
-    | PlayerRoute Symbol
+    = PortfolioRoute
+    | CurrencyRoute Symbol
     | NotFoundRoute

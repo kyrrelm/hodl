@@ -84,7 +84,7 @@ module.exports.register =  (router) => {
     });
 
 
-    ctx.body = Object.values(rates);
+    ctx.body = Object.values(rates).sort((a, b) => b.usdBalance - a.usdBalance);
   });
 
   router.get(`${path}/transactions`, async (ctx) => {

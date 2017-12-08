@@ -12,15 +12,14 @@ view : Model -> Html Msg
 view model =
     div []
         [ nav
-        , input [ class "search-input", placeholder "Find coin", onInput Msgs.ChangeTest ] []
-        , maybeList model.portfolio
+        , div [ class "card-list-container" ] [ maybeList model.portfolio ]
         ]
 
 
 nav : Html Msg
 nav =
     div [ class "clearfix mb2 white bg-black" ]
-        [ div [ class "left p2" ] [ text "Players" ] ]
+        [ div [ class "left p2" ] [ text "Hodl" ] ]
 
 
 maybeList : WebData (List Currency) -> Html Msg
@@ -41,13 +40,13 @@ maybeList response =
 
 list : List Currency -> Html Msg
 list portfolio =
-    div [ class "p2" ] (List.map portfolioCard portfolio)
+    div [ class "card-list" ] (List.map portfolioCard portfolio)
 
 
 portfolioCard : Currency -> Html Msg
 portfolioCard currency =
     div [ class "card" ]
-        [ text currency.symbol
+        [ div [ class "card-symbol h3" ] [ text currency.symbol ]
         , portfolioCardContent currency
         ]
 
@@ -62,21 +61,21 @@ portfolioCardContent currency =
 
 balanceContainer : Currency -> Html Msg
 balanceContainer currency =
-    let
-        totalUsd =
-            currency.balance * currency.usd
-    in
     div []
-        [ div [] [ text (toString currency.balance) ]
+        [ div [] [ text currency.balance ]
+        , div [ class "empty-line" ] []
+        , div [] [ text ("$ " ++ currency.usdBalance) ]
+        , div [] [ text ("€ " ++ currency.eurBalance) ]
         ]
 
 
 ratesContainer : Currency -> Html Msg
 ratesContainer currency =
     div []
-        [ div [] [ text ("USD: " ++ toString currency.usd) ]
-        , div [] [ text ("EURO: " ++ toString currency.eur) ]
-        , div [] [ text ("USD: " ++ toString currency.usd) ]
+        [ div [] [ text ("USD: " ++ currency.usd) ]
+        , div [] [ text ("EUR: " ++ currency.eur) ]
+        , div [] [ text ("BTC: " ++ currency.btc) ]
+        , div [] [ text ("ETH: " ++ currency.eth) ]
         ]
 
 

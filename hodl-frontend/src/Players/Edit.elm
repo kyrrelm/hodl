@@ -12,6 +12,7 @@
 --view model =
 --    div []
 --        [ nav model
+--        , input [ class "search-input", placeholder "Find coin", onInput Msgs.ChangeTest ] []
 --        , form model
 --        ]
 --

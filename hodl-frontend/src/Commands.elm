@@ -16,20 +16,20 @@ fetchPortfolioRequest =
         , headers = [ Http.header "Authorization" "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YTI0MWVlYzI5ZTQ5NTA2MjVkMDgzMTgiLCJyb2xlIjoidXNlciIsImlhdCI6MTUxMjMxNjY1MiwiZXhwIjoxNTEyOTIxNDUyfQ.PiD8hSU6oE_721l5hkh7ESJTXhQqpHUpXuyLUsy6GrQ" ]
         , method = "GET"
         , timeout = Nothing
-        , url = fetchPlayersUrl
+        , url = fetchPortfolioUrl
         , withCredentials = False
         }
 
 
-fetchPlayers : Cmd Msg
-fetchPlayers =
+fetchPortfolio : Cmd Msg
+fetchPortfolio =
     fetchPortfolioRequest
         |> RemoteData.sendRequest
         |> Cmd.map Msgs.OnFetchPortfolio
 
 
-fetchPlayersUrl : String
-fetchPlayersUrl =
+fetchPortfolioUrl : String
+fetchPortfolioUrl =
     "http://localhost:8080/portfolio/"
 
 
@@ -42,11 +42,13 @@ currencyDecoder : Decode.Decoder Currency
 currencyDecoder =
     decode Currency
         |> required "symbol" Decode.string
-        |> required "balance" Decode.float
-        |> required "BTC" Decode.float
-        |> required "ETH" Decode.float
-        |> required "USD" Decode.float
-        |> required "EUR" Decode.float
+        |> required "balance" Decode.string
+        |> required "usdBalance" Decode.string
+        |> required "eurBalance" Decode.string
+        |> required "BTC" Decode.string
+        |> required "ETH" Decode.string
+        |> required "USD" Decode.string
+        |> required "EUR" Decode.string
 
 
 
