@@ -3,7 +3,6 @@ module Commands exposing (..)
 import Http
 import Json.Decode as Decode
 import Json.Decode.Pipeline exposing (decode, required)
-import Json.Encode as Encode
 import Models exposing (Currency, Symbol)
 import Msgs exposing (Msg)
 import RemoteData
@@ -43,7 +42,7 @@ currencyDecoder : Decode.Decoder Currency
 currencyDecoder =
     decode Currency
         |> required "symbol" Decode.string
-        |> required "balance" Decode.string
+        |> required "balance" Decode.float
         |> required "BTC" Decode.float
         |> required "ETH" Decode.float
         |> required "USD" Decode.float
@@ -74,18 +73,17 @@ currencyDecoder =
 --savePlayerCmd player =
 --    savePlayerRequest player
 --        |> Http.send Msgs.OnPlayerSave
-
-
-currencyEncoder : Currency -> Encode.Value
-currencyEncoder currency =
-    let
-        attributes =
-            [ ( "symbol", Encode.string currency.symbol )
-            , ( "balance", Encode.string currency.balance )
-            , ( "BTC", Encode.float currency.btc )
-            , ( "ETH", Encode.float currency.eth )
-            , ( "USD", Encode.float currency.usd )
-            , ( "EUR", Encode.float currency.eur )
-            ]
-    in
-    Encode.object attributes
+--
+--currencyEncoder : Currency -> Encode.Value
+--currencyEncoder currency =
+--    let
+--        attributes =
+--            [ ( "symbol", Encode.string currency.symbol )
+--            , ( "balance", Encode.float currency.balance )
+--            , ( "BTC", Encode.float currency.btc )
+--            , ( "ETH", Encode.float currency.eth )
+--            , ( "USD", Encode.float currency.usd )
+--            , ( "EUR", Encode.float currency.eur )
+--            ]
+--    in
+--    Encode.object attributes

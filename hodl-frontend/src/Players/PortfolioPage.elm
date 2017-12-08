@@ -1,20 +1,18 @@
 module Players.PortfolioPage exposing (..)
 
 import Html exposing (..)
-import Html.Attributes exposing (class, href, placeholder)
+import Html.Attributes exposing (class, href, placeholder, style)
 import Html.Events exposing (onInput)
 import Models exposing (Currency, Model)
 import Msgs exposing (Msg)
 import RemoteData exposing (WebData)
-import Routing exposing (playerPath)
 
 
 view : Model -> Html Msg
 view model =
     div []
         [ nav
-        , input [ placeholder "Text to reverse", onInput Msgs.ChangeTest ] []
-        , text model.test
+        , input [ class "search-input", placeholder "Find coin", onInput Msgs.ChangeTest ] []
         , maybeList model.portfolio
         ]
 
@@ -43,12 +41,43 @@ maybeList response =
 
 list : List Currency -> Html Msg
 list portfolio =
-    div [ class "p2" ] (List.map portfolioRow portfolio)
+    div [ class "p2" ] (List.map portfolioCard portfolio)
 
 
-portfolioRow : Currency -> Html Msg
-portfolioRow currency =
-    text currency.symbol
+portfolioCard : Currency -> Html Msg
+portfolioCard currency =
+    div [ class "card" ]
+        [ text currency.symbol
+        , portfolioCardContent currency
+        ]
+
+
+portfolioCardContent : Currency -> Html Msg
+portfolioCardContent currency =
+    div [ class "card-content" ]
+        [ balanceContainer currency
+        , ratesContainer currency
+        ]
+
+
+balanceContainer : Currency -> Html Msg
+balanceContainer currency =
+    let
+        totalUsd =
+            currency.balance * currency.usd
+    in
+    div []
+        [ div [] [ text (toString currency.balance) ]
+        ]
+
+
+ratesContainer : Currency -> Html Msg
+ratesContainer currency =
+    div []
+        [ div [] [ text ("USD: " ++ toString currency.usd) ]
+        , div [] [ text ("EURO: " ++ toString currency.eur) ]
+        , div [] [ text ("USD: " ++ toString currency.usd) ]
+        ]
 
 
 

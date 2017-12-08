@@ -61,7 +61,7 @@ module.exports.register =  (router) => {
           .map(entry => entry.amount)
           .reduce((tot, value) => Big(tot).plus(Big(value))));
       if (!balance.eq(0)) {
-        balanceOverview[currency] = { balance };
+        balanceOverview[currency] = { balance: parseFloat(balance) };
       }
     });
 

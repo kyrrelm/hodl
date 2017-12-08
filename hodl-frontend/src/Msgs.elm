@@ -1,6 +1,5 @@
 module Msgs exposing (..)
 
-import Http
 import Models exposing (Currency)
 import Navigation exposing (Location)
 import RemoteData exposing (WebData)

@@ -24,7 +24,7 @@ type alias Symbol =
 
 type alias Currency =
     { symbol : Symbol
-    , balance : String
+    , balance : Float
     , btc : Float
     , eth : Float
     , usd : Float

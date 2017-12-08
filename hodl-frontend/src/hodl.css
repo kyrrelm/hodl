@@ -1,0 +1,50 @@
+@font-face {
+    font-family: 'roboto-medium';
+    src: url('./fonts/roboto/Roboto-Medium.woff2') format('woff2')
+}
+
+@font-face {
+    font-family: 'roboto-light';
+    src: url('./fonts/roboto/Roboto-Light.woff2') format('woff2')
+}
+
+body {
+    background-color: #262626;
+    font-family: "roboto-light", sans-serif;
+    margin: 0;
+    color: #c6c8ca;
+}
+
+input, select, textarea{
+    color: #c6c8ca;
+}
+
+.search-input {
+    background-color: transparent;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    width: 100%;
+    align-self: center;
+    border-style: solid;
+    border-width: 0 0 2px 0;
+    font-size: 200%;
+    outline: none;
+    font-style: italic;
+    text-decoration-color: #c6c8ca;
+}
+
+.card {
+    background-color: #4b4b4b;
+    margin-bottom: 5px;
+    padding: 5px;
+    cursor: pointer;
+
+}
+
+.card-content {
+    display: flex;
+    justify-content: space-between;
+}
+
+
+
