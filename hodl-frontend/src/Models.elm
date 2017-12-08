@@ -4,30 +4,35 @@ import RemoteData exposing (WebData)
 
 
 type alias Model =
-    { players : WebData (List Player)
+    { portfolio : WebData (List Currency)
     , route : Route
+    , test : String
     }
 
 
 initialModel : Route -> Model
 initialModel route =
-    { players = RemoteData.Loading
+    { portfolio = RemoteData.Loading
     , route = route
+    , test = ""
     }
 
 
-type alias PlayerId =
+type alias Symbol =
     String
 
 
-type alias Player =
-    { id : PlayerId
-    , name : String
-    , level : Int
+type alias Currency =
+    { symbol : Symbol
+    , balance : String
+    , btc : Float
+    , eth : Float
+    , usd : Float
+    , eur : Float
     }
 
 
 type Route
     = PlayersRoute
-    | PlayerRoute PlayerId
+    | PlayerRoute Symbol
     | NotFoundRoute

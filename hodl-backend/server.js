@@ -11,12 +11,14 @@ const portfolioResource = require('./resource/portfolioResource.js');
 const currencyResource = require('./resource/currencyResource.js');
 const tasks = require('./tasks.js');
 const mongo = require('./mongo.js');
+const cors = require('koa-cors');
 const DISABLE_API_KEY = process.env.DISABLE_API_KEY || 'true';
 
 const DISABLE_JWT = process.env.DISABLE_JWT || 'false';
 
 const app = new Koa();
 app.use(logger());
+app.use(cors());
 app.use(bodyParser());
 
 app.use(koaValidator());

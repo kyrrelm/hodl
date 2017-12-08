@@ -1,6 +1,6 @@
 module Routing exposing (..)
 
-import Models exposing (PlayerId, Route(..))
+import Models exposing (Route(..), Symbol)
 import Navigation exposing (Location)
 import UrlParser exposing (..)
 
@@ -29,6 +29,6 @@ playersPath =
     "#players"
 
 
-playerPath : PlayerId -> String
+playerPath : Symbol -> String
 playerPath id =
     "#players/" ++ id

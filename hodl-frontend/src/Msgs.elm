@@ -1,13 +1,17 @@
 module Msgs exposing (..)
 
 import Http
-import Models exposing (Player)
+import Models exposing (Currency)
 import Navigation exposing (Location)
 import RemoteData exposing (WebData)
 
 
 type Msg
-    = OnFetchPlayers (WebData (List Player))
+    = OnFetchPortfolio (WebData (List Currency))
     | OnLocationChange Location
-    | ChangeLevel Player Int
-    | OnPlayerSave (Result Http.Error Player)
+    | ChangeTest String
+
+
+
+--    | ChangeLevel Currency Int
+--    | OnPlayerSave (Result Http.Error Currency)
