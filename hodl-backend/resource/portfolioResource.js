@@ -61,7 +61,7 @@ module.exports.register =  (router) => {
           .map(entry => entry.amount)
           .reduce((tot, value) => Big(tot).plus(Big(value))));
       if (!balance.eq(0)) {
-        balanceOverview[currency] = { balance: parseFloat(balance) };
+        balanceOverview[currency] = { balance };
       }
     });
 
@@ -72,8 +72,15 @@ module.exports.register =  (router) => {
         .catch(err => console.log(err));
 
     Object.keys(balanceOverview).forEach(symbol => {
-      rates[symbol].balance = balanceOverview[symbol].balance;
-      rates[symbol].symbol = symbol;
+      const rate = rates[symbol];
+      rate.balance = balanceOverview[symbol].balance;
+      rate.symbol = symbol;
+      rate.USD = rate.USD.toString();
+      rate.EUR = rate.EUR.toString();
+      rate.BTC = rate.BTC.toString();
+      rate.ETH = rate.ETH.toString();
+      rate.usdBalance = Big(rate.balance).times(Big(rate.USD));
+      rate.eurBalance = Big(rate.balance).times(Big(rate.EUR));
     });
 
 
