@@ -11,7 +11,7 @@ view : Model -> Html Msg
 view model =
     div []
         [ nav
-        , div [ class "card-list-container" ] [ maybeList model.portfolio ]
+        , maybePortfolio model.portfolio
         ]
 
 
@@ -21,8 +21,8 @@ nav =
         [ div [ class "left p2" ] [ text "Hodl" ] ]
 
 
-maybeList : WebData Portfolio -> Html Msg
-maybeList response =
+maybePortfolio : WebData Portfolio -> Html Msg
+maybePortfolio response =
     case response of
         RemoteData.NotAsked ->
             text ""
@@ -31,27 +31,35 @@ maybeList response =
             text "Loading..."
 
         RemoteData.Success portfolio ->
-            list portfolio.currencies
+            portfolioContainer portfolio
 
         RemoteData.Failure error ->
             text (toString error)
 
 
-list : List Currency -> Html Msg
-list portfolio =
-    div [ class "card-list" ] (List.map portfolioCard portfolio)
-
-
-portfolioCard : Currency -> Html Msg
-portfolioCard currency =
-    div [ class "card" ]
-        [ div [ class "card-symbol h3" ] [ text currency.symbol ]
-        , portfolioCardContent currency
+portfolioContainer : Portfolio -> Html Msg
+portfolioContainer portfolio =
+    div []
+        [ text portfolio.usdBalance
+        , div [ class "card-list-container" ] [ list portfolio.currencies ]
         ]
 
 
-portfolioCardContent : Currency -> Html Msg
-portfolioCardContent currency =
+list : List Currency -> Html Msg
+list currencies =
+    div [ class "card-list" ] (List.map currencyCard currencies)
+
+
+currencyCard : Currency -> Html Msg
+currencyCard currency =
+    div [ class "card" ]
+        [ div [ class "card-symbol h3" ] [ text currency.symbol ]
+        , currencyCardContent currency
+        ]
+
+
+currencyCardContent : Currency -> Html Msg
+currencyCardContent currency =
     div [ class "card-content" ]
         [ balanceContainer currency
         , ratesContainer currency
