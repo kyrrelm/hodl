@@ -3,12 +3,12 @@ module Commands exposing (..)
 import Http
 import Json.Decode as Decode
 import Json.Decode.Pipeline exposing (decode, required)
-import Models exposing (Currency, Symbol)
+import Models exposing (Currency, Portfolio, Symbol)
 import Msgs exposing (Msg)
 import RemoteData
 
 
-fetchPortfolioRequest : Http.Request (List Currency)
+fetchPortfolioRequest : Http.Request Portfolio
 fetchPortfolioRequest =
     Http.request
         { body = Http.emptyBody
@@ -33,14 +33,17 @@ fetchPortfolioUrl =
     "http://localhost:8080/portfolio/"
 
 
-portfolioDecoder : Decode.Decoder (List Currency)
+portfolioDecoder : Decode.Decoder Portfolio
 portfolioDecoder =
-    Decode.list currencyDecoder
+    decode
+        Portfolio
+        |> required "currencies" (Decode.list currencyDecoder)
 
 
 currencyDecoder : Decode.Decoder Currency
 currencyDecoder =
-    decode Currency
+    decode
+        Currency
         |> required "symbol" Decode.string
         |> required "balance" Decode.string
         |> required "usdBalance" Decode.string

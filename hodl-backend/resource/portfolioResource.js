@@ -71,6 +71,11 @@ module.exports.register =  (router) => {
         .then(res => res.json())
         .catch(err => console.log(err));
 
+    const overview = {
+      usdBalance: 0,
+      eurBalance: 0,
+    };
+
     Object.keys(balanceOverview).forEach(symbol => {
       const rate = rates[symbol];
       rate.balance = balanceOverview[symbol].balance;
@@ -81,10 +86,14 @@ module.exports.register =  (router) => {
       rate.ETH = rate.ETH.toString();
       rate.usdBalance = Big(rate.balance).times(Big(rate.USD));
       rate.eurBalance = Big(rate.balance).times(Big(rate.EUR));
+      overview.usdBalance = Big(overview.usdBalance).add(Big(rate.usdBalance));
+      overview.eurBalance = Big(overview.eurBalance).add(Big(rate.eurBalance));
     });
 
+    overview.currencies = Object.values(rates).sort((a, b) => b.usdBalance - a.usdBalance);
 
-    ctx.body = Object.values(rates).sort((a, b) => b.usdBalance - a.usdBalance);
+    ctx.body = overview;
+
   });
 
   router.get(`${path}/transactions`, async (ctx) => {

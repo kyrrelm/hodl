@@ -1,12 +1,12 @@
 module Msgs exposing (..)
 
-import Models exposing (Currency)
+import Models exposing (Portfolio)
 import Navigation exposing (Location)
 import RemoteData exposing (WebData)
 
 
 type Msg
-    = OnFetchPortfolio (WebData (List Currency))
+    = OnFetchPortfolio (WebData Portfolio)
     | OnLocationChange Location
     | ChangeTest String
 

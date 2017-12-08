@@ -2,8 +2,7 @@ module Players.PortfolioPage exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (class, href, placeholder, style)
-import Html.Events exposing (onInput)
-import Models exposing (Currency, Model)
+import Models exposing (Currency, Model, Portfolio)
 import Msgs exposing (Msg)
 import RemoteData exposing (WebData)
 
@@ -22,7 +21,7 @@ nav =
         [ div [ class "left p2" ] [ text "Hodl" ] ]
 
 
-maybeList : WebData (List Currency) -> Html Msg
+maybeList : WebData Portfolio -> Html Msg
 maybeList response =
     case response of
         RemoteData.NotAsked ->
@@ -32,7 +31,7 @@ maybeList response =
             text "Loading..."
 
         RemoteData.Success portfolio ->
-            list portfolio
+            list portfolio.currencies
 
         RemoteData.Failure error ->
             text (toString error)

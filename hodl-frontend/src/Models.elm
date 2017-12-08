@@ -4,7 +4,7 @@ import RemoteData exposing (WebData)
 
 
 type alias Model =
-    { portfolio : WebData (List Currency)
+    { portfolio : WebData Portfolio
     , route : Route
     , test : String
     }
@@ -20,6 +20,11 @@ initialModel route =
 
 type alias Symbol =
     String
+
+
+type alias Portfolio =
+    { currencies : List Currency
+    }
 
 
 type alias Currency =

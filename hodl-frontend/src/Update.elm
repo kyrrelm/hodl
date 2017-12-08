@@ -2,7 +2,6 @@ module Update exposing (..)
 
 import Models exposing (Currency, Model)
 import Msgs exposing (Msg)
-import RemoteData
 import Routing exposing (parseLocation)
 
 
