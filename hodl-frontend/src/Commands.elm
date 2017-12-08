@@ -38,6 +38,7 @@ portfolioDecoder =
     decode
         Portfolio
         |> required "usdBalance" Decode.string
+        |> required "eurBalance" Decode.string
         |> required "currencies" (Decode.list currencyDecoder)
 
 

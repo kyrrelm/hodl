@@ -41,6 +41,7 @@ portfolioContainer : Portfolio -> Html Msg
 portfolioContainer portfolio =
     div []
         [ text portfolio.usdBalance
+        , text portfolio.eurBalance
         , div [ class "card-list-container" ] [ list portfolio.currencies ]
         ]
 

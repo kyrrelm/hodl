@@ -24,6 +24,7 @@ type alias Symbol =
 
 type alias Portfolio =
     { usdBalance : String
+    , eurBalance : String
     , currencies : List Currency
     }
 
