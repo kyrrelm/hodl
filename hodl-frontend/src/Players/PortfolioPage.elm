@@ -40,8 +40,7 @@ maybePortfolio response =
 portfolioContainer : Portfolio -> Html Msg
 portfolioContainer portfolio =
     div []
-        [ text portfolio.usdBalance
-        , text portfolio.eurBalance
+        [ text ("$ " ++ portfolio.usdBalance ++ " € " ++ portfolio.eurBalance)
         , div [ class "card-list-container" ] [ list portfolio.currencies ]
         ]
 

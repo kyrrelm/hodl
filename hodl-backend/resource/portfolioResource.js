@@ -84,10 +84,17 @@ module.exports.register =  (router) => {
       rate.EUR = rate.EUR.toString();
       rate.BTC = rate.BTC.toString();
       rate.ETH = rate.ETH.toString();
-      rate.usdBalance = Big(rate.balance).times(Big(rate.USD));
-      rate.eurBalance = Big(rate.balance).times(Big(rate.EUR));
-      overview.usdBalance = Big(overview.usdBalance).add(Big(rate.usdBalance));
-      overview.eurBalance = Big(overview.eurBalance).add(Big(rate.eurBalance));
+
+      const usdBalance = Big(rate.balance).times(Big(rate.USD));
+      const eurBalance = Big(rate.balance).times(Big(rate.EUR));
+
+      overview.usdBalance = Big(overview.usdBalance).add(Big(usdBalance)).toFixed(2);
+      overview.eurBalance = Big(overview.eurBalance).add(Big(eurBalance)).toFixed(2);
+
+      rate.usdBalance = usdBalance.toFixed(2);
+      rate.eurBalance = eurBalance.toFixed(2);
+
+
     });
 
     overview.currencies = Object.values(rates).sort((a, b) => b.usdBalance - a.usdBalance);
