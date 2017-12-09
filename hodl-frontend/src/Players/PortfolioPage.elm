@@ -9,16 +9,7 @@ import RemoteData exposing (WebData)
 
 view : Model -> Html Msg
 view model =
-    div []
-        [ nav
-        , maybePortfolio model.portfolio
-        ]
-
-
-nav : Html Msg
-nav =
-    div [ class "clearfix mb2 white bg-black" ]
-        [ div [ class "left p2" ] [ text "Hodl" ] ]
+    maybePortfolio model.portfolio
 
 
 maybePortfolio : WebData Portfolio -> Html Msg
@@ -31,17 +22,35 @@ maybePortfolio response =
             text "Loading..."
 
         RemoteData.Success portfolio ->
-            portfolioContainer portfolio
+            pageContainer portfolio
 
         RemoteData.Failure error ->
             text (toString error)
 
 
+pageContainer : Portfolio -> Html Msg
+pageContainer portfolio =
+    div []
+        [ nav portfolio
+        , div [ class "container" ] [ portfolioContainer portfolio ]
+        ]
+
+
+nav : Portfolio -> Html Msg
+nav portfolio =
+    div [ class "nav white bg-black" ]
+        [ div [ class "p2" ] [ text "Hodl" ]
+        , div [ class "p2" ]
+            [ span [] [ text ("$ " ++ portfolio.usdBalance) ]
+            , span [ class "total-balance" ] [ text ("€ " ++ portfolio.eurBalance) ]
+            ]
+        ]
+
+
 portfolioContainer : Portfolio -> Html Msg
 portfolioContainer portfolio =
     div []
-        [ text ("$ " ++ portfolio.usdBalance ++ " € " ++ portfolio.eurBalance)
-        , div [ class "card-list-container" ] [ list portfolio.currencies ]
+        [ div [ class "card-list-container" ] [ list portfolio.currencies ]
         ]
 
 

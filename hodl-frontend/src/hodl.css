@@ -19,6 +19,23 @@ input, select, textarea{
     color: #c6c8ca;
 }
 
+.nav {
+    position: fixed;
+    width: 100%;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.container {
+    padding-top: 5rem;
+}
+
+.total-balance {
+    padding-left: 2rem;
+}
+
 .search-input {
     background-color: transparent;
     margin-bottom: 20px;
@@ -36,6 +53,7 @@ input, select, textarea{
 .card-list-container {
     display: flex;
     justify-content: center;
+    margin: 0 2rem 2rem 2rem;
 }
 
 .card-list {
