@@ -1,6 +1,6 @@
 module Main exposing (..)
 
-import Commands exposing (fetchPortfolio)
+import Commands exposing (fetchPortfolio, fetchSymbols)
 import Models exposing (Model, initialModel)
 import Msgs exposing (Msg)
 import Navigation exposing (Location)
@@ -15,7 +15,7 @@ init location =
         currentRoute =
             Routing.parseLocation location
     in
-    ( initialModel currentRoute, fetchPortfolio )
+    ( initialModel currentRoute, Cmd.batch [ fetchPortfolio, fetchSymbols ] )
 
 
 subscriptions : Model -> Sub Msg
