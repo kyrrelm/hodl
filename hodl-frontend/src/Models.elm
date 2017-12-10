@@ -5,21 +5,23 @@ import RemoteData exposing (WebData)
 
 type alias Model =
     { portfolio : WebData Portfolio
+    , symbols : WebData (List Symbol)
     , route : Route
-    , test : String
     }
 
 
 initialModel : Route -> Model
 initialModel route =
     { portfolio = RemoteData.Loading
+    , symbols = RemoteData.Loading
     , route = route
-    , test = ""
     }
 
 
 type alias Symbol =
-    String
+    { symbol : String
+    , name : String
+    }
 
 
 type alias Portfolio =

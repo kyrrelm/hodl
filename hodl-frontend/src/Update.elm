@@ -1,5 +1,6 @@
 module Update exposing (..)
 
+import Commands exposing (fetchSymbols)
 import Models exposing (Currency, Model)
 import Msgs exposing (Msg)
 import Navigation exposing (..)
@@ -12,6 +13,9 @@ update msg model =
         Msgs.OnFetchPortfolio response ->
             ( { model | portfolio = response }, Cmd.none )
 
+        Msgs.OnFetchCurrencies response ->
+            ( { model | portfolio = response }, Cmd.none )
+
         Msgs.OnLocationChange location ->
             let
                 newRoute =
@@ -20,4 +24,4 @@ update msg model =
             ( { model | route = newRoute }, Cmd.none )
 
         Msgs.OnNewCurrencyClick ->
-            ( model, newUrl newCurrencyPath )
+            ( model, Cmd.batch [ newUrl newCurrencyPath, fetchSymbols ] )
