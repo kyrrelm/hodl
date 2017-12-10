@@ -32,13 +32,13 @@ maybePortfolio response =
 pageContainer : Portfolio -> Html Msg
 pageContainer portfolio =
     div []
-        [ nav portfolio
+        [ navBar portfolio
         , div [ class "container" ] [ portfolioContainer portfolio ]
         ]
 
 
-nav : Portfolio -> Html Msg
-nav portfolio =
+navBar : Portfolio -> Html Msg
+navBar portfolio =
     div [ class "nav white bg-black" ]
         [ div [ class "p2" ] [ text "Hodl" ]
         , div [ class "p2" ]
