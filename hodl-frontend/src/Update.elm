@@ -13,8 +13,8 @@ update msg model =
         Msgs.OnFetchPortfolio response ->
             ( { model | portfolio = response }, Cmd.none )
 
-        Msgs.OnFetchCurrencies response ->
-            ( { model | portfolio = response }, Cmd.none )
+        Msgs.OnFetchSymbols response ->
+            ( { model | symbols = response }, Cmd.none )
 
         Msgs.OnLocationChange location ->
             let

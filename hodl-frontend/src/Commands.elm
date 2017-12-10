@@ -18,7 +18,7 @@ fetchPortfolioRequest =
     Http.request
         { body = Http.emptyBody
         , expect = Http.expectJson portfolioDecoder
-        , headers = [ Http.header "Authorization" "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YTI0MWVlYzI5ZTQ5NTA2MjVkMDgzMTgiLCJyb2xlIjoidXNlciIsImlhdCI6MTUxMjMxNjY1MiwiZXhwIjoxNTEyOTIxNDUyfQ.PiD8hSU6oE_721l5hkh7ESJTXhQqpHUpXuyLUsy6GrQ" ]
+        , headers = [ Http.header "Authorization" "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YTI0MWVlYzI5ZTQ5NTA2MjVkMDgzMTgiLCJyb2xlIjoidXNlciIsImlhdCI6MTUxMjkyOTM3MywiZXhwIjoxNTEzNTM0MTczfQ.9HHg11ZvvIgwqC1ISBp7_ZUr3_wPu1GFGj-_Ye-JMhI" ]
         , method = "GET"
         , timeout = Nothing
         , url = fetchPortfolioUrl
@@ -66,7 +66,7 @@ fetchSymbolsRequest =
     Http.request
         { body = Http.emptyBody
         , expect = Http.expectJson symbolsDecoder
-        , headers = [ Http.header "Authorization" "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YTI0MWVlYzI5ZTQ5NTA2MjVkMDgzMTgiLCJyb2xlIjoidXNlciIsImlhdCI6MTUxMjMxNjY1MiwiZXhwIjoxNTEyOTIxNDUyfQ.PiD8hSU6oE_721l5hkh7ESJTXhQqpHUpXuyLUsy6GrQ" ]
+        , headers = [ Http.header "Authorization" "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YTI0MWVlYzI5ZTQ5NTA2MjVkMDgzMTgiLCJyb2xlIjoidXNlciIsImlhdCI6MTUxMjkyOTM3MywiZXhwIjoxNTEzNTM0MTczfQ.9HHg11ZvvIgwqC1ISBp7_ZUr3_wPu1GFGj-_Ye-JMhI" ]
         , method = "GET"
         , timeout = Nothing
         , url = fetchSymbolsUrl
@@ -76,9 +76,9 @@ fetchSymbolsRequest =
 
 fetchSymbols : Cmd Msg
 fetchSymbols =
-    fetchPortfolioRequest
+    fetchSymbolsRequest
         |> RemoteData.sendRequest
-        |> Cmd.map Msgs.OnFetchCurrencies
+        |> Cmd.map Msgs.OnFetchSymbols
 
 
 symbolsDecoder : Decode.Decoder (List Symbol)
