@@ -6,11 +6,15 @@ import Html.Events exposing (onClick)
 import Models exposing (Currency, Model, Portfolio)
 import Msgs exposing (Msg)
 import RemoteData exposing (WebData)
+import Views.NavBar exposing (view)
 
 
 view : Model -> Html Msg
 view model =
-    maybePortfolio model.portfolio
+    div []
+        [ Views.NavBar.view model
+        , maybePortfolio model.portfolio
+        ]
 
 
 maybePortfolio : WebData Portfolio -> Html Msg
@@ -31,21 +35,7 @@ maybePortfolio response =
 
 pageContainer : Portfolio -> Html Msg
 pageContainer portfolio =
-    div []
-        [ navBar portfolio
-        , div [ class "container" ] [ portfolioContainer portfolio ]
-        ]
-
-
-navBar : Portfolio -> Html Msg
-navBar portfolio =
-    div [ class "nav white bg-black" ]
-        [ div [ class "p2" ] [ text "Hodl" ]
-        , div [ class "p2" ]
-            [ span [] [ text ("$ " ++ portfolio.usdBalance) ]
-            , span [ class "total-balance" ] [ text ("€ " ++ portfolio.eurBalance) ]
-            ]
-        ]
+    div [ class "container" ] [ portfolioContainer portfolio ]
 
 
 portfolioContainer : Portfolio -> Html Msg

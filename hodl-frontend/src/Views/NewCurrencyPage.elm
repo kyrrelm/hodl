@@ -5,7 +5,6 @@ import Models exposing (Currency, Model, Portfolio)
 import Msgs exposing (Msg)
 import RemoteData exposing (WebData)
 import Views.NavBar exposing (view)
-import Views.PortfolioPage exposing (navBar)
 
 
 view : Model -> Html Msg

@@ -1,11 +1,10 @@
-module Views.NavBar exposing (..)
+module Views.NavBar exposing (view)
 
 import Html exposing (..)
 import Html.Attributes exposing (class)
 import Models exposing (Currency, Model, Portfolio)
 import Msgs exposing (Msg)
 import RemoteData exposing (WebData)
-import Views.PortfolioPage exposing (navBar)
 
 
 view : Model -> Html Msg
