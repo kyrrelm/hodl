@@ -2,7 +2,8 @@ module Update exposing (..)
 
 import Models exposing (Currency, Model)
 import Msgs exposing (Msg)
-import Routing exposing (parseLocation)
+import Navigation exposing (..)
+import Routing exposing (newCurrencyPath, parseLocation)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -17,6 +18,9 @@ update msg model =
                     parseLocation location
             in
             ( { model | route = newRoute }, Cmd.none )
+
+        Msgs.OnNewCurrencyClick ->
+            ( model, newUrl newCurrencyPath )
 
         Msgs.ChangeTest test ->
             ( { model | test = test }, Cmd.none )

@@ -8,6 +8,7 @@ import RemoteData exposing (WebData)
 type Msg
     = OnFetchPortfolio (WebData Portfolio)
     | OnLocationChange Location
+    | OnNewCurrencyClick
     | ChangeTest String
 
 

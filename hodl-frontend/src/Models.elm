@@ -43,5 +43,5 @@ type alias Currency =
 
 type Route
     = PortfolioRoute
-    | CurrencyRoute Symbol
+    | CurrencyRoute
     | NotFoundRoute

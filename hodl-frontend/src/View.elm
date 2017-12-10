@@ -18,7 +18,7 @@ page model =
         Models.PortfolioRoute ->
             Players.PortfolioPage.view model
 
-        Models.CurrencyRoute id ->
+        Models.CurrencyRoute ->
             notFoundView
 
         Models.NotFoundRoute ->

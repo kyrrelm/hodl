@@ -9,8 +9,8 @@ matchers : Parser (Route -> a) a
 matchers =
     oneOf
         [ map PortfolioRoute top
-        , map CurrencyRoute (s "players" </> string)
         , map PortfolioRoute (s "players")
+        , map CurrencyRoute (s "newCurrency")
         ]
 
 
@@ -27,6 +27,11 @@ parseLocation location =
 playersPath : String
 playersPath =
     "#players"
+
+
+newCurrencyPath : String
+newCurrencyPath =
+    "#newCurrency"
 
 
 playerPath : Symbol -> String

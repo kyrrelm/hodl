@@ -2,6 +2,7 @@ module Players.PortfolioPage exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (class, href, placeholder, style)
+import Html.Events exposing (onClick)
 import Models exposing (Currency, Model, Portfolio)
 import Msgs exposing (Msg)
 import RemoteData exposing (WebData)
@@ -54,9 +55,19 @@ portfolioContainer portfolio =
         ]
 
 
+addCurrencyCard : Html Msg
+addCurrencyCard =
+    div [ class "card", onClick Msgs.OnNewCurrencyClick ]
+        [ text "+"
+        ]
+
+
 list : List Currency -> Html Msg
 list currencies =
-    div [ class "card-list" ] (List.map currencyCard currencies)
+    div [ class "card-list" ]
+        [ addCurrencyCard
+        , div [] (List.map currencyCard currencies)
+        ]
 
 
 currencyCard : Currency -> Html Msg
