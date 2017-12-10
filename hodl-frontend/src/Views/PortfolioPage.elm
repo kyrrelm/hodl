@@ -1,4 +1,4 @@
-module Players.PortfolioPage exposing (..)
+module Views.PortfolioPage exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (class, href, placeholder, style)

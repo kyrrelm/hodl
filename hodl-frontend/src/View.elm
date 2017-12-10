@@ -3,7 +3,7 @@ module View exposing (..)
 import Html exposing (Html, div, text)
 import Models exposing (Model)
 import Msgs exposing (Msg)
-import Players.PortfolioPage
+import Views.PortfolioPage
 
 
 view : Model -> Html Msg
@@ -16,7 +16,7 @@ page : Model -> Html Msg
 page model =
     case model.route of
         Models.PortfolioRoute ->
-            Players.PortfolioPage.view model
+            Views.PortfolioPage.view model
 
         Models.CurrencyRoute ->
             notFoundView
