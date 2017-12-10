@@ -104,23 +104,3 @@ ratesContainer currency =
         , div [] [ text ("BTC: " ++ currency.btc) ]
         , div [] [ text ("ETH: " ++ currency.eth) ]
         ]
-
-
-
---    div []
---        [ div []
---            [ text currency.symbol
---            , text currency.balance
---            ]
---        ]
---editBtn : Currency -> Html.Html Msg
---editBtn player =
---    let
---        path =
---            playerPath player.id
---    in
---    a
---        [ class "btn regular"
---        , href path
---        ]
---        [ i [ class "fa fa-pencil mr1" ] [], text "Edit" ]

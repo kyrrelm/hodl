@@ -22,9 +22,6 @@ update msg model =
         Msgs.OnNewCurrencyClick ->
             ( model, newUrl newCurrencyPath )
 
-        Msgs.ChangeTest test ->
-            ( { model | test = test }, Cmd.none )
-
 
 
 --        Msgs.OnPlayerSave (Ok player) ->
