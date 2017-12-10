@@ -1,6 +1,6 @@
 module Routing exposing (..)
 
-import Models exposing (Route(..), Symbol)
+import Models exposing (Route(..))
 import Navigation exposing (Location)
 import UrlParser exposing (..)
 

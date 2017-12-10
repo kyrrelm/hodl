@@ -3,7 +3,7 @@ module Commands exposing (..)
 import Http
 import Json.Decode as Decode
 import Json.Decode.Pipeline exposing (decode, required)
-import Models exposing (Currency, Portfolio, Symbol)
+import Models exposing (Currency, Portfolio)
 import Msgs exposing (Msg)
 import RemoteData
 

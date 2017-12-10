@@ -1,7 +1,7 @@
 module View exposing (..)
 
 import Html exposing (Html, div, text)
-import Models exposing (Model, Symbol)
+import Models exposing (Model)
 import Msgs exposing (Msg)
 import Players.PortfolioPage
 

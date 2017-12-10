@@ -7,10 +7,6 @@ import RemoteData exposing (WebData)
 
 type Msg
     = OnFetchPortfolio (WebData Portfolio)
+      --    | OnFetchCurrencies (WebData Portfolio)
     | OnLocationChange Location
     | OnNewCurrencyClick
-
-
-
---    | ChangeLevel Currency Int
---    | OnPlayerSave (Result Http.Error Currency)

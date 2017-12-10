@@ -21,31 +21,3 @@ update msg model =
 
         Msgs.OnNewCurrencyClick ->
             ( model, newUrl newCurrencyPath )
-
-
-
---        Msgs.OnPlayerSave (Ok player) ->
---            ( updatePlayer model player, Cmd.none )
---
---        Msgs.OnPlayerSave (Err error) ->
---            ( model, Cmd.none )
---
---
---
---updatePlayer : Model -> Currency -> Model
---updatePlayer model updatedPlayer =
---    let
---        pick currentPlayer =
---            if updatedPlayer.id == currentPlayer.id then
---                updatedPlayer
---
---            else
---                currentPlayer
---
---        updatePlayerList players =
---            List.map pick players
---
---        updatedPlayers =
---            RemoteData.map updatePlayerList model.players
---    in
---    { model | players = updatedPlayers }
