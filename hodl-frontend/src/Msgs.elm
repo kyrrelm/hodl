@@ -10,3 +10,4 @@ type Msg
     | OnFetchSymbols (WebData (List Symbol))
     | OnLocationChange Location
     | OnNewCurrencyClick
+    | OnSearchCoins String

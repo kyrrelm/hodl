@@ -7,6 +7,7 @@ type alias Model =
     { portfolio : WebData Portfolio
     , symbols : WebData (List Symbol)
     , route : Route
+    , searchCoins : String
     }
 
 
@@ -15,6 +16,7 @@ initialModel route =
     { portfolio = RemoteData.Loading
     , symbols = RemoteData.Loading
     , route = route
+    , searchCoins = ""
     }
 
 

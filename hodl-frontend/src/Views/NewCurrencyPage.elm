@@ -1,7 +1,8 @@
 module Views.NewCurrencyPage exposing (..)
 
 import Html exposing (..)
-import Html.Attributes exposing (class)
+import Html.Attributes exposing (class, placeholder)
+import Html.Events exposing (onInput)
 import Models exposing (Model, Symbol)
 import Msgs exposing (Msg)
 import RemoteData exposing (WebData)
@@ -12,13 +13,13 @@ view : Model -> Html Msg
 view model =
     div []
         [ Views.NavBar.view model
-        , div [ class "container" ] [ maybeSymbols model.symbols ]
+        , div [ class "container" ] [ maybeSymbols model ]
         ]
 
 
-maybeSymbols : WebData (List Symbol) -> Html Msg
-maybeSymbols response =
-    case response of
+maybeSymbols : Model -> Html Msg
+maybeSymbols model =
+    case model.symbols of
         RemoteData.NotAsked ->
             text ""
 
@@ -26,20 +27,30 @@ maybeSymbols response =
             text "Loading..."
 
         RemoteData.Success symbols ->
-            symbolsContainer symbols
+            symbolsContainer ( model.searchCoins, symbols )
 
         RemoteData.Failure error ->
             text (toString error)
 
 
-symbolsContainer : List Symbol -> Html Msg
-symbolsContainer symbols =
-    div [ class "card-list-container" ] [ list symbols ]
+symbolsContainer : ( String, List Symbol ) -> Html Msg
+symbolsContainer ( searchCoins, symbols ) =
+    div [ class "card-list-container" ] [ list ( searchCoins, symbols ) ]
 
 
-list : List Symbol -> Html Msg
-list symbols =
-    div [ class "card-list" ] (List.map symbolCard symbols)
+list : ( String, List Symbol ) -> Html Msg
+list ( searchCoins, symbols ) =
+    let
+        filter symbol =
+            String.contains searchCoins symbol.name
+
+        filteredSymbols =
+            List.filter filter symbols
+    in
+    div [ class "card-list" ]
+        [ input [ class "search-input", placeholder "Find coin", onInput Msgs.OnSearchCoins ] []
+        , div [] (List.map symbolCard filteredSymbols)
+        ]
 
 
 symbolCard : Symbol -> Html Msg

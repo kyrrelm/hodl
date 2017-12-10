@@ -25,3 +25,6 @@ update msg model =
 
         Msgs.OnNewCurrencyClick ->
             ( model, Cmd.batch [ newUrl newCurrencyPath, fetchSymbols ] )
+
+        Msgs.OnSearchCoins input ->
+            ( { model | searchCoins = input }, Cmd.none )
