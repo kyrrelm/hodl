@@ -13,7 +13,7 @@ view : Model -> Html Msg
 view model =
     div []
         [ Views.NavBar.view model
-        , maybePortfolio model.portfolio
+        , div [ class "container" ] [ maybePortfolio model.portfolio ]
         ]
 
 
@@ -27,15 +27,10 @@ maybePortfolio response =
             text "Loading..."
 
         RemoteData.Success portfolio ->
-            pageContainer portfolio
+            portfolioContainer portfolio
 
         RemoteData.Failure error ->
             text (toString error)
-
-
-pageContainer : Portfolio -> Html Msg
-pageContainer portfolio =
-    div [ class "container" ] [ portfolioContainer portfolio ]
 
 
 portfolioContainer : Portfolio -> Html Msg

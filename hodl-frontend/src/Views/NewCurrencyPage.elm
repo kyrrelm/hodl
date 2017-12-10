@@ -12,7 +12,7 @@ view : Model -> Html Msg
 view model =
     div []
         [ Views.NavBar.view model
-        , maybeSymbols model.symbols
+        , div [ class "container" ] [ maybeSymbols model.symbols ]
         ]
 
 
