@@ -41,8 +41,14 @@ symbolsContainer ( searchCoins, symbols ) =
 list : ( String, List Symbol ) -> Html Msg
 list ( searchCoins, symbols ) =
     let
+        containsName symbol =
+            String.contains (String.toLower searchCoins) (String.toLower symbol.name)
+
+        containsSymbol symbol =
+            String.contains (String.toLower searchCoins) (String.toLower symbol.symbol)
+
         filter symbol =
-            String.contains searchCoins symbol.name
+            containsName symbol || containsSymbol symbol
 
         filteredSymbols =
             List.filter filter symbols
