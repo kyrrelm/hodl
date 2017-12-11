@@ -12,11 +12,13 @@ const updateCurrencies = (app) => {
       .then(json => {
         const currencies = Object
             .values(json.Data)
+            .sort((a, b) => parseInt(a.SortOrder) - parseInt(b.SortOrder))
             .map(currency =>
             {
               return {
                 symbol: currency.Symbol,
                 name: currency.CoinName,
+                sortOrder: currency.SortOrder,
               }
             });
         app.currency.update({}, {$addToSet: {currencies: {$each: currencies}}}, {upsert: true});
