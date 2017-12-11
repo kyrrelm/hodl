@@ -3,7 +3,7 @@ module Commands exposing (..)
 import Http
 import Json.Decode as Decode
 import Json.Decode.Pipeline exposing (decode, required)
-import Models exposing (Currency, Portfolio, Symbol)
+import Models exposing (Coin, Currency, Portfolio)
 import Msgs exposing (Msg)
 import RemoteData
 
@@ -61,7 +61,7 @@ fetchSymbolsUrl =
     "http://localhost:8080/currency/"
 
 
-fetchSymbolsRequest : Http.Request (List Symbol)
+fetchSymbolsRequest : Http.Request (List Coin)
 fetchSymbolsRequest =
     Http.request
         { body = Http.emptyBody
@@ -81,14 +81,14 @@ fetchSymbols =
         |> Cmd.map Msgs.OnFetchSymbols
 
 
-symbolsDecoder : Decode.Decoder (List Symbol)
+symbolsDecoder : Decode.Decoder (List Coin)
 symbolsDecoder =
     Decode.list symbolDecoder
 
 
-symbolDecoder : Decode.Decoder Symbol
+symbolDecoder : Decode.Decoder Coin
 symbolDecoder =
     decode
-        Symbol
+        Coin
         |> required "symbol" Decode.string
         |> required "name" Decode.string

@@ -5,7 +5,7 @@ import RemoteData exposing (WebData)
 
 type alias Model =
     { portfolio : WebData Portfolio
-    , symbols : WebData (List Symbol)
+    , coins : WebData (List Coin)
     , route : Route
     , searchCoins : String
     }
@@ -14,13 +14,13 @@ type alias Model =
 initialModel : Route -> Model
 initialModel route =
     { portfolio = RemoteData.Loading
-    , symbols = RemoteData.Loading
+    , coins = RemoteData.Loading
     , route = route
     , searchCoins = ""
     }
 
 
-type alias Symbol =
+type alias Coin =
     { symbol : String
     , name : String
     }
