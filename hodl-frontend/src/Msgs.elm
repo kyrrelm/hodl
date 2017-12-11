@@ -11,3 +11,4 @@ type Msg
     | OnLocationChange Location
     | OnNewCurrencyClick
     | OnSearchCoins String
+    | OnAddCurrencyClick

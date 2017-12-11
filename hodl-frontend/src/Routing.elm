@@ -11,6 +11,7 @@ matchers =
         [ map PortfolioRoute top
         , map PortfolioRoute (s "portfolio")
         , map CurrencyRoute (s "newCurrency")
+        , map AddCurrencyRoute (s "addCurrency")
         ]
 
 
@@ -32,3 +33,8 @@ portfolioPath =
 newCurrencyPath : String
 newCurrencyPath =
     "#newCurrency"
+
+
+addCurrencyPath : String
+addCurrencyPath =
+    "#addCurrency"

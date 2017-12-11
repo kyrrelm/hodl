@@ -2,7 +2,7 @@ module Views.NewCurrencyPage exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (class, placeholder)
-import Html.Events exposing (onInput)
+import Html.Events exposing (onClick, onInput)
 import Models exposing (Coin, Model)
 import Msgs exposing (Msg)
 import RemoteData exposing (WebData)
@@ -61,7 +61,7 @@ list ( searchCoins, coins ) =
 
 symbolCard : Coin -> Html Msg
 symbolCard symbol =
-    div [ class "card" ]
+    div [ class "card", onClick Msgs.OnAddCurrencyClick ]
         [ div [ class "card-symbol h3" ] [ text symbol.symbol ]
         , text symbol.name
         ]

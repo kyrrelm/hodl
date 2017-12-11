@@ -3,6 +3,7 @@ module View exposing (..)
 import Html exposing (Html, div, text)
 import Models exposing (Model)
 import Msgs exposing (Msg)
+import Views.AddCurrencyPage
 import Views.NewCurrencyPage
 import Views.PortfolioPage
 
@@ -21,6 +22,9 @@ page model =
 
         Models.CurrencyRoute ->
             Views.NewCurrencyPage.view model
+
+        Models.AddCurrencyRoute ->
+            Views.AddCurrencyPage.view model
 
         Models.NotFoundRoute ->
             notFoundView

@@ -4,7 +4,7 @@ import Commands exposing (fetchSymbols)
 import Models exposing (Currency, Model)
 import Msgs exposing (Msg)
 import Navigation exposing (..)
-import Routing exposing (newCurrencyPath, parseLocation)
+import Routing exposing (addCurrencyPath, newCurrencyPath, parseLocation)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -25,6 +25,9 @@ update msg model =
 
         Msgs.OnNewCurrencyClick ->
             ( model, Cmd.batch [ newUrl newCurrencyPath, fetchSymbols ] )
+
+        Msgs.OnAddCurrencyClick ->
+            ( model, Cmd.batch [ newUrl addCurrencyPath ] )
 
         Msgs.OnSearchCoins input ->
             ( { model | searchCoins = input }, Cmd.none )
