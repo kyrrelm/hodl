@@ -12,13 +12,13 @@ view : Model -> Html Msg
 view model =
     div []
         [ Views.NavBar.view model
-        , div [ class "container" ] [ maybeCoins model ]
+        , div [ class "container" ] [ maybeCurrency model ]
         ]
 
 
-maybeCoins : Model -> Html Msg
-maybeCoins model =
-    case model.coins of
+maybeCurrency : Model -> Html Msg
+maybeCurrency model =
+    case model.currency of
         RemoteData.NotAsked ->
             text ""
 

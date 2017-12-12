@@ -124,7 +124,7 @@ currencyDecoder =
     decode
         Currency
         |> required "symbol" Decode.string
-        |> required "BTC" Decode.string
-        |> required "ETH" Decode.string
-        |> required "USD" Decode.string
-        |> required "EUR" Decode.string
+        |> required "btc" Decode.string
+        |> required "eth" Decode.string
+        |> required "usd" Decode.string
+        |> required "eur" Decode.string

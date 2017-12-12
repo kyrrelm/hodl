@@ -21,7 +21,17 @@ module.exports.register =  (router) => {
         .then(res => res.json())
         .catch(err => console.log(err));
 
-    const currencyArray = Object.values(response).map((currency, index) => Object.assign({}, currency, {symbol: Object.keys(response)[index]}));
+    const currencyArray = Object
+        .values(response)
+        .map((currency, index) => {
+          return {
+            btc: String(currency.BTC),
+            eth: String(currency.ETH),
+            usd: String(currency.USD),
+            eur: String(currency.EUR),
+            symbol: Object.keys(response)[index]
+          }
+    });
 
     if (currencyArray.length === 1) {
       ctx.body = currencyArray[0];
