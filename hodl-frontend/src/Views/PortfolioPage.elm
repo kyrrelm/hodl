@@ -3,7 +3,7 @@ module Views.PortfolioPage exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (class, href, placeholder, style)
 import Html.Events exposing (onClick)
-import Models exposing (Currency, Model, Portfolio)
+import Models exposing (CurrencyBalance, Model, Portfolio)
 import Msgs exposing (Msg)
 import RemoteData exposing (WebData)
 import Views.NavBar exposing (view)
@@ -47,7 +47,7 @@ addCurrencyCard =
         ]
 
 
-list : List Currency -> Html Msg
+list : List CurrencyBalance -> Html Msg
 list currencies =
     div [ class "card-list" ]
         [ addCurrencyCard
@@ -55,7 +55,7 @@ list currencies =
         ]
 
 
-currencyCard : Currency -> Html Msg
+currencyCard : CurrencyBalance -> Html Msg
 currencyCard currency =
     div [ class "card" ]
         [ div [ class "card-symbol h3" ] [ text currency.symbol ]
@@ -63,7 +63,7 @@ currencyCard currency =
         ]
 
 
-currencyCardContent : Currency -> Html Msg
+currencyCardContent : CurrencyBalance -> Html Msg
 currencyCardContent currency =
     div [ class "card-content" ]
         [ balanceContainer currency
@@ -71,7 +71,7 @@ currencyCardContent currency =
         ]
 
 
-balanceContainer : Currency -> Html Msg
+balanceContainer : CurrencyBalance -> Html Msg
 balanceContainer currency =
     div []
         [ div [] [ text currency.balance ]
@@ -81,7 +81,7 @@ balanceContainer currency =
         ]
 
 
-ratesContainer : Currency -> Html Msg
+ratesContainer : CurrencyBalance -> Html Msg
 ratesContainer currency =
     div []
         [ div [] [ text ("USD: " ++ currency.usd) ]

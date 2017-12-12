@@ -6,6 +6,7 @@ import RemoteData exposing (WebData)
 type alias Model =
     { portfolio : WebData Portfolio
     , coins : WebData (List Coin)
+    , currency : WebData Currency
     , route : Route
     , searchCoins : String
     }
@@ -15,6 +16,7 @@ initialModel : Route -> Model
 initialModel route =
     { portfolio = RemoteData.Loading
     , coins = RemoteData.Loading
+    , currency = RemoteData.Loading
     , route = route
     , searchCoins = ""
     }
@@ -26,14 +28,23 @@ type alias Coin =
     }
 
 
-type alias Portfolio =
-    { usdBalance : String
-    , eurBalance : String
-    , currencies : List Currency
+type alias Currency =
+    { symbol : String
+    , btc : String
+    , eth : String
+    , usd : String
+    , eur : String
     }
 
 
-type alias Currency =
+type alias Portfolio =
+    { usdBalance : String
+    , eurBalance : String
+    , currencies : List CurrencyBalance
+    }
+
+
+type alias CurrencyBalance =
     { symbol : String
     , balance : String
     , usdBalance : String

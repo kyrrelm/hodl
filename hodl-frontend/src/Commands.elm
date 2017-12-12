@@ -3,7 +3,7 @@ module Commands exposing (..)
 import Http
 import Json.Decode as Decode
 import Json.Decode.Pipeline exposing (decode, required)
-import Models exposing (Coin, Currency, Portfolio)
+import Models exposing (Coin, Currency, CurrencyBalance, Portfolio)
 import Msgs exposing (Msg)
 import RemoteData
 
@@ -39,13 +39,13 @@ portfolioDecoder =
         Portfolio
         |> required "usdBalance" Decode.string
         |> required "eurBalance" Decode.string
-        |> required "currencies" (Decode.list currencyDecoder)
+        |> required "currencies" (Decode.list currencyBalanceDecoder)
 
 
-currencyDecoder : Decode.Decoder Currency
-currencyDecoder =
+currencyBalanceDecoder : Decode.Decoder CurrencyBalance
+currencyBalanceDecoder =
     decode
-        Currency
+        CurrencyBalance
         |> required "symbol" Decode.string
         |> required "balance" Decode.string
         |> required "usdBalance" Decode.string
@@ -92,3 +92,39 @@ symbolDecoder =
         Coin
         |> required "symbol" Decode.string
         |> required "name" Decode.string
+
+
+fetchCurrencyUrl : String -> String
+fetchCurrencyUrl symbol =
+    "http://localhost:8080/currency/rates?symbols=" ++ symbol
+
+
+fetchCurrencyRequest : String -> Http.Request Currency
+fetchCurrencyRequest symbol =
+    Http.request
+        { body = Http.emptyBody
+        , expect = Http.expectJson currencyDecoder
+        , headers = [ Http.header "Authorization" "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YTI0MWVlYzI5ZTQ5NTA2MjVkMDgzMTgiLCJyb2xlIjoidXNlciIsImlhdCI6MTUxMjkyOTM3MywiZXhwIjoxNTEzNTM0MTczfQ.9HHg11ZvvIgwqC1ISBp7_ZUr3_wPu1GFGj-_Ye-JMhI" ]
+        , method = "GET"
+        , timeout = Nothing
+        , url = fetchCurrencyUrl symbol
+        , withCredentials = False
+        }
+
+
+fetchCurrency : String -> Cmd Msg
+fetchCurrency symbol =
+    fetchCurrencyRequest symbol
+        |> RemoteData.sendRequest
+        |> Cmd.map Msgs.OnFetchCurrency
+
+
+currencyDecoder : Decode.Decoder Currency
+currencyDecoder =
+    decode
+        Currency
+        |> required "symbol" Decode.string
+        |> required "BTC" Decode.string
+        |> required "ETH" Decode.string
+        |> required "USD" Decode.string
+        |> required "EUR" Decode.string

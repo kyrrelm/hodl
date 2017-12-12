@@ -1,5 +1,4 @@
 const fetch = require('node-fetch');
-const validate = require('../utils.js').validate;
 
 const path = '/currency';
 
@@ -18,9 +17,18 @@ module.exports.register =  (router) => {
       ctx.throw(400, `Query string symbols is missing. Example: symbols=ETH,BTC`);
     }
 
-    ctx.body = await fetch(`https://min-api.cryptocompare.com/data/pricemulti?fsyms=${symbols}&tsyms=BTC,ETH,USD,EUR`)
+    const response = await fetch(`https://min-api.cryptocompare.com/data/pricemulti?fsyms=${symbols}&tsyms=BTC,ETH,USD,EUR`)
         .then(res => res.json())
         .catch(err => console.log(err));
+
+    const currencyArray = Object.values(response).map((currency, index) => Object.assign({}, currency, {symbol: Object.keys(response)[index]}));
+
+    if (currencyArray.length === 1) {
+      ctx.body = currencyArray[0];
+    } else {
+      ctx.body = currencyArray;
+    }
+
   });
 
 };

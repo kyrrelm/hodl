@@ -1,7 +1,7 @@
 module Update exposing (..)
 
-import Commands exposing (fetchSymbols)
-import Models exposing (Currency, Model)
+import Commands exposing (fetchCurrency, fetchSymbols)
+import Models exposing (CurrencyBalance, Model)
 import Msgs exposing (Msg)
 import Navigation exposing (..)
 import Routing exposing (addCurrencyPath, newCurrencyPath, parseLocation)
@@ -16,6 +16,9 @@ update msg model =
         Msgs.OnFetchSymbols response ->
             ( { model | coins = response }, Cmd.none )
 
+        Msgs.OnFetchCurrency response ->
+            ( { model | currency = response }, Cmd.none )
+
         Msgs.OnLocationChange location ->
             let
                 newRoute =
@@ -26,8 +29,8 @@ update msg model =
         Msgs.OnNewCurrencyClick ->
             ( model, Cmd.batch [ newUrl newCurrencyPath, fetchSymbols ] )
 
-        Msgs.OnAddCurrencyClick ->
-            ( model, Cmd.batch [ newUrl addCurrencyPath ] )
+        Msgs.OnAddCurrencyClick symbol ->
+            ( model, Cmd.batch [ newUrl addCurrencyPath, fetchCurrency symbol ] )
 
         Msgs.OnSearchCoins input ->
             ( { model | searchCoins = input }, Cmd.none )
