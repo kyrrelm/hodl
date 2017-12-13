@@ -1,8 +1,9 @@
 module Views.AddCurrencyPage exposing (..)
 
 import Html exposing (..)
-import Html.Attributes exposing (class, placeholder)
-import Models exposing (Coin, Model)
+import Html.Attributes exposing (align, class, placeholder, type_)
+import Html.Events exposing (onInput)
+import Models exposing (Coin, Currency, Model)
 import Msgs exposing (Msg)
 import RemoteData exposing (WebData)
 import Views.NavBar exposing (view)
@@ -12,7 +13,7 @@ view : Model -> Html Msg
 view model =
     div []
         [ Views.NavBar.view model
-        , div [ class "container" ] [ maybeCurrency model ]
+        , div [ class "container-flex" ] [ maybeCurrency model ]
         ]
 
 
@@ -25,15 +26,26 @@ maybeCurrency model =
         RemoteData.Loading ->
             text "Loading..."
 
-        RemoteData.Success coins ->
-            text "Derp"
+        RemoteData.Success currency ->
+            currencyContainer currency
 
-        --            coinsContainer ( model.searchCoins, coins )
         RemoteData.Failure error ->
             text (toString error)
 
 
-
---coinsContainer : ( String, List Coin ) -> Html Msg
---coinsContainer ( searchCoins, coins ) =
---    div [ class "card-list-container" ] [ list ( searchCoins, coins ) ]
+currencyContainer : Currency -> Html Msg
+currencyContainer currency =
+    div [ class "currencyContainer" ]
+        [ div [ class "card-content h1 space-bottom" ] [ text currency.symbol ]
+        , div [ class "card-content h2 space-bottom" ]
+            [ div [] [ text "Current price" ]
+            , div []
+                [ div [] [ text ("$ " ++ currency.usd) ]
+                , div [] [ text ("€ " ++ currency.eur) ]
+                ]
+            ]
+        , div [ class "card-content h2" ]
+            [ div [] [ text "Amount" ]
+            , input [ class "h2 currency-input", type_ "text", placeholder "0.00", onInput Msgs.OnCurrencyAmountInput ] []
+            ]
+        ]

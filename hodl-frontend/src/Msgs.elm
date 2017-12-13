@@ -13,3 +13,4 @@ type Msg
     | OnNewCurrencyClick
     | OnSearchCoins String
     | OnAddCurrencyClick String
+    | OnCurrencyAmountInput String

@@ -9,6 +9,7 @@ type alias Model =
     , currency : WebData Currency
     , route : Route
     , searchCoins : String
+    , inputCurrencyAmount : String
     }
 
 
@@ -19,6 +20,7 @@ initialModel route =
     , currency = RemoteData.Loading
     , route = route
     , searchCoins = ""
+    , inputCurrencyAmount = ""
     }
 
 

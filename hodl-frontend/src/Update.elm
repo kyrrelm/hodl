@@ -34,3 +34,6 @@ update msg model =
 
         Msgs.OnSearchCoins input ->
             ( { model | searchCoins = input }, Cmd.none )
+
+        Msgs.OnCurrencyAmountInput input ->
+            ( { model | inputCurrencyAmount = input }, Cmd.none )
