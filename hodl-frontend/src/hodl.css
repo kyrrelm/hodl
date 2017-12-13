@@ -24,6 +24,24 @@ input, select, textarea{
     text-decoration-color: #c6c8ca;
 }
 
+button {
+    background-color: #4b4b4b;
+    border: none;
+    border-radius: 0;
+    padding: 0.5rem;
+    font-size: 1.5rem;
+    color: #c6c8ca;
+    outline: none;
+}
+
+button:hover {
+    background-color: #555555;
+}
+
+button:active {
+    background-color: #4b4b4b;
+}
+
 .nav {
     position: fixed;
     width: 100%;
@@ -47,6 +65,11 @@ input, select, textarea{
     margin: 0 2rem 2rem 2rem;
     display: flex;
     justify-content: center;
+}
+
+.align-right {
+    display: flex;
+    justify-content: flex-end;
 }
 
 .space-bottom {
