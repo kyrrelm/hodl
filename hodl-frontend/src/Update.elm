@@ -1,7 +1,7 @@
 module Update exposing (..)
 
 import Commands exposing (fetchCurrency, fetchSymbols, saveCurrencyCmd)
-import Models exposing (CurrencyBalance, Model)
+import Models exposing (CurrencyOverview, Model)
 import Msgs exposing (Msg)
 import Navigation exposing (..)
 import RemoteData exposing (WebData)
@@ -48,13 +48,13 @@ update msg model =
                     ( model, Cmd.none )
 
                 RemoteData.Success currency ->
-                    ( model, saveCurrencyCmd ( currency, model.inputCurrencyAmount ) )
+                    ( { model | currencyToSave = RemoteData.Loading }, saveCurrencyCmd ( currency, model.inputCurrencyAmount ) )
 
                 RemoteData.Failure error ->
                     ( model, Cmd.none )
 
         Msgs.OnCurrencySave (Ok portfolioEntry) ->
-            ( model, Cmd.none )
+            ( { model | currencyToSave = RemoteData.Success portfolioEntry }, Cmd.none )
 
         Msgs.OnCurrencySave (Err error) ->
-            ( model, Cmd.none )
+            ( { model | currencyToSave = RemoteData.Failure error }, Cmd.none )

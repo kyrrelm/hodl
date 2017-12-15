@@ -4,7 +4,7 @@ import Http
 import Json.Decode as Decode
 import Json.Decode.Pipeline exposing (decode, required)
 import Json.Encode as Encode
-import Models exposing (Coin, Currency, CurrencyBalance, Portfolio, PortfolioEntry)
+import Models exposing (Coin, Currency, CurrencyBalance, CurrencyOverview, Portfolio)
 import Msgs exposing (Msg)
 import RemoteData
 
@@ -47,10 +47,10 @@ portfolioDecoder =
         |> required "currencies" (Decode.list currencyBalanceDecoder)
 
 
-currencyBalanceDecoder : Decode.Decoder CurrencyBalance
+currencyBalanceDecoder : Decode.Decoder CurrencyOverview
 currencyBalanceDecoder =
     decode
-        CurrencyBalance
+        CurrencyOverview
         |> required "symbol" Decode.string
         |> required "balance" Decode.string
         |> required "usdBalance" Decode.string
@@ -140,7 +140,7 @@ saveCurrencyUrl =
     "http://localhost:8080/portfolio/"
 
 
-saveCurrencyRequest : ( Currency, String ) -> Http.Request PortfolioEntry
+saveCurrencyRequest : ( Currency, String ) -> Http.Request CurrencyBalance
 saveCurrencyRequest ( currency, symbol ) =
     Http.request
         { body =
@@ -154,11 +154,11 @@ saveCurrencyRequest ( currency, symbol ) =
         }
 
 
-portfolioEntryDecoder : Decode.Decoder PortfolioEntry
+portfolioEntryDecoder : Decode.Decoder CurrencyBalance
 portfolioEntryDecoder =
-    decode PortfolioEntry
+    decode CurrencyBalance
         |> required "symbol" Decode.string
-        |> required "amount" Decode.string
+        |> required "balance" Decode.string
 
 
 saveCurrencyCmd : ( Currency, String ) -> Cmd Msg

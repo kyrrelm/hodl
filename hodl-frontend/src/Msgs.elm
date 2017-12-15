@@ -1,7 +1,7 @@
 module Msgs exposing (..)
 
 import Http
-import Models exposing (Coin, Currency, Portfolio, PortfolioEntry)
+import Models exposing (Coin, Currency, CurrencyBalance, Portfolio)
 import Navigation exposing (Location)
 import RemoteData exposing (WebData)
 
@@ -16,4 +16,4 @@ type Msg
     | OnAddCurrencyClick String
     | OnCurrencyAmountInput String
     | OnClickCurrencySave
-    | OnCurrencySave (Result Http.Error PortfolioEntry)
+    | OnCurrencySave (Result Http.Error CurrencyBalance)

@@ -7,6 +7,7 @@ type alias Model =
     { portfolio : WebData Portfolio
     , coins : WebData (List Coin)
     , currency : WebData Currency
+    , currencyToSave : WebData CurrencyBalance
     , route : Route
     , searchCoins : String
     , inputCurrencyAmount : String
@@ -17,7 +18,8 @@ initialModel : Route -> Model
 initialModel route =
     { portfolio = RemoteData.Loading
     , coins = RemoteData.Loading
-    , currency = RemoteData.Loading
+    , currency = RemoteData.NotAsked
+    , currencyToSave = RemoteData.NotAsked
     , route = route
     , searchCoins = ""
     , inputCurrencyAmount = ""
@@ -42,17 +44,17 @@ type alias Currency =
 type alias Portfolio =
     { usdBalance : String
     , eurBalance : String
-    , currencies : List CurrencyBalance
-    }
-
-
-type alias PortfolioEntry =
-    { symbol : String
-    , amount : String
+    , currencies : List CurrencyOverview
     }
 
 
 type alias CurrencyBalance =
+    { symbol : String
+    , balance : String
+    }
+
+
+type alias CurrencyOverview =
     { symbol : String
     , balance : String
     , usdBalance : String

@@ -2,7 +2,7 @@ module Views.NavBar exposing (view)
 
 import Html exposing (..)
 import Html.Attributes exposing (class)
-import Models exposing (CurrencyBalance, Model, Portfolio)
+import Models exposing (CurrencyOverview, Model, Portfolio)
 import Msgs exposing (Msg)
 import RemoteData exposing (WebData)
 

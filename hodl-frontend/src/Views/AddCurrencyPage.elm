@@ -27,6 +27,22 @@ maybeCurrency model =
             text "Loading..."
 
         RemoteData.Success currency ->
+            maybeSavingCurrency ( model, currency )
+
+        RemoteData.Failure error ->
+            text (toString error)
+
+
+maybeSavingCurrency : ( Model, Currency ) -> Html Msg
+maybeSavingCurrency ( model, currency ) =
+    case model.currencyToSave of
+        RemoteData.NotAsked ->
+            currencyContainer currency
+
+        RemoteData.Loading ->
+            text "Loading..."
+
+        RemoteData.Success c ->
             currencyContainer currency
 
         RemoteData.Failure error ->
