@@ -2,7 +2,7 @@ module Views.AddCurrencyPage exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (align, class, placeholder, type_)
-import Html.Events exposing (onInput)
+import Html.Events exposing (onClick, onInput)
 import Models exposing (Coin, Currency, Model)
 import Msgs exposing (Msg)
 import RemoteData exposing (WebData)
@@ -48,5 +48,5 @@ currencyContainer currency =
             [ div [] [ text "Amount" ]
             , input [ class "h2 currency-input", type_ "text", placeholder "0.00", onInput Msgs.OnCurrencyAmountInput ] []
             ]
-        , div [ class "align-right" ] [ button [] [ text "Save" ] ]
+        , div [ class "align-right" ] [ button [ onClick Msgs.OnClickCurrencySave ] [ text "Save" ] ]
         ]

@@ -46,6 +46,12 @@ type alias Portfolio =
     }
 
 
+type alias PortfolioEntry =
+    { symbol : String
+    , amount : String
+    }
+
+
 type alias CurrencyBalance =
     { symbol : String
     , balance : String

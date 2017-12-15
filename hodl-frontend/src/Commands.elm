@@ -3,9 +3,14 @@ module Commands exposing (..)
 import Http
 import Json.Decode as Decode
 import Json.Decode.Pipeline exposing (decode, required)
-import Models exposing (Coin, Currency, CurrencyBalance, Portfolio)
+import Json.Encode as Encode
+import Models exposing (Coin, Currency, CurrencyBalance, Portfolio, PortfolioEntry)
 import Msgs exposing (Msg)
 import RemoteData
+
+
+jwtToken =
+    "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YTI0MWVlYzI5ZTQ5NTA2MjVkMDgzMTgiLCJyb2xlIjoidXNlciIsImlhdCI6MTUxMzM1NTIxMiwiZXhwIjoxNTEzOTYwMDEyfQ.uTHrkkrpdpzYlxkvrgUYmN4tVZme8_dbFQ2Ku38ixPc"
 
 
 fetchPortfolioUrl : String
@@ -18,7 +23,7 @@ fetchPortfolioRequest =
     Http.request
         { body = Http.emptyBody
         , expect = Http.expectJson portfolioDecoder
-        , headers = [ Http.header "Authorization" "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YTI0MWVlYzI5ZTQ5NTA2MjVkMDgzMTgiLCJyb2xlIjoidXNlciIsImlhdCI6MTUxMjkyOTM3MywiZXhwIjoxNTEzNTM0MTczfQ.9HHg11ZvvIgwqC1ISBp7_ZUr3_wPu1GFGj-_Ye-JMhI" ]
+        , headers = [ Http.header "Authorization" jwtToken ]
         , method = "GET"
         , timeout = Nothing
         , url = fetchPortfolioUrl
@@ -66,7 +71,7 @@ fetchSymbolsRequest =
     Http.request
         { body = Http.emptyBody
         , expect = Http.expectJson symbolsDecoder
-        , headers = [ Http.header "Authorization" "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YTI0MWVlYzI5ZTQ5NTA2MjVkMDgzMTgiLCJyb2xlIjoidXNlciIsImlhdCI6MTUxMjkyOTM3MywiZXhwIjoxNTEzNTM0MTczfQ.9HHg11ZvvIgwqC1ISBp7_ZUr3_wPu1GFGj-_Ye-JMhI" ]
+        , headers = [ Http.header "Authorization" jwtToken ]
         , method = "GET"
         , timeout = Nothing
         , url = fetchSymbolsUrl
@@ -104,7 +109,7 @@ fetchCurrencyRequest symbol =
     Http.request
         { body = Http.emptyBody
         , expect = Http.expectJson currencyDecoder
-        , headers = [ Http.header "Authorization" "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YTI0MWVlYzI5ZTQ5NTA2MjVkMDgzMTgiLCJyb2xlIjoidXNlciIsImlhdCI6MTUxMjkyOTM3MywiZXhwIjoxNTEzNTM0MTczfQ.9HHg11ZvvIgwqC1ISBp7_ZUr3_wPu1GFGj-_Ye-JMhI" ]
+        , headers = [ Http.header "Authorization" jwtToken ]
         , method = "GET"
         , timeout = Nothing
         , url = fetchCurrencyUrl symbol
@@ -128,3 +133,46 @@ currencyDecoder =
         |> required "eth" Decode.string
         |> required "usd" Decode.string
         |> required "eur" Decode.string
+
+
+saveCurrencyUrl : String
+saveCurrencyUrl =
+    "http://localhost:8080/portfolio/"
+
+
+saveCurrencyRequest : ( Currency, String ) -> Http.Request PortfolioEntry
+saveCurrencyRequest ( currency, symbol ) =
+    Http.request
+        { body =
+            currencyEncoder ( currency, symbol ) |> Http.jsonBody
+        , expect = Http.expectJson portfolioEntryDecoder
+        , headers = [ Http.header "Authorization" jwtToken ]
+        , method = "POST"
+        , timeout = Nothing
+        , url = saveCurrencyUrl
+        , withCredentials = False
+        }
+
+
+portfolioEntryDecoder : Decode.Decoder PortfolioEntry
+portfolioEntryDecoder =
+    decode PortfolioEntry
+        |> required "symbol" Decode.string
+        |> required "amount" Decode.string
+
+
+saveCurrencyCmd : ( Currency, String ) -> Cmd Msg
+saveCurrencyCmd ( currency, symbol ) =
+    saveCurrencyRequest ( currency, symbol )
+        |> Http.send Msgs.OnCurrencySave
+
+
+currencyEncoder : ( Currency, String ) -> Encode.Value
+currencyEncoder ( currency, amount ) =
+    let
+        attributes =
+            [ ( "symbol", Encode.string currency.symbol )
+            , ( "amount", Encode.string amount )
+            ]
+    in
+    Encode.object attributes

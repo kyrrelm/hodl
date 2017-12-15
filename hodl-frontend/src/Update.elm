@@ -1,9 +1,10 @@
 module Update exposing (..)
 
-import Commands exposing (fetchCurrency, fetchSymbols)
+import Commands exposing (fetchCurrency, fetchSymbols, saveCurrencyCmd)
 import Models exposing (CurrencyBalance, Model)
 import Msgs exposing (Msg)
 import Navigation exposing (..)
+import RemoteData exposing (WebData)
 import Routing exposing (addCurrencyPath, newCurrencyPath, parseLocation)
 
 
@@ -37,3 +38,23 @@ update msg model =
 
         Msgs.OnCurrencyAmountInput input ->
             ( { model | inputCurrencyAmount = input }, Cmd.none )
+
+        Msgs.OnClickCurrencySave ->
+            case model.currency of
+                RemoteData.NotAsked ->
+                    ( model, Cmd.none )
+
+                RemoteData.Loading ->
+                    ( model, Cmd.none )
+
+                RemoteData.Success currency ->
+                    ( model, saveCurrencyCmd ( currency, model.inputCurrencyAmount ) )
+
+                RemoteData.Failure error ->
+                    ( model, Cmd.none )
+
+        Msgs.OnCurrencySave (Ok portfolioEntry) ->
+            ( model, Cmd.none )
+
+        Msgs.OnCurrencySave (Err error) ->
+            ( model, Cmd.none )
