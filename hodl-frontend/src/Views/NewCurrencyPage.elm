@@ -54,14 +54,14 @@ list ( searchCoins, coins ) =
             List.filter filter coins
     in
     div [ class "card-list" ]
-        [ input [ class "search-input", placeholder "Find coin", onInput Msgs.OnSearchCoins ] []
+        [ input [ class "search-input", placeholder "Find coin", onInput Msgs.OnInputSearchCoin ] []
         , div [] (List.map symbolCard filteredCoins)
         ]
 
 
 symbolCard : Coin -> Html Msg
 symbolCard symbol =
-    div [ class "card", onClick (Msgs.OnAddCurrencyClick symbol.symbol) ]
+    div [ class "card", onClick (Msgs.OnClickAddCurrency symbol.symbol) ]
         [ div [ class "card-symbol h3" ] [ text symbol.symbol ]
         , text symbol.name
         ]

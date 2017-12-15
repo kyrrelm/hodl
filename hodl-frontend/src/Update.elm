@@ -27,16 +27,16 @@ update msg model =
             in
             ( { model | route = newRoute }, Cmd.none )
 
-        Msgs.OnNewCurrencyClick ->
+        Msgs.OnClickNewCurrency ->
             ( model, Cmd.batch [ newUrl newCurrencyPath, fetchSymbols ] )
 
-        Msgs.OnAddCurrencyClick symbol ->
+        Msgs.OnClickAddCurrency symbol ->
             ( model, Cmd.batch [ newUrl addCurrencyPath, fetchCurrency symbol ] )
 
-        Msgs.OnSearchCoins input ->
+        Msgs.OnInputSearchCoin input ->
             ( { model | searchCoins = input }, Cmd.none )
 
-        Msgs.OnCurrencyAmountInput input ->
+        Msgs.OnInputCurrencyAmount input ->
             ( { model | inputCurrencyAmount = input }, Cmd.none )
 
         Msgs.OnClickCurrencySave ->

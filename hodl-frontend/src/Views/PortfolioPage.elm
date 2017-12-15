@@ -42,7 +42,7 @@ portfolioContainer portfolio =
 
 addCurrencyCard : Html Msg
 addCurrencyCard =
-    div [ class "card", onClick Msgs.OnNewCurrencyClick ]
+    div [ class "card", onClick Msgs.OnClickNewCurrency ]
         [ text "+"
         ]
 

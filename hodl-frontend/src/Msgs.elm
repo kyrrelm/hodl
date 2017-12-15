@@ -11,9 +11,9 @@ type Msg
     | OnFetchSymbols (WebData (List Coin))
     | OnFetchCurrency (WebData Currency)
     | OnLocationChange Location
-    | OnNewCurrencyClick
-    | OnSearchCoins String
-    | OnAddCurrencyClick String
-    | OnCurrencyAmountInput String
+    | OnClickNewCurrency
+    | OnInputSearchCoin String
+    | OnClickAddCurrency String
+    | OnInputCurrencyAmount String
     | OnClickCurrencySave
     | OnCurrencySave (Result Http.Error CurrencyBalance)
