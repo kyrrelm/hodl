@@ -1,11 +1,11 @@
 module Update exposing (..)
 
-import Commands exposing (fetchCurrency, fetchSymbols, saveCurrencyCmd)
+import Commands exposing (fetchCurrency, fetchPortfolio, fetchSymbols, saveCurrencyCmd)
 import Models exposing (CurrencyOverview, Model)
 import Msgs exposing (Msg)
 import Navigation exposing (..)
 import RemoteData exposing (WebData)
-import Routing exposing (addCurrencyPath, newCurrencyPath, parseLocation)
+import Routing exposing (addCurrencyPath, newCurrencyPath, parseLocation, portfolioPath)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -54,7 +54,7 @@ update msg model =
                     ( model, Cmd.none )
 
         Msgs.OnCurrencySave (Ok portfolioEntry) ->
-            ( { model | currencyToSave = RemoteData.Success portfolioEntry }, Cmd.none )
+            ( { model | currencyToSave = RemoteData.Success portfolioEntry }, Cmd.batch [ newUrl portfolioPath, fetchPortfolio ] )
 
         Msgs.OnCurrencySave (Err error) ->
             ( { model | currencyToSave = RemoteData.Failure error }, Cmd.none )
