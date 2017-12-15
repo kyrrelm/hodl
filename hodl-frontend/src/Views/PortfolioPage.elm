@@ -43,7 +43,7 @@ portfolioContainer portfolio =
 addCurrencyCard : Html Msg
 addCurrencyCard =
     div [ class "card", onClick Msgs.OnClickNewCurrency ]
-        [ text "+"
+        [ div [ class "card-content-centered" ] [ text "+" ]
         ]
 
 

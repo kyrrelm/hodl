@@ -17,3 +17,4 @@ type Msg
     | OnInputCurrencyAmount String
     | OnClickCurrencySave
     | OnCurrencySave (Result Http.Error CurrencyBalance)
+    | OnClickNavBarName

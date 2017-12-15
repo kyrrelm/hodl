@@ -32,6 +32,7 @@ button {
     font-size: 1.5rem;
     color: #c6c8ca;
     outline: none;
+    cursor: pointer;
 }
 
 button:hover {
@@ -49,6 +50,11 @@ button:active {
     padding-right: 2rem;
     display: flex;
     justify-content: space-between;
+}
+
+.nav-name:hover {
+    color: #e2e4e6;
+    cursor: pointer;
 }
 
 .total-balance {
@@ -103,9 +109,18 @@ button:active {
 
 }
 
+.card:hover {
+    background-color: #555555;
+}
+
 .card-content {
     display: flex;
     justify-content: space-between;
+}
+
+.card-content-centered {
+    display: flex;
+    justify-content: center;
 }
 
 .card-symbol {

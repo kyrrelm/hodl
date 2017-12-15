@@ -30,6 +30,9 @@ update msg model =
         Msgs.OnClickNewCurrency ->
             ( model, Cmd.batch [ newUrl newCurrencyPath, fetchSymbols ] )
 
+        Msgs.OnClickNavBarName ->
+            ( model, Cmd.batch [ newUrl portfolioPath, fetchPortfolio ] )
+
         Msgs.OnClickAddCurrency symbol ->
             ( model, Cmd.batch [ newUrl addCurrencyPath, fetchCurrency symbol ] )
 
