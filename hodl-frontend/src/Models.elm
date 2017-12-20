@@ -11,6 +11,7 @@ type alias Model =
     , route : Route
     , searchCoins : String
     , inputCurrencyAmount : String
+    , inputCurrencyAmountError : Maybe String
     }
 
 
@@ -23,6 +24,7 @@ initialModel route =
     , route = route
     , searchCoins = ""
     , inputCurrencyAmount = ""
+    , inputCurrencyAmountError = Nothing
     }
 
 

@@ -37,20 +37,20 @@ maybeSavingCurrency : ( Model, Currency ) -> Html Msg
 maybeSavingCurrency ( model, currency ) =
     case model.currencyToSave of
         RemoteData.NotAsked ->
-            currencyContainer currency
+            currencyContainer ( model, currency )
 
         RemoteData.Loading ->
             text "Loading..."
 
         RemoteData.Success c ->
-            currencyContainer currency
+            currencyContainer ( model, currency )
 
         RemoteData.Failure error ->
             text (toString error)
 
 
-currencyContainer : Currency -> Html Msg
-currencyContainer currency =
+currencyContainer : ( Model, Currency ) -> Html Msg
+currencyContainer ( model, currency ) =
     div [ class "currencyContainer" ]
         [ div [ class "card-content h1 space-bottom" ] [ text currency.symbol ]
         , div [ class "card-content h2 space-bottom" ]
@@ -64,5 +64,16 @@ currencyContainer currency =
             [ div [] [ text "Amount" ]
             , input [ class "h2 currency-input", type_ "text", placeholder "0.00", onInput Msgs.OnInputCurrencyAmount ] []
             ]
+        , inputCurrencyAmountErrorView model.inputCurrencyAmountError
         , div [ class "align-right" ] [ button [ onClick Msgs.OnClickCurrencySave ] [ text "Save" ] ]
         ]
+
+
+inputCurrencyAmountErrorView : Maybe String -> Html Msg
+inputCurrencyAmountErrorView maybeError =
+    case maybeError of
+        Nothing ->
+            text ""
+
+        Just error ->
+            div [ class "align-right" ] [ div [ class "validation-error" ] [ text error ] ]

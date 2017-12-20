@@ -81,10 +81,16 @@ button:active {
 .align-right {
     display: flex;
     justify-content: flex-end;
+    position: relative;
 }
 
 .space-bottom {
-    margin-bottom: 2rem;
+    margin-bottom: 3rem;
+}
+
+.validation-error {
+    position: absolute;
+    bottom: 1rem;
 }
 
 .search-input {

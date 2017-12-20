@@ -51,7 +51,12 @@ update msg model =
                     ( model, Cmd.none )
 
                 RemoteData.Success currency ->
-                    ( { model | currencyToSave = RemoteData.Loading }, saveCurrencyCmd ( currency, model.inputCurrencyAmount ) )
+                    case validateInputCurrencyAmount model.inputCurrencyAmount of
+                        Nothing ->
+                            ( { model | currencyToSave = RemoteData.Loading }, saveCurrencyCmd ( currency, model.inputCurrencyAmount ) )
+
+                        Just error ->
+                            ( { model | inputCurrencyAmountError = Just error }, Cmd.none )
 
                 RemoteData.Failure error ->
                     ( model, Cmd.none )
@@ -61,3 +66,13 @@ update msg model =
 
         Msgs.OnCurrencySave (Err error) ->
             ( { model | currencyToSave = RemoteData.Failure error }, Cmd.none )
+
+
+validateInputCurrencyAmount : String -> Maybe String
+validateInputCurrencyAmount currencyAmount =
+    case String.toFloat currencyAmount of
+        Ok amount ->
+            Nothing
+
+        Err e ->
+            Just "That is not a number"
