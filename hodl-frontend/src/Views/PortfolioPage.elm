@@ -1,7 +1,7 @@
 module Views.PortfolioPage exposing (..)
 
 import Html exposing (..)
-import Html.Attributes exposing (class, href, placeholder, style)
+import Html.Attributes exposing (class, href, placeholder, src, style)
 import Html.Events exposing (onClick)
 import Models exposing (CurrencyOverview, Model, Portfolio)
 import Msgs exposing (Msg)
@@ -43,7 +43,7 @@ portfolioContainer portfolio =
 addCurrencyCard : Html Msg
 addCurrencyCard =
     div [ class "card", onClick Msgs.OnClickNewCurrency ]
-        [ div [ class "card-content-centered" ] [ text "+" ]
+        [ div [ class "card-content-centered icon" ] [ img [ src "./assets/plus.svg" ] [] ]
         ]
 
 
