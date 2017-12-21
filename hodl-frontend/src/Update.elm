@@ -54,12 +54,19 @@ update msg model =
                     ( model, Cmd.none )
 
                 RemoteData.Success currency ->
-                    case validateInputCurrencyAmount model.inputCurrencyAmount of
-                        Nothing ->
+                    case currencyIsValid model of
+                        True ->
                             ( { model | currencyToSave = RemoteData.Loading }, saveCurrencyCmd ( currency, model.inputCurrencyAmount, model.inputCurrencyPrice ) )
 
-                        Just error ->
-                            ( { model | inputCurrencyAmountError = Just error }, Cmd.none )
+                        False ->
+                            ( { model
+                                | inputCurrencyAmountError =
+                                    validatePositiveNumber model.inputCurrencyAmount
+                                , inputCurrencyPriceError =
+                                    validateEmptyStringOrPositiveNumber model.inputCurrencyPrice
+                              }
+                            , Cmd.none
+                            )
 
                 RemoteData.Failure error ->
                     ( model, Cmd.none )
@@ -71,16 +78,39 @@ update msg model =
             ( { model | currencyToSave = RemoteData.Failure error }, Cmd.none )
 
 
-validateInputCurrencyAmount : String -> Maybe String
-validateInputCurrencyAmount currencyAmount =
-    case String.isEmpty currencyAmount of
+currencyIsValid : Model -> Bool
+currencyIsValid model =
+    validateEmptyStringOrPositiveNumber model.inputCurrencyPrice
+        == Nothing
+        && validatePositiveNumber model.inputCurrencyAmount
+        == Nothing
+
+
+validateEmptyStringOrPositiveNumber : String -> Maybe String
+validateEmptyStringOrPositiveNumber value =
+    case value == "" of
+        True ->
+            Nothing
+
+        False ->
+            validatePositiveNumber value
+
+
+validatePositiveNumber : String -> Maybe String
+validatePositiveNumber value =
+    case String.isEmpty value of
         True ->
             Just "Missing value"
 
         False ->
-            case String.toFloat currencyAmount of
+            case String.toFloat value of
                 Ok amount ->
-                    Nothing
+                    case amount > 0 of
+                        True ->
+                            Nothing
+
+                        False ->
+                            Just "Value must me possitive"
 
                 Err e ->
                     Just "That is not a number"
