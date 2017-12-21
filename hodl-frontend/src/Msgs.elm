@@ -14,6 +14,7 @@ type Msg
     | OnClickNewCurrency
     | OnInputSearchCoin String
     | OnClickAddCurrency String
+    | OnInputCurrencyPrice String
     | OnInputCurrencyAmount String
     | OnClickCurrencySave
     | OnCurrencySave (Result Http.Error CurrencyBalance)

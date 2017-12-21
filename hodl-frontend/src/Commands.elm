@@ -140,11 +140,11 @@ saveCurrencyUrl =
     "http://localhost:8080/portfolio/"
 
 
-saveCurrencyRequest : ( Currency, String ) -> Http.Request CurrencyBalance
-saveCurrencyRequest ( currency, symbol ) =
+saveCurrencyRequest : ( Currency, String, String ) -> Http.Request CurrencyBalance
+saveCurrencyRequest ( currency, amount, btcPrice ) =
     Http.request
         { body =
-            currencyEncoder ( currency, symbol ) |> Http.jsonBody
+            currencyEncoder ( currency, amount, btcPrice ) |> Http.jsonBody
         , expect = Http.expectJson portfolioEntryDecoder
         , headers = [ Http.header "Authorization" jwtToken ]
         , method = "POST"
@@ -161,18 +161,19 @@ portfolioEntryDecoder =
         |> required "balance" Decode.string
 
 
-saveCurrencyCmd : ( Currency, String ) -> Cmd Msg
-saveCurrencyCmd ( currency, symbol ) =
-    saveCurrencyRequest ( currency, symbol )
+saveCurrencyCmd : ( Currency, String, String ) -> Cmd Msg
+saveCurrencyCmd ( currency, amount, priceBtc ) =
+    saveCurrencyRequest ( currency, amount, priceBtc )
         |> Http.send Msgs.OnCurrencySave
 
 
-currencyEncoder : ( Currency, String ) -> Encode.Value
-currencyEncoder ( currency, amount ) =
+currencyEncoder : ( Currency, String, String ) -> Encode.Value
+currencyEncoder ( currency, amount, priceBtc ) =
     let
         attributes =
             [ ( "symbol", Encode.string currency.symbol )
             , ( "amount", Encode.string amount )
+            , ( "priceBtc", Encode.string priceBtc )
             ]
     in
     Encode.object attributes

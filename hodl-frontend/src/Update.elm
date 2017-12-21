@@ -39,6 +39,9 @@ update msg model =
         Msgs.OnInputSearchCoin input ->
             ( { model | searchCoins = input }, Cmd.none )
 
+        Msgs.OnInputCurrencyPrice input ->
+            ( { model | inputCurrencyPrice = input, inputCurrencyPriceError = Nothing }, Cmd.none )
+
         Msgs.OnInputCurrencyAmount input ->
             ( { model | inputCurrencyAmount = input, inputCurrencyAmountError = Nothing }, Cmd.none )
 
@@ -53,7 +56,7 @@ update msg model =
                 RemoteData.Success currency ->
                     case validateInputCurrencyAmount model.inputCurrencyAmount of
                         Nothing ->
-                            ( { model | currencyToSave = RemoteData.Loading }, saveCurrencyCmd ( currency, model.inputCurrencyAmount ) )
+                            ( { model | currencyToSave = RemoteData.Loading }, saveCurrencyCmd ( currency, model.inputCurrencyAmount, model.inputCurrencyPrice ) )
 
                         Just error ->
                             ( { model | inputCurrencyAmountError = Just error }, Cmd.none )

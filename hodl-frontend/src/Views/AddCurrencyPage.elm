@@ -61,6 +61,13 @@ currencyContainer ( model, currency ) =
                 ]
             ]
         , div [ class "card-content space-bottom" ]
+            [ div [ class "h2" ] [ text "Price (BTC)" ]
+            , div []
+                [ input [ class "h2 currency-input", type_ "text", placeholder "(optional) 0.00", onInput Msgs.OnInputCurrencyPrice ] []
+                , inputCurrencyAmountErrorView model.inputCurrencyPriceError
+                ]
+            ]
+        , div [ class "card-content space-bottom" ]
             [ div [ class "h2" ] [ text "Amount" ]
             , div []
                 [ input [ class "h2 currency-input", type_ "text", placeholder "0.00", onInput Msgs.OnInputCurrencyAmount ] []

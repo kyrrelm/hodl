@@ -1,6 +1,7 @@
 const fetch = require('node-fetch');
 const Big = require('big.js');
 const validate = require('../utils.js').validate;
+const isNumber = require('../utils.js').isNumber;
 
 
 const path = '/portfolio';
@@ -8,11 +9,16 @@ const path = '/portfolio';
 module.exports.register =  (router) => {
 
   router.post(path, async function (ctx) {
-    validate(ctx, {symbol: 'string', amount: 'string'});
+    validate(ctx, {symbol: 'string', amount: 'stringNum', priceBtc: 'string'});
 
     const userId = ctx.state.user._id;
     const symbol = ctx.request.body.symbol;
     const amount = Big(ctx.request.body.amount);
+    const priceBtc = ctx.request.body.priceBtc;
+
+    if(priceBtc !== '' && !isNumber(priceBtc)){
+      ctx.throw(400, `field priceBtc must be of type string and contain a number or be an empty string`);
+    }
 
     const currencyExists = await ctx.app.currency.find({ currencies: { $elemMatch: { symbol }}}).limit(1).hasNext();
 
@@ -30,7 +36,7 @@ module.exports.register =  (router) => {
       ctx.throw(400, `This will result in a negative balance of ${symbol}. Current balance: ${balance}, Attempted deposit: ${amount}`);
     }
 
-    await ctx.app.portfolio.insert({userId, symbol, amount: amount.toString()});
+    await ctx.app.portfolio.insert({userId, symbol, amount: amount.toString(), priceBtc});
     
 
     ctx.body = {
@@ -46,7 +52,11 @@ module.exports.register =  (router) => {
     const portfolio = await ctx.app.portfolio.find({ userId }).toArray();
 
     if(portfolio.length === 0) {
-      ctx.body = [];
+      ctx.body = {
+        usdBalance: "0",
+        eurBalance: "0",
+        currencies: []
+      };
       return;
     }
 
