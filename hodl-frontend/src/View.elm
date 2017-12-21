@@ -23,7 +23,7 @@ page model =
         Models.CurrencyRoute ->
             Views.NewCurrencyPage.view model
 
-        Models.AddCurrencyRoute ->
+        Models.AddCurrencyRoute symbol ->
             Views.AddCurrencyPage.view model
 
         Models.NotFoundRoute ->

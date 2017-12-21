@@ -11,7 +11,7 @@ matchers =
         [ map PortfolioRoute top
         , map PortfolioRoute (s "portfolio")
         , map CurrencyRoute (s "newCurrency")
-        , map AddCurrencyRoute (s "addCurrency")
+        , map AddCurrencyRoute (s "addCurrency" </> string)
         ]
 
 
@@ -35,6 +35,6 @@ newCurrencyPath =
     "#newCurrency"
 
 
-addCurrencyPath : String
-addCurrencyPath =
-    "#addCurrency"
+addCurrencyPath : String -> String
+addCurrencyPath symbol =
+    "#addCurrency/" ++ symbol

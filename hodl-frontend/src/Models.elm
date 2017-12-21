@@ -75,5 +75,5 @@ type alias CurrencyOverview =
 type Route
     = PortfolioRoute
     | CurrencyRoute
-    | AddCurrencyRoute
+    | AddCurrencyRoute String
     | NotFoundRoute

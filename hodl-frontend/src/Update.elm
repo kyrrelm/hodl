@@ -37,7 +37,7 @@ update msg model =
             ( model, Cmd.batch [ newUrl portfolioPath, fetchPortfolio ] )
 
         Msgs.OnClickAddCurrency symbol ->
-            ( { model | inputCurrencyAmountError = Nothing }, Cmd.batch [ newUrl addCurrencyPath, fetchCurrency symbol ] )
+            ( { model | inputCurrencyAmountError = Nothing }, Cmd.batch [ newUrl (addCurrencyPath symbol), fetchCurrency symbol ] )
 
         Msgs.OnInputSearchCoin input ->
             ( { model | searchCoins = input }, Cmd.none )
