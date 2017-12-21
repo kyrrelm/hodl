@@ -57,7 +57,7 @@ list currencies =
 
 currencyCard : CurrencyOverview -> Html Msg
 currencyCard currency =
-    div [ class "card" ]
+    div [ class "card", onClick (Msgs.OnClickAddCurrency currency.symbol) ]
         [ div [ class "card-symbol h3" ] [ text currency.symbol ]
         , currencyCardContent currency
         ]
