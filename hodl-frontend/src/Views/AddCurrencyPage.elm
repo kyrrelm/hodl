@@ -60,11 +60,13 @@ currencyContainer ( model, currency ) =
                 , div [] [ text ("€ " ++ currency.eur) ]
                 ]
             ]
-        , div [ class "card-content h2 space-bottom" ]
-            [ div [] [ text "Amount" ]
-            , input [ class "h2 currency-input", type_ "text", placeholder "0.00", onInput Msgs.OnInputCurrencyAmount ] []
+        , div [ class "card-content space-bottom" ]
+            [ div [ class "h2" ] [ text "Amount" ]
+            , div []
+                [ input [ class "h2 currency-input", type_ "text", placeholder "0.00", onInput Msgs.OnInputCurrencyAmount ] []
+                , inputCurrencyAmountErrorView model.inputCurrencyAmountError
+                ]
             ]
-        , inputCurrencyAmountErrorView model.inputCurrencyAmountError
         , div [ class "align-right" ] [ button [ onClick Msgs.OnClickCurrencySave ] [ text "Save" ] ]
         ]
 

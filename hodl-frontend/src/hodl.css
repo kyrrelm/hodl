@@ -90,7 +90,8 @@ button:active {
 
 .validation-error {
     position: absolute;
-    bottom: 1rem;
+    top: 0.3rem;
+    color: red;
 }
 
 .search-input {

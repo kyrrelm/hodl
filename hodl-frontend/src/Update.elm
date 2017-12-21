@@ -34,13 +34,13 @@ update msg model =
             ( model, Cmd.batch [ newUrl portfolioPath, fetchPortfolio ] )
 
         Msgs.OnClickAddCurrency symbol ->
-            ( model, Cmd.batch [ newUrl addCurrencyPath, fetchCurrency symbol ] )
+            ( { model | inputCurrencyAmountError = Nothing }, Cmd.batch [ newUrl addCurrencyPath, fetchCurrency symbol ] )
 
         Msgs.OnInputSearchCoin input ->
             ( { model | searchCoins = input }, Cmd.none )
 
         Msgs.OnInputCurrencyAmount input ->
-            ( { model | inputCurrencyAmount = input }, Cmd.none )
+            ( { model | inputCurrencyAmount = input, inputCurrencyAmountError = Nothing }, Cmd.none )
 
         Msgs.OnClickCurrencySave ->
             case model.currency of
@@ -70,9 +70,14 @@ update msg model =
 
 validateInputCurrencyAmount : String -> Maybe String
 validateInputCurrencyAmount currencyAmount =
-    case String.toFloat currencyAmount of
-        Ok amount ->
-            Nothing
+    case String.isEmpty currencyAmount of
+        True ->
+            Just "Missing value"
 
-        Err e ->
-            Just "That is not a number"
+        False ->
+            case String.toFloat currencyAmount of
+                Ok amount ->
+                    Nothing
+
+                Err e ->
+                    Just "That is not a number"
