@@ -1,7 +1,7 @@
 module Update exposing (..)
 
 import Commands exposing (fetchCurrency, fetchPortfolio, fetchSymbols, saveCurrencyCmd)
-import Models exposing (CurrencyOverview, Model)
+import Models exposing (CurrencyOverview, Model, Route)
 import Msgs exposing (Msg)
 import Navigation exposing (..)
 import RemoteData exposing (WebData)
