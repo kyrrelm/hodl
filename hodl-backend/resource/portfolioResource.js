@@ -19,6 +19,9 @@ module.exports.register =  (router) => {
     if(priceBtc !== '' && !isNumber(priceBtc)){
       ctx.throw(400, `field priceBtc must be of type string and contain a number or be an empty string`);
     }
+    else if (Number(priceBtc) < 0) {
+      ctx.throw(400, `field priceBtc must be of type string and represent a number > 0 or an empty string`);
+    }
 
     const currencyExists = await ctx.app.currency.find({ currencies: { $elemMatch: { symbol }}}).limit(1).hasNext();
 
