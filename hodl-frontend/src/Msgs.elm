@@ -11,6 +11,7 @@ type Msg
     | OnFetchSymbols (WebData (List Coin))
     | OnFetchCurrency (WebData Currency)
     | OnLocationChange Location
+    | OnGoBack Int
     | OnClickNewCurrency
     | OnInputSearchCoin String
     | OnClickAddCurrency String

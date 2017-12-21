@@ -27,6 +27,9 @@ update msg model =
             in
             ( { model | route = newRoute }, Cmd.none )
 
+        Msgs.OnGoBack amount ->
+            ( model, back amount )
+
         Msgs.OnClickNewCurrency ->
             ( model, Cmd.batch [ newUrl newCurrencyPath, fetchSymbols ] )
 

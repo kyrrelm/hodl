@@ -74,7 +74,10 @@ currencyContainer ( model, currency ) =
                 , inputCurrencyAmountErrorView model.inputCurrencyAmountError
                 ]
             ]
-        , div [ class "align-right" ] [ button [ onClick Msgs.OnClickCurrencySave ] [ text "Save" ] ]
+        , div [ class "align-right" ]
+            [ button [ class "space-right", onClick Msgs.OnClickCurrencySave ] [ text "Save" ]
+            , button [ onClick (Msgs.OnGoBack 1) ] [ text "Cancel" ]
+            ]
         ]
 
 

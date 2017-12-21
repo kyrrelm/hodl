@@ -88,6 +88,10 @@ button:active {
     margin-bottom: 3rem;
 }
 
+.space-right {
+    margin-right: 1rem;
+}
+
 .validation-error {
     position: absolute;
     top: 0.3rem;
