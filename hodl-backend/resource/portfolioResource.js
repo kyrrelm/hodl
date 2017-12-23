@@ -57,7 +57,7 @@ module.exports.register =  (router) => {
     if(portfolio.length === 0) {
       ctx.body = {
         usdBalance: "0",
-        eurBalance: "0",
+        btcBalance: "0",
         currencies: []
       };
       return;
