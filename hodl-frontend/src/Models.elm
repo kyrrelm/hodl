@@ -41,9 +41,7 @@ type alias Coin =
 type alias Currency =
     { symbol : String
     , btc : String
-    , eth : String
     , usd : String
-    , eur : String
     }
 
 
@@ -64,11 +62,9 @@ type alias CurrencyOverview =
     { symbol : String
     , balance : String
     , usdBalance : String
-    , eurBalance : String
-    , btc : String
-    , eth : String
-    , usd : String
-    , eur : String
+    , btcBalance : String
+    , usdPrice : String
+    , btcPrice : String
     }
 
 

@@ -10,7 +10,7 @@ import RemoteData
 
 
 jwtToken =
-    "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YTI0MWVlYzI5ZTQ5NTA2MjVkMDgzMTgiLCJyb2xlIjoidXNlciIsImlhdCI6MTUxMzM1NTIxMiwiZXhwIjoxNTEzOTYwMDEyfQ.uTHrkkrpdpzYlxkvrgUYmN4tVZme8_dbFQ2Ku38ixPc"
+    "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YTNlZDRlOGMwZTI5ZDA5MzY2NTRlMmMiLCJyb2xlIjoidXNlciIsImlhdCI6MTUxNDA2NzE3NiwiZXhwIjoxNTE0NjcxOTc2fQ.9oYblPQkBESX0fCTbKPpCcCPyxpuuWgWJli0tbbVcys"
 
 
 fetchPortfolioUrl : String
@@ -43,7 +43,7 @@ portfolioDecoder =
     decode
         Portfolio
         |> required "usdBalance" Decode.string
-        |> required "eurBalance" Decode.string
+        |> required "btcBalance" Decode.string
         |> required "currencies" (Decode.list currencyBalanceDecoder)
 
 
@@ -54,11 +54,9 @@ currencyBalanceDecoder =
         |> required "symbol" Decode.string
         |> required "balance" Decode.string
         |> required "usdBalance" Decode.string
-        |> required "eurBalance" Decode.string
-        |> required "BTC" Decode.string
-        |> required "ETH" Decode.string
-        |> required "USD" Decode.string
-        |> required "EUR" Decode.string
+        |> required "btcBalance" Decode.string
+        |> required "price_usd" Decode.string
+        |> required "price_btc" Decode.string
 
 
 fetchSymbolsUrl : String
@@ -129,10 +127,8 @@ currencyDecoder =
     decode
         Currency
         |> required "symbol" Decode.string
-        |> required "btc" Decode.string
-        |> required "eth" Decode.string
-        |> required "usd" Decode.string
-        |> required "eur" Decode.string
+        |> required "price_btc" Decode.string
+        |> required "price_usd" Decode.string
 
 
 saveCurrencyUrl : String
@@ -173,7 +169,7 @@ currencyEncoder ( currency, amount, priceBtc ) =
         attributes =
             [ ( "symbol", Encode.string currency.symbol )
             , ( "amount", Encode.string amount )
-            , ( "priceBtc", Encode.string priceBtc )
+            , ( "price_btc", Encode.string priceBtc )
             ]
     in
     Encode.object attributes

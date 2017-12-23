@@ -77,15 +77,13 @@ balanceContainer currency =
         [ div [] [ text currency.balance ]
         , div [ class "empty-line" ] []
         , div [] [ text ("$ " ++ currency.usdBalance) ]
-        , div [] [ text ("€ " ++ currency.eurBalance) ]
+        , div [] [ text ("฿ " ++ currency.btcBalance) ]
         ]
 
 
 ratesContainer : CurrencyOverview -> Html Msg
 ratesContainer currency =
     div []
-        [ div [] [ text ("USD: " ++ currency.usd) ]
-        , div [] [ text ("EUR: " ++ currency.eur) ]
-        , div [] [ text ("BTC: " ++ currency.btc) ]
-        , div [] [ text ("ETH: " ++ currency.eth) ]
+        [ div [] [ text ("$: " ++ currency.usdPrice) ]
+        , div [] [ text ("฿: " ++ currency.btcPrice) ]
         ]

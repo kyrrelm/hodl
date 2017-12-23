@@ -9,21 +9,21 @@ const path = '/portfolio';
 module.exports.register =  (router) => {
 
   router.post(path, async function (ctx) {
-    validate(ctx, {symbol: 'string', amount: 'stringNum', priceBtc: 'string'});
+    validate(ctx, {symbol: 'string', amount: 'stringNum', price_btc: 'string'});
 
     const userId = ctx.state.user._id;
-    const symbol = ctx.request.body.symbol;
+    const symbol = ctx.request.body.symbol.toUpperCase();
     const amount = Big(ctx.request.body.amount);
-    const priceBtc = ctx.request.body.priceBtc;
+    const price_btc = ctx.request.body.price_btc;
 
-    if(priceBtc !== '' && !isNumber(priceBtc)){
+    if(price_btc !== '' && !isNumber(price_btc)){
       ctx.throw(400, `field priceBtc must be of type string and contain a number or be an empty string`);
     }
-    else if (Number(priceBtc) < 0) {
+    else if (Number(price_btc) < 0) {
       ctx.throw(400, `field priceBtc must be of type string and represent a number > 0 or an empty string`);
     }
 
-    const currencyExists = await ctx.app.currency.find({ currencies: { $elemMatch: { symbol }}}).limit(1).hasNext();
+    const currencyExists = await ctx.app.currency.find({symbol}).limit(1).hasNext();
 
     if (!currencyExists) {
       ctx.throw(400, "Unsupported currency");
@@ -39,7 +39,7 @@ module.exports.register =  (router) => {
       ctx.throw(400, `This will result in a negative balance of ${symbol}. Current balance: ${balance}, Attempted deposit: ${amount}`);
     }
 
-    await ctx.app.portfolio.insert({userId, symbol, amount: amount.toString(), priceBtc});
+    await ctx.app.portfolio.insert({userId, symbol, amount: amount.toString(), priceBtc: price_btc});
     
 
     ctx.body = {
@@ -63,12 +63,12 @@ module.exports.register =  (router) => {
       return;
     }
 
-    const allCurrencies = [...new Set(portfolio.map(entry => entry.symbol))];
+    const allSymbols = [...new Set(portfolio.map(entry => entry.symbol))];
 
     const balanceOverview = {};
 
     //Add currencies to balanceOverview if currency balance !== 0
-    allCurrencies.forEach(currency => {
+    allSymbols.forEach(currency => {
       const balance = Big(portfolio
           .filter(entry => entry.symbol === currency)
           .map(entry => entry.amount)
@@ -78,39 +78,30 @@ module.exports.register =  (router) => {
       }
     });
 
-    const currenciesString = Object.keys(balanceOverview).reduce((out, symbol) => `${out},${symbol}`);
 
-    const rates = await fetch(`https://min-api.cryptocompare.com/data/pricemulti?fsyms=${currenciesString}&tsyms=BTC,ETH,USD,EUR`)
-        .then(res => res.json())
-        .catch(err => console.log(err));
+    const currencies = await ctx.app.currency.find({symbol: {$in: allSymbols}}).toArray();
 
     const overview = {
       usdBalance: 0,
-      eurBalance: 0,
+      btcBalance: 0,
     };
 
     Object.keys(balanceOverview).forEach(symbol => {
-      const rate = rates[symbol];
-      rate.balance = balanceOverview[symbol].balance;
-      rate.symbol = symbol;
-      rate.USD = rate.USD.toString();
-      rate.EUR = rate.EUR.toString();
-      rate.BTC = rate.BTC.toString();
-      rate.ETH = rate.ETH.toString();
+      const currency = currencies.find(currency => currency.symbol === symbol);
+      currency.balance = balanceOverview[symbol].balance;
 
-      const usdBalance = Big(rate.balance).times(Big(rate.USD));
-      const eurBalance = Big(rate.balance).times(Big(rate.EUR));
+      const usdBalance = Big(currency.balance).times(Big(currency.price_usd));
+      const btcBalance = Big(currency.balance).times(Big(currency.price_btc));
 
       overview.usdBalance = Big(overview.usdBalance).add(Big(usdBalance)).toFixed(2);
-      overview.eurBalance = Big(overview.eurBalance).add(Big(eurBalance)).toFixed(2);
+      overview.btcBalance = Big(overview.btcBalance).add(Big(btcBalance)).toFixed(2);
 
-      rate.usdBalance = usdBalance.toFixed(2);
-      rate.eurBalance = eurBalance.toFixed(2);
-
+      currency.usdBalance = usdBalance.toFixed(2);
+      currency.btcBalance = btcBalance.toFixed(2);
 
     });
 
-    overview.currencies = Object.values(rates).sort((a, b) => b.usdBalance - a.usdBalance);
+    overview.currencies = currencies.sort((a, b) => b.usdBalance - a.usdBalance);
 
     ctx.body = overview;
 

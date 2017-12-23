@@ -35,6 +35,6 @@ navBar portfolio =
         [ div [ class "p2 nav-name", onClick Msgs.OnClickNavBarName ] [ text "Hodl" ]
         , div [ class "p2" ]
             [ span [] [ text ("$ " ++ portfolio.usdBalance) ]
-            , span [ class "total-balance" ] [ text ("€ " ++ portfolio.eurBalance) ]
+            , span [ class "total-balance" ] [ text ("฿ " ++ portfolio.eurBalance) ]
             ]
         ]

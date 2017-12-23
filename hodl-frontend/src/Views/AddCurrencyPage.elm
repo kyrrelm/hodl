@@ -57,7 +57,6 @@ currencyContainer ( model, currency ) =
             [ div [] [ text "Current price" ]
             , div []
                 [ div [] [ text ("$ " ++ currency.usd) ]
-                , div [] [ text ("€ " ++ currency.eur) ]
                 ]
             ]
         , div [ class "card-content space-bottom" ]

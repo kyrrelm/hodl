@@ -5,8 +5,13 @@ const path = '/currency';
 module.exports.register =  (router) => {
 
   router.get(path, async (ctx) => {
-    const currency = await ctx.app.currency.findOne();
-    ctx.body = currency.currencies;
+
+    const currencies = await ctx.app.currency.find({}).toArray();
+
+    ctx.body = currencies.map(currency => {return {
+      name: currency.name,
+      symbol: currency.symbol,
+    }});
   });
 
   router.get(`${path}/rates`, async (ctx) => {
@@ -17,26 +22,14 @@ module.exports.register =  (router) => {
       ctx.throw(400, `Query string symbols is missing. Example: symbols=ETH,BTC`);
     }
 
-    const response = await fetch(`https://min-api.cryptocompare.com/data/pricemulti?fsyms=${symbols}&tsyms=BTC,ETH,USD,EUR`)
-        .then(res => res.json())
-        .catch(err => console.log(err));
+    const symbolsArray = symbols.split(',');
 
-    const currencyArray = Object
-        .values(response)
-        .map((currency, index) => {
-          return {
-            btc: String(currency.BTC),
-            eth: String(currency.ETH),
-            usd: String(currency.USD),
-            eur: String(currency.EUR),
-            symbol: Object.keys(response)[index]
-          }
-    });
+    const currencies = await ctx.app.currency.find({symbol: {$in: symbolsArray}}).toArray();
 
-    if (currencyArray.length === 1) {
-      ctx.body = currencyArray[0];
+    if (currencies.length === 1) {
+      ctx.body = currencies[0];
     } else {
-      ctx.body = currencyArray;
+      ctx.body = currencies;
     }
 
   });
