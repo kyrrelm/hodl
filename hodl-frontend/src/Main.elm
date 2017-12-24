@@ -16,6 +16,9 @@ init location =
             Routing.parseLocation location
     in
     case currentRoute of
+        Models.LoginRoute ->
+            ( initialModel currentRoute, Cmd.none )
+
         Models.PortfolioRoute ->
             ( initialModel currentRoute, Cmd.batch [ fetchPortfolio, fetchSymbols ] )
 

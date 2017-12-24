@@ -12,6 +12,7 @@ matchers =
         , map PortfolioRoute (s "portfolio")
         , map CurrencyRoute (s "newCurrency")
         , map AddCurrencyRoute (s "addCurrency" </> string)
+        , map LoginRoute (s "login")
         ]
 
 

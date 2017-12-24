@@ -73,3 +73,4 @@ type Route
     | CurrencyRoute
     | AddCurrencyRoute String
     | NotFoundRoute
+    | LoginRoute
