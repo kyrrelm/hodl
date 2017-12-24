@@ -3,7 +3,7 @@ module Views.AddCurrencyPage exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (align, class, placeholder, type_)
 import Html.Events exposing (onClick, onInput)
-import Models exposing (Coin, Currency, Model)
+import Models exposing (Coin, CurrencyToSave, Model)
 import Msgs exposing (Msg)
 import RemoteData exposing (WebData)
 import Views.NavBar exposing (view)
@@ -33,7 +33,7 @@ maybeCurrency model =
             text (toString error)
 
 
-maybeSavingCurrency : ( Model, Currency ) -> Html Msg
+maybeSavingCurrency : ( Model, CurrencyToSave ) -> Html Msg
 maybeSavingCurrency ( model, currency ) =
     case model.currencyToSave of
         RemoteData.NotAsked ->
@@ -49,7 +49,7 @@ maybeSavingCurrency ( model, currency ) =
             text (toString error)
 
 
-currencyContainer : ( Model, Currency ) -> Html Msg
+currencyContainer : ( Model, CurrencyToSave ) -> Html Msg
 currencyContainer ( model, currency ) =
     div [ class "currencyContainer" ]
         [ div [ class "card-content h1 space-bottom" ] [ text currency.symbol ]

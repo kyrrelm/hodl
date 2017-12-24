@@ -6,7 +6,7 @@ import RemoteData exposing (WebData)
 type alias Model =
     { portfolio : WebData Portfolio
     , coins : WebData (List Coin)
-    , currency : WebData Currency
+    , currency : WebData CurrencyToSave
     , currencyToSave : WebData CurrencyBalance
     , route : Route
     , searchCoins : String
@@ -38,7 +38,7 @@ type alias Coin =
     }
 
 
-type alias Currency =
+type alias CurrencyToSave =
     { symbol : String
     , btc : String
     , usd : String

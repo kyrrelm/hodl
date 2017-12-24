@@ -4,7 +4,7 @@ import Http
 import Json.Decode as Decode
 import Json.Decode.Pipeline exposing (decode, required)
 import Json.Encode as Encode
-import Models exposing (Coin, Currency, CurrencyBalance, CurrencyOverview, Portfolio)
+import Models exposing (Coin, CurrencyBalance, CurrencyOverview, CurrencyToSave, Portfolio)
 import Msgs exposing (Msg)
 import RemoteData
 
@@ -102,7 +102,7 @@ fetchCurrencyUrl symbol =
     "http://localhost:8080/currency/rates?symbols=" ++ symbol
 
 
-fetchCurrencyRequest : String -> Http.Request Currency
+fetchCurrencyRequest : String -> Http.Request CurrencyToSave
 fetchCurrencyRequest symbol =
     Http.request
         { body = Http.emptyBody
@@ -122,10 +122,10 @@ fetchCurrency symbol =
         |> Cmd.map Msgs.OnFetchCurrency
 
 
-currencyDecoder : Decode.Decoder Currency
+currencyDecoder : Decode.Decoder CurrencyToSave
 currencyDecoder =
     decode
-        Currency
+        CurrencyToSave
         |> required "symbol" Decode.string
         |> required "price_btc" Decode.string
         |> required "price_usd" Decode.string
@@ -136,7 +136,7 @@ saveCurrencyUrl =
     "http://localhost:8080/portfolio/"
 
 
-saveCurrencyRequest : ( Currency, String, String ) -> Http.Request CurrencyBalance
+saveCurrencyRequest : ( CurrencyToSave, String, String ) -> Http.Request CurrencyBalance
 saveCurrencyRequest ( currency, amount, btcPrice ) =
     Http.request
         { body =
@@ -157,13 +157,13 @@ portfolioEntryDecoder =
         |> required "balance" Decode.string
 
 
-saveCurrencyCmd : ( Currency, String, String ) -> Cmd Msg
+saveCurrencyCmd : ( CurrencyToSave, String, String ) -> Cmd Msg
 saveCurrencyCmd ( currency, amount, priceBtc ) =
     saveCurrencyRequest ( currency, amount, priceBtc )
         |> Http.send Msgs.OnCurrencySave
 
 
-currencyEncoder : ( Currency, String, String ) -> Encode.Value
+currencyEncoder : ( CurrencyToSave, String, String ) -> Encode.Value
 currencyEncoder ( currency, amount, priceBtc ) =
     let
         attributes =

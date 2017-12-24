@@ -1,7 +1,7 @@
 module Msgs exposing (..)
 
 import Http
-import Models exposing (Coin, Currency, CurrencyBalance, Portfolio)
+import Models exposing (Coin, CurrencyBalance, CurrencyToSave, Portfolio)
 import Navigation exposing (Location)
 import RemoteData exposing (WebData)
 
@@ -9,7 +9,7 @@ import RemoteData exposing (WebData)
 type Msg
     = OnFetchPortfolio (WebData Portfolio)
     | OnFetchSymbols (WebData (List Coin))
-    | OnFetchCurrency (WebData Currency)
+    | OnFetchCurrency (WebData CurrencyToSave)
     | OnLocationChange Location
     | OnGoBack Int
     | OnClickNewCurrency
