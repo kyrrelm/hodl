@@ -14,6 +14,8 @@ type alias Model =
     , inputCurrencyPriceError : Maybe String
     , inputCurrencyAmount : String
     , inputCurrencyAmountError : Maybe String
+    , inputEmail : String
+    , inputPassword : String
     }
 
 
@@ -29,6 +31,13 @@ initialModel route =
     , inputCurrencyPriceError = Nothing
     , inputCurrencyAmount = ""
     , inputCurrencyAmountError = Nothing
+    , inputEmail = ""
+    , inputPassword = ""
+    }
+
+
+type alias Jwt =
+    { token : String
     }
 
 

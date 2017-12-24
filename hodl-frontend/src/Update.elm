@@ -1,6 +1,6 @@
 module Update exposing (..)
 
-import Commands exposing (fetchCurrency, fetchPortfolio, fetchSymbols, saveCurrencyCmd)
+import Commands exposing (fetchCurrency, fetchPortfolio, fetchSymbols, loginCmd, saveCurrencyCmd)
 import Models exposing (CurrencyOverview, Model, Route)
 import Msgs exposing (Msg)
 import Navigation exposing (..)
@@ -79,6 +79,18 @@ update msg model =
 
         Msgs.OnCurrencySave (Err error) ->
             ( { model | currencyToSave = RemoteData.Failure error }, Cmd.none )
+
+        Msgs.OnInputEmail input ->
+            ( { model | inputEmail = input }, Cmd.none )
+
+        Msgs.OnInputPassword input ->
+            ( { model | inputPassword = input }, Cmd.none )
+
+        Msgs.OnClickLogin ->
+            ( model, loginCmd ( model.inputEmail, model.inputPassword ) )
+
+        Msgs.OnLogin jwt ->
+            ( model, Cmd.none )
 
 
 currencyIsValid : Model -> Bool

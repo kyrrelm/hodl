@@ -47,7 +47,7 @@ module.exports.register =  (router) => {
     const passwordIsCorrect = bcrypt.compareSync(password, user.hash);
 
     if(!passwordIsCorrect) {
-      return ctx.throw(409, 'Incorrect email or password2');
+      return ctx.throw(409, 'Incorrect email or password');
     }
 
     ctx.body = {

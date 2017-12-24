@@ -4,7 +4,7 @@ import Http
 import Json.Decode as Decode
 import Json.Decode.Pipeline exposing (decode, required)
 import Json.Encode as Encode
-import Models exposing (Coin, CurrencyBalance, CurrencyOverview, CurrencyToSave, Portfolio)
+import Models exposing (Coin, CurrencyBalance, CurrencyOverview, CurrencyToSave, Jwt, Portfolio)
 import Msgs exposing (Msg)
 import RemoteData
 
@@ -173,3 +173,45 @@ currencyEncoder ( currency, amount, priceBtc ) =
             ]
     in
     Encode.object attributes
+
+
+loginCmd : ( String, String ) -> Cmd Msg
+loginCmd ( email, password ) =
+    loginRequest ( email, password )
+        |> Http.send Msgs.OnLogin
+
+
+loginRequest : ( String, String ) -> Http.Request Jwt
+loginRequest ( email, password ) =
+    Http.request
+        { body =
+            loginEncoder ( email, password ) |> Http.jsonBody
+        , expect = Http.expectJson loginDecoder
+        , headers = []
+        , method = "POST"
+        , timeout = Nothing
+        , url = loginUrl
+        , withCredentials = False
+        }
+
+
+loginUrl : String
+loginUrl =
+    "http://localhost:8080/auth"
+
+
+loginEncoder : ( String, String ) -> Encode.Value
+loginEncoder ( email, password ) =
+    let
+        attributes =
+            [ ( "email", Encode.string email )
+            , ( "password", Encode.string password )
+            ]
+    in
+    Encode.object attributes
+
+
+loginDecoder : Decode.Decoder Jwt
+loginDecoder =
+    decode Jwt
+        |> required "token" Decode.string
