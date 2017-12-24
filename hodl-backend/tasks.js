@@ -12,9 +12,11 @@ const updateCurrencies = (app) => {
       .then(json => {
         const currencies = json
             .sort((a, b) => parseInt(a.rank) - parseInt(b.rank));
-        app.currency.deleteMany({}).then(() => {
-          app.currency.insertMany(currencies);
-          console.log("Done updating currencies");
-        });
+        app.currency.deleteMany({})
+            .then(() =>
+            {
+              app.currency.insertMany(currencies);
+              console.log("Done updating currencies");
+            });
       }).catch(err => console.log(err));
 };
