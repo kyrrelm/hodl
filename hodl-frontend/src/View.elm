@@ -16,49 +16,26 @@ view model =
 
 page : Model -> Html Msg
 page model =
-    case model.route of
-        Models.LoginRoute ->
+    case model.jwt of
+        Nothing ->
             Views.LoginPage.view model
 
-        Models.PortfolioRoute ->
-            Views.PortfolioPage.view model
+        Just jwt ->
+            case model.route of
+                Models.LoginRoute ->
+                    Views.LoginPage.view model
 
-        Models.CurrencyRoute ->
-            Views.NewCurrencyPage.view model
+                Models.PortfolioRoute ->
+                    Views.PortfolioPage.view model
 
-        Models.AddCurrencyRoute symbol ->
-            Views.AddCurrencyPage.view model
+                Models.CurrencyRoute ->
+                    Views.NewCurrencyPage.view model
 
-        Models.NotFoundRoute ->
-            notFoundView
+                Models.AddCurrencyRoute symbol ->
+                    Views.AddCurrencyPage.view model
 
-
-
---playerEditPage : Model -> Symbol -> Html Msg
---playerEditPage model playerId =
---    case model.players of
---        RemoteData.NotAsked ->
---            text ""
---
---        RemoteData.Loading ->
---            text "Loading ..."
---
---        RemoteData.Success players ->
---            let
---                maybePlayer =
---                    players
---                        |> List.filter (\player -> player.id == playerId)
---                        |> List.head
---            in
---            case maybePlayer of
---                Just player ->
---                    Players.Edit.view player
---
---                Nothing ->
---                    notFoundView
---
---        RemoteData.Failure err ->
---            text (toString err)
+                Models.NotFoundRoute ->
+                    notFoundView
 
 
 notFoundView : Html msg

@@ -1,6 +1,5 @@
 port module Ports exposing (..)
 
-import Json.Encode exposing (Value)
 import Models exposing (Jwt)
 
 
@@ -14,4 +13,4 @@ port storeJwtToken : Jwt -> Cmd msg
 port retrieveJwtToken : () -> Cmd msg
 
 
-port receiveJwtToken : (Jwt -> msg) -> Sub msg
+port receiveJwtToken : (Maybe Jwt -> msg) -> Sub msg

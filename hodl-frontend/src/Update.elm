@@ -99,8 +99,27 @@ update msg model =
                 Err error ->
                     ( model, Cmd.none )
 
-        Msgs.ReceiveJwtToken jwt ->
-            ( model, Cmd.none )
+        Msgs.ReceiveJwtToken maybeJwt ->
+            case maybeJwt of
+                Nothing ->
+                    ( model, Cmd.none )
+
+                Just jwt ->
+                    case model.route of
+                        Models.LoginRoute ->
+                            ( { model | jwt = Just jwt }, Cmd.batch [ fetchPortfolio, fetchSymbols, newUrl portfolioPath ] )
+
+                        Models.PortfolioRoute ->
+                            ( { model | jwt = Just jwt }, Cmd.batch [ fetchPortfolio, fetchSymbols ] )
+
+                        Models.CurrencyRoute ->
+                            ( { model | jwt = Just jwt }, Cmd.batch [ fetchPortfolio, fetchSymbols ] )
+
+                        Models.AddCurrencyRoute symbol ->
+                            ( { model | jwt = Just jwt }, Cmd.batch [ fetchPortfolio, fetchCurrency symbol ] )
+
+                        Models.NotFoundRoute ->
+                            ( { model | jwt = Just jwt }, newUrl portfolioPath )
 
 
 currencyIsValid : Model -> Bool

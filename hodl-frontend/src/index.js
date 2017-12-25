@@ -14,14 +14,16 @@ var mountNode = document.getElementById('main');
 var app = Elm.Main.embed(mountNode);
 
 app.ports.storeJwtToken.subscribe(function(jwt) {
-  console.log("PORT reporting in:", jwt);
-  localStorage.setItem('jwt', jwt.token);
+  localStorage.setItem('jwtToken', jwt.token);
   app.ports.receiveJwtToken.send(jwt);
 });
 
 app.ports.retrieveJwtToken.subscribe(function() {
-  console.log("PORT 2 reporting in.");
-  const jwt = {token: localStorage.getItem("jwt")};
-  console.log(jwt);
-  app.ports.receiveJwtToken.send(jwt);
+  const token = localStorage.getItem("jwtToken");
+  if(token) {
+    app.ports.receiveJwtToken.send({token});
+  }
+  else {
+    app.ports.receiveJwtToken.send(null);
+  }
 });

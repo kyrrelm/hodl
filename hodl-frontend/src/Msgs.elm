@@ -24,4 +24,4 @@ type Msg
     | OnInputPassword String
     | OnClickLogin
     | OnLogin (Result Http.Error Jwt)
-    | ReceiveJwtToken Jwt
+    | ReceiveJwtToken (Maybe Jwt)

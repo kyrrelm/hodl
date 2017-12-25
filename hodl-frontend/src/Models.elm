@@ -16,6 +16,7 @@ type alias Model =
     , inputCurrencyAmountError : Maybe String
     , inputEmail : String
     , inputPassword : String
+    , jwt : Maybe Jwt
     }
 
 
@@ -33,6 +34,7 @@ initialModel route =
     , inputCurrencyAmountError = Nothing
     , inputEmail = ""
     , inputPassword = ""
+    , jwt = Nothing
     }
 
 

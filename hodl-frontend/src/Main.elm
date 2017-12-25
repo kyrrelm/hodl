@@ -1,10 +1,9 @@
 module Main exposing (..)
 
-import Commands exposing (fetchCurrency, fetchPortfolio, fetchSymbols)
 import Models exposing (Model, initialModel)
 import Msgs exposing (Msg)
 import Navigation exposing (Location)
-import Ports exposing (receiveJwtToken)
+import Ports exposing (..)
 import Routing
 import Update exposing (update)
 import View exposing (view)
@@ -16,21 +15,7 @@ init location =
         currentRoute =
             Routing.parseLocation location
     in
-    case currentRoute of
-        Models.LoginRoute ->
-            ( initialModel currentRoute, Cmd.none )
-
-        Models.PortfolioRoute ->
-            ( initialModel currentRoute, Cmd.batch [ fetchPortfolio, fetchSymbols ] )
-
-        Models.CurrencyRoute ->
-            ( initialModel currentRoute, Cmd.batch [ fetchPortfolio, fetchSymbols ] )
-
-        Models.AddCurrencyRoute symbol ->
-            ( initialModel currentRoute, Cmd.batch [ fetchPortfolio, fetchCurrency symbol ] )
-
-        Models.NotFoundRoute ->
-            ( initialModel currentRoute, Cmd.none )
+    ( initialModel currentRoute, retrieveJwtToken () )
 
 
 subscriptions : Model -> Sub Msg
