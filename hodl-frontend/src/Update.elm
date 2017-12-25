@@ -1,6 +1,7 @@
 module Update exposing (..)
 
 import Commands exposing (fetchCurrencyCmd, fetchPortfolioCmd, fetchSymbolsCmd, loginCmd, saveCurrencyCmd)
+import Http exposing (Error(..))
 import Models exposing (CurrencyOverview, Jwt, Model, Route)
 import Msgs exposing (Msg)
 import Navigation exposing (..)
@@ -14,7 +15,36 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Msgs.OnFetchPortfolio response ->
-            ( { model | portfolio = response }, Cmd.none )
+            case response of
+                RemoteData.NotAsked ->
+                    ( { model | portfolio = response }, Cmd.none )
+
+                RemoteData.Loading ->
+                    ( { model | portfolio = response }, Cmd.none )
+
+                RemoteData.Success portfolio ->
+                    ( { model | portfolio = response }, Cmd.none )
+
+                RemoteData.Failure error ->
+                    case error of
+                        BadUrl string ->
+                            ( { model | portfolio = response }, Cmd.none )
+
+                        Timeout ->
+                            ( { model | portfolio = response }, Cmd.none )
+
+                        NetworkError ->
+                            ( { model | portfolio = response }, Cmd.none )
+
+                        BadStatus responseError ->
+                            if responseError.status.code == 401 then
+                                ( { model | portfolio = response, jwt = Nothing }, newUrl loginPath )
+
+                            else
+                                ( { model | portfolio = response }, Cmd.none )
+
+                        BadPayload toString a ->
+                            ( { model | portfolio = response }, Cmd.none )
 
         Msgs.OnFetchSymbols response ->
             ( { model | coins = response }, Cmd.none )
