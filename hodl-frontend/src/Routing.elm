@@ -36,6 +36,11 @@ newCurrencyPath =
     "#newCurrency"
 
 
+loginPath : String
+loginPath =
+    "#login"
+
+
 addCurrencyPath : String -> String
 addCurrencyPath symbol =
     "#addCurrency/" ++ symbol

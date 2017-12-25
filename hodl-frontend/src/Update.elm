@@ -1,13 +1,13 @@
 module Update exposing (..)
 
-import Commands exposing (fetchCurrency, fetchPortfolio, fetchSymbols, loginCmd, saveCurrencyCmd)
+import Commands exposing (fetchCurrencyCmd, fetchPortfolioCmd, fetchSymbolsCmd, loginCmd, saveCurrencyCmd)
 import Models exposing (CurrencyOverview, Jwt, Model, Route)
 import Msgs exposing (Msg)
 import Navigation exposing (..)
 import Ports exposing (..)
 import RemoteData exposing (WebData)
 import Result exposing (Result)
-import Routing exposing (addCurrencyPath, newCurrencyPath, parseLocation, portfolioPath)
+import Routing exposing (addCurrencyPath, loginPath, newCurrencyPath, parseLocation, portfolioPath)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -33,13 +33,28 @@ update msg model =
             ( model, back amount )
 
         Msgs.OnClickNewCurrency ->
-            ( model, Cmd.batch [ newUrl newCurrencyPath, fetchSymbols ] )
+            case model.jwt of
+                Nothing ->
+                    ( model, newUrl loginPath )
+
+                Just jwt ->
+                    ( model, Cmd.batch [ newUrl newCurrencyPath, fetchSymbolsCmd jwt ] )
 
         Msgs.OnClickNavBarName ->
-            ( model, Cmd.batch [ newUrl portfolioPath, fetchPortfolio ] )
+            case model.jwt of
+                Nothing ->
+                    ( model, newUrl loginPath )
+
+                Just jwt ->
+                    ( model, Cmd.batch [ newUrl portfolioPath, fetchPortfolioCmd jwt ] )
 
         Msgs.OnClickAddCurrency symbol ->
-            ( { model | inputCurrencyAmountError = Nothing }, Cmd.batch [ newUrl (addCurrencyPath symbol), fetchCurrency symbol ] )
+            case model.jwt of
+                Nothing ->
+                    ( model, newUrl loginPath )
+
+                Just jwt ->
+                    ( { model | inputCurrencyAmountError = Nothing }, Cmd.batch [ newUrl (addCurrencyPath symbol), fetchCurrencyCmd jwt symbol ] )
 
         Msgs.OnInputSearchCoin input ->
             ( { model | searchCoins = input }, Cmd.none )
@@ -51,33 +66,43 @@ update msg model =
             ( { model | inputCurrencyAmount = input, inputCurrencyAmountError = Nothing }, Cmd.none )
 
         Msgs.OnClickCurrencySave ->
-            case model.currency of
-                RemoteData.NotAsked ->
-                    ( model, Cmd.none )
+            case model.jwt of
+                Nothing ->
+                    ( model, newUrl loginPath )
 
-                RemoteData.Loading ->
-                    ( model, Cmd.none )
+                Just jwt ->
+                    case model.currency of
+                        RemoteData.NotAsked ->
+                            ( model, Cmd.none )
 
-                RemoteData.Success currency ->
-                    case currencyIsValid model of
-                        True ->
-                            ( { model | currencyToSave = RemoteData.Loading }, saveCurrencyCmd ( currency, model.inputCurrencyAmount, model.inputCurrencyPrice ) )
+                        RemoteData.Loading ->
+                            ( model, Cmd.none )
 
-                        False ->
-                            ( { model
-                                | inputCurrencyAmountError =
-                                    validatePositiveNumber model.inputCurrencyAmount
-                                , inputCurrencyPriceError =
-                                    validateEmptyStringOrPositiveNumber model.inputCurrencyPrice
-                              }
-                            , Cmd.none
-                            )
+                        RemoteData.Success currency ->
+                            case currencyIsValid model of
+                                True ->
+                                    ( { model | currencyToSave = RemoteData.Loading }, saveCurrencyCmd jwt currency model.inputCurrencyAmount model.inputCurrencyPrice )
 
-                RemoteData.Failure error ->
-                    ( model, Cmd.none )
+                                False ->
+                                    ( { model
+                                        | inputCurrencyAmountError =
+                                            validatePositiveNumber model.inputCurrencyAmount
+                                        , inputCurrencyPriceError =
+                                            validateEmptyStringOrPositiveNumber model.inputCurrencyPrice
+                                      }
+                                    , Cmd.none
+                                    )
+
+                        RemoteData.Failure error ->
+                            ( model, Cmd.none )
 
         Msgs.OnCurrencySave (Ok portfolioEntry) ->
-            ( { model | currencyToSave = RemoteData.Success portfolioEntry }, Cmd.batch [ newUrl portfolioPath, fetchPortfolio ] )
+            case model.jwt of
+                Nothing ->
+                    ( model, newUrl loginPath )
+
+                Just jwt ->
+                    ( { model | currencyToSave = RemoteData.Success portfolioEntry }, Cmd.batch [ newUrl portfolioPath, fetchPortfolioCmd jwt ] )
 
         Msgs.OnCurrencySave (Err error) ->
             ( { model | currencyToSave = RemoteData.Failure error }, Cmd.none )
@@ -107,16 +132,16 @@ update msg model =
                 Just jwt ->
                     case model.route of
                         Models.LoginRoute ->
-                            ( { model | jwt = Just jwt }, Cmd.batch [ fetchPortfolio, fetchSymbols, newUrl portfolioPath ] )
+                            ( { model | jwt = Just jwt }, Cmd.batch [ fetchPortfolioCmd jwt, fetchSymbolsCmd jwt, newUrl portfolioPath ] )
 
                         Models.PortfolioRoute ->
-                            ( { model | jwt = Just jwt }, Cmd.batch [ fetchPortfolio, fetchSymbols ] )
+                            ( { model | jwt = Just jwt }, Cmd.batch [ fetchPortfolioCmd jwt, fetchSymbolsCmd jwt ] )
 
                         Models.CurrencyRoute ->
-                            ( { model | jwt = Just jwt }, Cmd.batch [ fetchPortfolio, fetchSymbols ] )
+                            ( { model | jwt = Just jwt }, Cmd.batch [ fetchPortfolioCmd jwt, fetchSymbolsCmd jwt ] )
 
                         Models.AddCurrencyRoute symbol ->
-                            ( { model | jwt = Just jwt }, Cmd.batch [ fetchPortfolio, fetchCurrency symbol ] )
+                            ( { model | jwt = Just jwt }, Cmd.batch [ fetchPortfolioCmd jwt, fetchCurrencyCmd jwt symbol ] )
 
                         Models.NotFoundRoute ->
                             ( { model | jwt = Just jwt }, newUrl portfolioPath )

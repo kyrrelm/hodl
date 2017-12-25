@@ -9,21 +9,24 @@ import Msgs exposing (Msg)
 import RemoteData
 
 
-jwtToken =
-    "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YTNlZDRlOGMwZTI5ZDA5MzY2NTRlMmMiLCJyb2xlIjoidXNlciIsImlhdCI6MTUxNDA2NzE3NiwiZXhwIjoxNTE0NjcxOTc2fQ.9oYblPQkBESX0fCTbKPpCcCPyxpuuWgWJli0tbbVcys"
+jwtHeader : Jwt -> String
+jwtHeader jwt =
+    "Bearer " ++ jwt.token
 
 
-fetchPortfolioUrl : String
-fetchPortfolioUrl =
-    "http://localhost:8080/portfolio/"
+fetchPortfolioCmd : Jwt -> Cmd Msg
+fetchPortfolioCmd jwt =
+    fetchPortfolioRequest jwt
+        |> RemoteData.sendRequest
+        |> Cmd.map Msgs.OnFetchPortfolio
 
 
-fetchPortfolioRequest : Http.Request Portfolio
-fetchPortfolioRequest =
+fetchPortfolioRequest : Jwt -> Http.Request Portfolio
+fetchPortfolioRequest jwt =
     Http.request
         { body = Http.emptyBody
         , expect = Http.expectJson portfolioDecoder
-        , headers = [ Http.header "Authorization" jwtToken ]
+        , headers = [ Http.header "Authorization" (jwtHeader jwt) ]
         , method = "GET"
         , timeout = Nothing
         , url = fetchPortfolioUrl
@@ -31,11 +34,9 @@ fetchPortfolioRequest =
         }
 
 
-fetchPortfolio : Cmd Msg
-fetchPortfolio =
-    fetchPortfolioRequest
-        |> RemoteData.sendRequest
-        |> Cmd.map Msgs.OnFetchPortfolio
+fetchPortfolioUrl : String
+fetchPortfolioUrl =
+    "http://localhost:8080/portfolio/"
 
 
 portfolioDecoder : Decode.Decoder Portfolio
@@ -59,17 +60,19 @@ currencyBalanceDecoder =
         |> required "price_btc" Decode.string
 
 
-fetchSymbolsUrl : String
-fetchSymbolsUrl =
-    "http://localhost:8080/currency/"
+fetchSymbolsCmd : Jwt -> Cmd Msg
+fetchSymbolsCmd jwt =
+    fetchSymbolsRequest jwt
+        |> RemoteData.sendRequest
+        |> Cmd.map Msgs.OnFetchSymbols
 
 
-fetchSymbolsRequest : Http.Request (List Coin)
-fetchSymbolsRequest =
+fetchSymbolsRequest : Jwt -> Http.Request (List Coin)
+fetchSymbolsRequest jwt =
     Http.request
         { body = Http.emptyBody
         , expect = Http.expectJson symbolsDecoder
-        , headers = [ Http.header "Authorization" jwtToken ]
+        , headers = [ Http.header "Authorization" (jwtHeader jwt) ]
         , method = "GET"
         , timeout = Nothing
         , url = fetchSymbolsUrl
@@ -77,11 +80,9 @@ fetchSymbolsRequest =
         }
 
 
-fetchSymbols : Cmd Msg
-fetchSymbols =
-    fetchSymbolsRequest
-        |> RemoteData.sendRequest
-        |> Cmd.map Msgs.OnFetchSymbols
+fetchSymbolsUrl : String
+fetchSymbolsUrl =
+    "http://localhost:8080/currency/"
 
 
 symbolsDecoder : Decode.Decoder (List Coin)
@@ -97,17 +98,19 @@ symbolDecoder =
         |> required "name" Decode.string
 
 
-fetchCurrencyUrl : String -> String
-fetchCurrencyUrl symbol =
-    "http://localhost:8080/currency/rates?symbols=" ++ symbol
+fetchCurrencyCmd : Jwt -> String -> Cmd Msg
+fetchCurrencyCmd jwt symbol =
+    fetchCurrencyRequest jwt symbol
+        |> RemoteData.sendRequest
+        |> Cmd.map Msgs.OnFetchCurrency
 
 
-fetchCurrencyRequest : String -> Http.Request CurrencyToSave
-fetchCurrencyRequest symbol =
+fetchCurrencyRequest : Jwt -> String -> Http.Request CurrencyToSave
+fetchCurrencyRequest jwt symbol =
     Http.request
         { body = Http.emptyBody
         , expect = Http.expectJson currencyDecoder
-        , headers = [ Http.header "Authorization" jwtToken ]
+        , headers = [ Http.header "Authorization" (jwtHeader jwt) ]
         , method = "GET"
         , timeout = Nothing
         , url = fetchCurrencyUrl symbol
@@ -115,11 +118,9 @@ fetchCurrencyRequest symbol =
         }
 
 
-fetchCurrency : String -> Cmd Msg
-fetchCurrency symbol =
-    fetchCurrencyRequest symbol
-        |> RemoteData.sendRequest
-        |> Cmd.map Msgs.OnFetchCurrency
+fetchCurrencyUrl : String -> String
+fetchCurrencyUrl symbol =
+    "http://localhost:8080/currency/rates?symbols=" ++ symbol
 
 
 currencyDecoder : Decode.Decoder CurrencyToSave
@@ -131,18 +132,19 @@ currencyDecoder =
         |> required "price_usd" Decode.string
 
 
-saveCurrencyUrl : String
-saveCurrencyUrl =
-    "http://localhost:8080/portfolio/"
+saveCurrencyCmd : Jwt -> CurrencyToSave -> String -> String -> Cmd Msg
+saveCurrencyCmd jwt currency amount priceBtc =
+    saveCurrencyRequest jwt currency amount priceBtc
+        |> Http.send Msgs.OnCurrencySave
 
 
-saveCurrencyRequest : ( CurrencyToSave, String, String ) -> Http.Request CurrencyBalance
-saveCurrencyRequest ( currency, amount, btcPrice ) =
+saveCurrencyRequest : Jwt -> CurrencyToSave -> String -> String -> Http.Request CurrencyBalance
+saveCurrencyRequest jwt currency amount btcPrice =
     Http.request
         { body =
             currencyEncoder ( currency, amount, btcPrice ) |> Http.jsonBody
         , expect = Http.expectJson portfolioEntryDecoder
-        , headers = [ Http.header "Authorization" jwtToken ]
+        , headers = [ Http.header "Authorization" (jwtHeader jwt) ]
         , method = "POST"
         , timeout = Nothing
         , url = saveCurrencyUrl
@@ -150,17 +152,16 @@ saveCurrencyRequest ( currency, amount, btcPrice ) =
         }
 
 
+saveCurrencyUrl : String
+saveCurrencyUrl =
+    "http://localhost:8080/portfolio/"
+
+
 portfolioEntryDecoder : Decode.Decoder CurrencyBalance
 portfolioEntryDecoder =
     decode CurrencyBalance
         |> required "symbol" Decode.string
         |> required "balance" Decode.string
-
-
-saveCurrencyCmd : ( CurrencyToSave, String, String ) -> Cmd Msg
-saveCurrencyCmd ( currency, amount, priceBtc ) =
-    saveCurrencyRequest ( currency, amount, priceBtc )
-        |> Http.send Msgs.OnCurrencySave
 
 
 currencyEncoder : ( CurrencyToSave, String, String ) -> Encode.Value
