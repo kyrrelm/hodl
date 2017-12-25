@@ -1,10 +1,12 @@
 module Update exposing (..)
 
 import Commands exposing (fetchCurrency, fetchPortfolio, fetchSymbols, loginCmd, saveCurrencyCmd)
-import Models exposing (CurrencyOverview, Model, Route)
+import Models exposing (CurrencyOverview, Jwt, Model, Route)
 import Msgs exposing (Msg)
 import Navigation exposing (..)
+import Ports exposing (..)
 import RemoteData exposing (WebData)
+import Result exposing (Result)
 import Routing exposing (addCurrencyPath, newCurrencyPath, parseLocation, portfolioPath)
 
 
@@ -89,7 +91,15 @@ update msg model =
         Msgs.OnClickLogin ->
             ( model, loginCmd ( model.inputEmail, model.inputPassword ) )
 
-        Msgs.OnLogin jwt ->
+        Msgs.OnLogin jwtResponse ->
+            case jwtResponse of
+                Ok jwt ->
+                    ( model, storeJwtToken jwt )
+
+                Err error ->
+                    ( model, Cmd.none )
+
+        Msgs.ReceiveJwtToken jwt ->
             ( model, Cmd.none )
 
 

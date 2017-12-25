@@ -4,6 +4,7 @@ import Commands exposing (fetchCurrency, fetchPortfolio, fetchSymbols)
 import Models exposing (Model, initialModel)
 import Msgs exposing (Msg)
 import Navigation exposing (Location)
+import Ports exposing (receiveJwtToken)
 import Routing
 import Update exposing (update)
 import View exposing (view)
@@ -34,7 +35,7 @@ init location =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Sub.none
+    receiveJwtToken Msgs.ReceiveJwtToken
 
 
 main : Program Never Model Msg
