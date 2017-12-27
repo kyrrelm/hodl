@@ -7,6 +7,7 @@ import Views.AddCurrencyPage
 import Views.LoginPage
 import Views.NewCurrencyPage
 import Views.PortfolioPage
+import Views.RegisterPage
 
 
 view : Model -> Html Msg
@@ -18,10 +19,30 @@ page : Model -> Html Msg
 page model =
     case model.jwt of
         Nothing ->
-            Views.LoginPage.view model
+            case model.route of
+                Models.RegisterRoute ->
+                    Views.RegisterPage.view model
+
+                Models.LoginRoute ->
+                    Views.LoginPage.view model
+
+                Models.PortfolioRoute ->
+                    Views.LoginPage.view model
+
+                Models.CurrencyRoute ->
+                    Views.LoginPage.view model
+
+                Models.AddCurrencyRoute symbol ->
+                    Views.LoginPage.view model
+
+                Models.NotFoundRoute ->
+                    Views.LoginPage.view model
 
         Just jwt ->
             case model.route of
+                Models.RegisterRoute ->
+                    Views.RegisterPage.view model
+
                 Models.LoginRoute ->
                     Views.LoginPage.view model
 

@@ -22,6 +22,10 @@ type Msg
     | OnClickNavBarName
     | OnInputEmail String
     | OnInputPassword String
+    | OnInputPasswordRepeat String
     | OnClickLogin
+    | OnClickRegister
+    | OnClickToRegisterPage
+    | OnClickCancelRegister
     | OnLogin (Result Http.Error Jwt)
     | ReceiveJwtToken (Maybe Jwt)

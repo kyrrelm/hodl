@@ -1,4 +1,4 @@
-module Views.LoginPage exposing (..)
+module Views.RegisterPage exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (class, placeholder, type_)
@@ -24,19 +24,26 @@ view model =
                 , type_ "password"
                 , placeholder "password"
                 , onInput Msgs.OnInputPassword
-                , onEnter Msgs.OnClickLogin
+                ]
+                []
+            , input
+                [ class "h1 space-bottom"
+                , type_ "password"
+                , placeholder "confirm password"
+                , onInput Msgs.OnInputPasswordRepeat
+                , onEnter Msgs.OnClickRegister
                 ]
                 []
             , button
                 [ class "h1 space-bottom-small"
-                , onClick Msgs.OnClickLogin
-                ]
-                [ text "Login" ]
-            , button
-                [ class "h1"
-                , onClick Msgs.OnClickToRegisterPage
+                , onClick Msgs.OnClickRegister
                 ]
                 [ text "Register" ]
+            , button
+                [ class "h1"
+                , onClick Msgs.OnClickCancelRegister
+                ]
+                [ text "Cancel" ]
             ]
         ]
 

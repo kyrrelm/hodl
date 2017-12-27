@@ -13,6 +13,7 @@ matchers =
         , map CurrencyRoute (s "newCurrency")
         , map AddCurrencyRoute (s "addCurrency" </> string)
         , map LoginRoute (s "login")
+        , map RegisterRoute (s "register")
         ]
 
 
@@ -39,6 +40,11 @@ newCurrencyPath =
 loginPath : String
 loginPath =
     "#login"
+
+
+registerPath : String
+registerPath =
+    "#register"
 
 
 addCurrencyPath : String -> String

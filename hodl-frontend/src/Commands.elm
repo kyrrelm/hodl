@@ -216,3 +216,28 @@ loginDecoder : Decode.Decoder Jwt
 loginDecoder =
     decode Jwt
         |> required "token" Decode.string
+
+
+registerCmd : ( String, String ) -> Cmd Msg
+registerCmd ( email, password ) =
+    registerRequest ( email, password )
+        |> Http.send Msgs.OnLogin
+
+
+registerRequest : ( String, String ) -> Http.Request Jwt
+registerRequest ( email, password ) =
+    Http.request
+        { body =
+            loginEncoder ( email, password ) |> Http.jsonBody
+        , expect = Http.expectJson loginDecoder
+        , headers = []
+        , method = "POST"
+        , timeout = Nothing
+        , url = registerUrl
+        , withCredentials = False
+        }
+
+
+registerUrl : String
+registerUrl =
+    "http://localhost:8080/auth/register"

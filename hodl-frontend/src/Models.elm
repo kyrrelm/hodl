@@ -16,6 +16,7 @@ type alias Model =
     , inputCurrencyAmountError : Maybe String
     , inputEmail : String
     , inputPassword : String
+    , inputPasswordRepeat : String
     , jwt : Maybe Jwt
     }
 
@@ -34,6 +35,7 @@ initialModel route =
     , inputCurrencyAmountError = Nothing
     , inputEmail = ""
     , inputPassword = ""
+    , inputPasswordRepeat = ""
     , jwt = Nothing
     }
 
@@ -85,3 +87,4 @@ type Route
     | AddCurrencyRoute String
     | NotFoundRoute
     | LoginRoute
+    | RegisterRoute

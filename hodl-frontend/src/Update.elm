@@ -1,6 +1,6 @@
 module Update exposing (..)
 
-import Commands exposing (fetchCurrencyCmd, fetchPortfolioCmd, fetchSymbolsCmd, loginCmd, saveCurrencyCmd)
+import Commands exposing (..)
 import Http exposing (Error(..))
 import Models exposing (CurrencyOverview, Jwt, Model, Route)
 import Msgs exposing (Msg)
@@ -8,7 +8,7 @@ import Navigation exposing (..)
 import Ports exposing (..)
 import RemoteData exposing (WebData)
 import Result exposing (Result)
-import Routing exposing (addCurrencyPath, loginPath, newCurrencyPath, parseLocation, portfolioPath)
+import Routing exposing (..)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -134,8 +134,20 @@ update msg model =
         Msgs.OnInputPassword input ->
             ( { model | inputPassword = input }, Cmd.none )
 
+        Msgs.OnInputPasswordRepeat input ->
+            ( { model | inputPasswordRepeat = input }, Cmd.none )
+
         Msgs.OnClickLogin ->
             ( model, loginCmd ( model.inputEmail, model.inputPassword ) )
+
+        Msgs.OnClickRegister ->
+            ( model, registerCmd ( model.inputEmail, model.inputPassword ) )
+
+        Msgs.OnClickToRegisterPage ->
+            ( model, newUrl registerPath )
+
+        Msgs.OnClickCancelRegister ->
+            ( model, newUrl loginPath )
 
         Msgs.OnLogin jwtResponse ->
             case jwtResponse of
@@ -153,6 +165,9 @@ update msg model =
                 Just jwt ->
                     case model.route of
                         Models.LoginRoute ->
+                            ( { model | jwt = Just jwt }, Cmd.batch [ fetchPortfolioCmd jwt, fetchSymbolsCmd jwt, newUrl portfolioPath ] )
+
+                        Models.RegisterRoute ->
                             ( { model | jwt = Just jwt }, Cmd.batch [ fetchPortfolioCmd jwt, fetchSymbolsCmd jwt, newUrl portfolioPath ] )
 
                         Models.PortfolioRoute ->
