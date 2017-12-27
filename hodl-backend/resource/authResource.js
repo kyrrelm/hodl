@@ -20,6 +20,10 @@ module.exports.register =  (router) => {
       ctx.throw(409, 'Email already in use');
     }
 
+    if(password.length < 10) {
+      ctx.throw(409, 'Password has to be at least 10 characters');
+    }
+
     const hash = bcrypt.hashSync(password, 10);
     const _id = new ObjectID();
     await ctx.app.user.insert({_id, email, hash});
