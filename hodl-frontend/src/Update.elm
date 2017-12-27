@@ -15,42 +15,28 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Msgs.OnFetchPortfolio response ->
-            case response of
-                RemoteData.NotAsked ->
+            case isAuthorized response of
+                True ->
                     ( { model | portfolio = response }, Cmd.none )
 
-                RemoteData.Loading ->
-                    ( { model | portfolio = response }, Cmd.none )
-
-                RemoteData.Success portfolio ->
-                    ( { model | portfolio = response }, Cmd.none )
-
-                RemoteData.Failure error ->
-                    case error of
-                        BadUrl string ->
-                            ( { model | portfolio = response }, Cmd.none )
-
-                        Timeout ->
-                            ( { model | portfolio = response }, Cmd.none )
-
-                        NetworkError ->
-                            ( { model | portfolio = response }, Cmd.none )
-
-                        BadStatus responseError ->
-                            if responseError.status.code == 401 then
-                                ( { model | portfolio = response, jwt = Nothing }, newUrl loginPath )
-
-                            else
-                                ( { model | portfolio = response }, Cmd.none )
-
-                        BadPayload toString a ->
-                            ( { model | portfolio = response }, Cmd.none )
+                False ->
+                    ( { model | portfolio = response, jwt = Nothing }, newUrl loginPath )
 
         Msgs.OnFetchSymbols response ->
-            ( { model | coins = response }, Cmd.none )
+            case isAuthorized response of
+                True ->
+                    ( { model | coins = response }, Cmd.none )
+
+                False ->
+                    ( { model | coins = response, jwt = Nothing }, newUrl loginPath )
 
         Msgs.OnFetchCurrency response ->
-            ( { model | currency = response }, Cmd.none )
+            case isAuthorized response of
+                True ->
+                    ( { model | currency = response }, Cmd.none )
+
+                False ->
+                    ( { model | currency = response, jwt = Nothing }, newUrl loginPath )
 
         Msgs.OnLocationChange location ->
             let
@@ -135,7 +121,12 @@ update msg model =
                     ( { model | currencyToSave = RemoteData.Success portfolioEntry }, Cmd.batch [ newUrl portfolioPath, fetchPortfolioCmd jwt ] )
 
         Msgs.OnCurrencySave (Err error) ->
-            ( { model | currencyToSave = RemoteData.Failure error }, Cmd.none )
+            case isUnauthorizedError error of
+                True ->
+                    ( { model | jwt = Nothing }, newUrl loginPath )
+
+                False ->
+                    ( { model | currencyToSave = RemoteData.Failure error }, Cmd.none )
 
         Msgs.OnInputEmail input ->
             ( { model | inputEmail = input }, Cmd.none )
@@ -213,3 +204,42 @@ validatePositiveNumber value =
 
                 Err e ->
                     Just "That is not a number"
+
+
+isAuthorized : WebData a -> Bool
+isAuthorized response =
+    case response of
+        RemoteData.NotAsked ->
+            True
+
+        RemoteData.Loading ->
+            True
+
+        RemoteData.Success portfolio ->
+            True
+
+        RemoteData.Failure error ->
+            not (isUnauthorizedError error)
+
+
+isUnauthorizedError : Http.Error -> Bool
+isUnauthorizedError error =
+    case error of
+        BadUrl string ->
+            False
+
+        Timeout ->
+            False
+
+        NetworkError ->
+            False
+
+        BadStatus responseError ->
+            if responseError.status.code == 401 then
+                True
+
+            else
+                False
+
+        BadPayload toString a ->
+            False
