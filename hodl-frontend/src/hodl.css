@@ -55,6 +55,14 @@ button:active {
     background-color: #4b4b4b;
 }
 
+.red {
+    color: red;
+}
+
+.green {
+    color: lightgreen;
+}
+
 .nav {
     position: fixed;
     width: 100%;

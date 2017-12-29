@@ -58,7 +58,7 @@ list currencies =
 currencyCard : CurrencyOverview -> Html Msg
 currencyCard currency =
     div [ class "card", onClick (Msgs.OnClickAddCurrency currency.symbol) ]
-        [ div [ class "card-symbol h3" ] [ text currency.symbol ]
+        [ div [ class "card-symbol h3" ] [ text (currency.name ++ " (" ++ currency.symbol ++ ")") ]
         , currencyCardContent currency
         ]
 
@@ -84,6 +84,25 @@ balanceContainer currency =
 ratesContainer : CurrencyOverview -> Html Msg
 ratesContainer currency =
     div []
-        [ div [] [ text ("$: " ++ currency.usdPrice) ]
+        [ percentWithColor currency.percentChange24h
+        , div [] [ text ("$: " ++ currency.usdPrice) ]
         , div [] [ text ("฿: " ++ currency.btcPrice) ]
         ]
+
+
+percentWithColor : String -> Html Msg
+percentWithColor percent =
+    let
+        firstCharMaybe =
+            List.head (String.toList percent)
+    in
+    case firstCharMaybe of
+        Nothing ->
+            text ""
+
+        Just firstChar ->
+            if firstChar == '-' then
+                div [ class "red" ] [ text (percent ++ "%") ]
+
+            else
+                div [ class "green" ] [ text (percent ++ "%") ]

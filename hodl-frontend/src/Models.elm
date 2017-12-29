@@ -73,11 +73,13 @@ type alias CurrencyBalance =
 
 type alias CurrencyOverview =
     { symbol : String
+    , name : String
     , balance : String
     , usdBalance : String
     , btcBalance : String
     , usdPrice : String
     , btcPrice : String
+    , percentChange24h : String
     }
 
 

@@ -53,11 +53,13 @@ currencyBalanceDecoder =
     decode
         CurrencyOverview
         |> required "symbol" Decode.string
+        |> required "name" Decode.string
         |> required "balance" Decode.string
         |> required "usdBalance" Decode.string
         |> required "btcBalance" Decode.string
         |> required "price_usd" Decode.string
         |> required "price_btc" Decode.string
+        |> required "percent_change_24h" Decode.string
 
 
 fetchSymbolsCmd : Jwt -> Cmd Msg
