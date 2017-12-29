@@ -12,6 +12,14 @@ html {
     height: 100%;
 }
 
+@media (max-width: 500px) {
+    .input-field {
+        width: 12rem;
+        margin-left: 1rem;
+    }
+}
+
+
 body {
     background-color: #262626;
     font-family: "roboto-light", sans-serif;
@@ -200,7 +208,3 @@ button:active {
     display: flex;
     flex-direction: column;
 }
-
-
-
-
