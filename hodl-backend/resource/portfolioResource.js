@@ -93,13 +93,16 @@ module.exports.register =  (router) => {
       const usdBalance = Big(currency.balance).times(Big(currency.price_usd));
       const btcBalance = Big(currency.balance).times(Big(currency.price_btc));
 
-      overview.usdBalance = Big(overview.usdBalance).add(Big(usdBalance)).toFixed(2);
-      overview.btcBalance = Big(overview.btcBalance).add(Big(btcBalance)).toFixed(2);
+      overview.usdBalance = Big(overview.usdBalance).add(Big(usdBalance));
+      overview.btcBalance = Big(overview.btcBalance).add(Big(btcBalance));
 
       currency.usdBalance = usdBalance.toFixed(2);
-      currency.btcBalance = btcBalance.toFixed(2);
+      currency.btcBalance = btcBalance.toFixed(8);
 
     });
+
+    overview.usdBalance = overview.usdBalance.toFixed(2);
+    overview.btcBalance = overview.btcBalance.toFixed(8);
 
     overview.currencies = currencies.sort((a, b) => b.usdBalance - a.usdBalance);
 

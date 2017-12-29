@@ -73,20 +73,21 @@ currencyCardContent currency =
 
 balanceContainer : CurrencyOverview -> Html Msg
 balanceContainer currency =
-    div []
-        [ div [] [ text currency.balance ]
-        , div [ class "empty-line" ] []
-        , div [] [ text ("$ " ++ currency.usdBalance) ]
-        , div [] [ text ("฿ " ++ currency.btcBalance) ]
+    div [ class "container-right-align", style [ ( "flexBasis", "8rem" ) ] ]
+        [ div [ class "empty-line" ] []
+        , div [] [ text currency.balance ]
+        , div [] [ text (currency.usdBalance ++ " $") ]
+        , div [] [ text (currency.btcBalance ++ " ฿") ]
         ]
 
 
 ratesContainer : CurrencyOverview -> Html Msg
 ratesContainer currency =
-    div []
-        [ percentWithColor currency.percentChange24h
-        , div [] [ text ("$: " ++ currency.usdPrice) ]
-        , div [] [ text ("฿: " ++ currency.btcPrice) ]
+    div [ class "container-right-align" ]
+        [ div [ class "empty-line" ] []
+        , percentWithColor currency.percentChange24h
+        , div [] [ text (currency.usdPrice ++ " $") ]
+        , div [] [ text (currency.btcPrice ++ " ฿") ]
         ]
 
 
@@ -102,7 +103,7 @@ percentWithColor percent =
 
         Just firstChar ->
             if firstChar == '-' then
-                div [ class "red" ] [ text (percent ++ "%") ]
+                div [ class "red" ] [ text (percent ++ " %") ]
 
             else
-                div [ class "green" ] [ text (percent ++ "%") ]
+                div [ class "green" ] [ text (percent ++ " %") ]

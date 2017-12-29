@@ -63,6 +63,12 @@ button:active {
     color: lightgreen;
 }
 
+.container-right-align {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
 .nav {
     position: fixed;
     width: 100%;
@@ -139,6 +145,7 @@ button:active {
 
 .card-list {
     flex-basis: 40rem;
+    min-width: 20rem;
 }
 
 .card {
