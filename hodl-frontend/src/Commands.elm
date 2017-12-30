@@ -9,6 +9,10 @@ import Msgs exposing (Msg)
 import RemoteData
 
 
+baseUrl =
+    "http://localhost:8080/"
+
+
 jwtHeader : Jwt -> String
 jwtHeader jwt =
     "Bearer " ++ jwt.token
@@ -36,7 +40,7 @@ fetchPortfolioRequest jwt =
 
 fetchPortfolioUrl : String
 fetchPortfolioUrl =
-    "http://localhost:8080/portfolio/"
+    baseUrl ++ "portfolio/"
 
 
 portfolioDecoder : Decode.Decoder Portfolio
@@ -84,7 +88,7 @@ fetchSymbolsRequest jwt =
 
 fetchSymbolsUrl : String
 fetchSymbolsUrl =
-    "http://localhost:8080/currency/"
+    baseUrl ++ "currency/"
 
 
 symbolsDecoder : Decode.Decoder (List Coin)
@@ -122,7 +126,7 @@ fetchCurrencyRequest jwt symbol =
 
 fetchCurrencyUrl : String -> String
 fetchCurrencyUrl symbol =
-    "http://localhost:8080/currency/rates?symbols=" ++ symbol
+    baseUrl ++ "currency/rates?symbols=" ++ symbol
 
 
 currencyDecoder : Decode.Decoder CurrencyToSave
@@ -156,7 +160,7 @@ saveCurrencyRequest jwt currency amount btcPrice =
 
 saveCurrencyUrl : String
 saveCurrencyUrl =
-    "http://localhost:8080/portfolio/"
+    baseUrl ++ "portfolio/"
 
 
 portfolioEntryDecoder : Decode.Decoder CurrencyBalance
@@ -200,7 +204,7 @@ loginRequest ( email, password ) =
 
 loginUrl : String
 loginUrl =
-    "http://localhost:8080/auth"
+    baseUrl ++ "auth"
 
 
 loginEncoder : ( String, String ) -> Encode.Value
@@ -242,4 +246,4 @@ registerRequest ( email, password ) =
 
 registerUrl : String
 registerUrl =
-    "http://localhost:8080/auth/register"
+    baseUrl ++ "auth/register"
