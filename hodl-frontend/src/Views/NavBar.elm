@@ -1,7 +1,7 @@
 module Views.NavBar exposing (view)
 
 import Html exposing (..)
-import Html.Attributes exposing (class)
+import Html.Attributes exposing (class, src)
 import Html.Events exposing (onClick)
 import Models exposing (CurrencyOverview, Model, Portfolio)
 import Msgs exposing (Msg)
@@ -34,7 +34,10 @@ navBar portfolio =
     div [ class "nav white bg-black" ]
         [ div [ class "p2 nav-name", onClick Msgs.OnClickNavBarName ] [ text "Hodl" ]
         , div [ class "p2" ]
-            [ span [] [ text (portfolio.usdBalance ++ " $") ]
-            , span [ class "total-balance" ] [ text (portfolio.eurBalance ++ " ฿") ]
+            [ span []
+                [ span [] [ text (portfolio.usdBalance ++ " $") ]
+                , span [ class "total-balance" ] [ text (portfolio.eurBalance ++ " ฿") ]
+                ]
+            , div [ class "icon logout-button" ] [ img [ src "./assets/logout2.svg" ] [] ]
             ]
         ]

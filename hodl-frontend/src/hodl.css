@@ -12,13 +12,6 @@ html {
     height: 100%;
 }
 
-@media (max-width: 500px) {
-    .input-field {
-        width: 12rem;
-        margin-left: 1rem;
-    }
-}
-
 
 body {
     background-color: #262626;
@@ -80,14 +73,14 @@ button:active {
 .nav {
     position: fixed;
     width: 100%;
-    padding-left: 2rem;
-    padding-right: 2rem;
+    padding-left: 1rem;
+    padding-right: 4rem;
     display: flex;
     justify-content: space-between;
 }
 
 .icon {
-    max-width: 100%;
+    width: 1rem;
     height: 1rem;
 }
 
@@ -207,4 +200,41 @@ button:active {
     margin: 2rem;
     display: flex;
     flex-direction: column;
+}
+
+.logout-button {
+    display: inline-block;
+    position: absolute;
+    top: 1.2rem;
+    right: 2rem;
+}
+
+@media (max-width: 500px) {
+    .input-field {
+        width: 12rem;
+        margin-left: 1rem;
+    }
+}
+
+
+@media (min-width: 900px) {
+    .nav {
+        padding-left: 2rem;
+    }
+}
+
+@media (max-width: 400px) {
+    .nav {
+        padding-left: 0;
+        padding-right: 2rem;
+    }
+
+    .nav-name {
+        padding-right: 0;
+    }
+
+    .logout-button {
+        top: 1.2rem;
+        right: 1rem;
+    }
 }

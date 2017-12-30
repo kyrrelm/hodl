@@ -42,8 +42,8 @@ portfolioContainer portfolio =
 
 addCurrencyCard : Html Msg
 addCurrencyCard =
-    div [ class "card", onClick Msgs.OnClickNewCurrency ]
-        [ div [ class "card-content-centered icon" ] [ img [ src "./assets/plus.svg" ] [] ]
+    div [ class "card card-content-centered", onClick Msgs.OnClickNewCurrency ]
+        [ div [ class "icon" ] [ img [ src "./assets/plus.svg" ] [] ]
         ]
 
 
