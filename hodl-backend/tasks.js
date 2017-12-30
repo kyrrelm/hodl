@@ -2,7 +2,7 @@ const fetch = require('node-fetch');
 
 module.exports.currencies = (app) => {
   updateCurrencies(app);
-
+  setInterval(updateCurrencies, 120000, app);
 };
 
 const updateCurrencies = (app) => {
