@@ -38,6 +38,6 @@ navBar portfolio =
                 [ span [] [ text (portfolio.usdBalance ++ " $") ]
                 , span [ class "total-balance" ] [ text (portfolio.eurBalance ++ " ฿") ]
                 ]
-            , div [ class "icon logout-button" ] [ img [ src "./assets/logout2.svg" ] [] ]
+            , div [ class "icon logout-button", onClick Msgs.OnClickLogout ] [ img [ src "./assets/logout2.svg" ] [] ]
             ]
         ]

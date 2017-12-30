@@ -24,6 +24,7 @@ type Msg
     | OnInputPassword String
     | OnInputPasswordRepeat String
     | OnClickLogin
+    | OnClickLogout
     | OnClickRegister
     | OnClickToRegisterPage
     | OnClickCancelRegister

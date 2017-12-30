@@ -18,6 +18,10 @@ app.ports.storeJwtToken.subscribe(function(jwt) {
   app.ports.receiveJwtToken.send(jwt);
 });
 
+app.ports.deleteJwtToken.subscribe(function() {
+  localStorage.removeItem('jwtToken');
+});
+
 app.ports.retrieveJwtToken.subscribe(function() {
   const token = localStorage.getItem("jwtToken");
   if(token) {

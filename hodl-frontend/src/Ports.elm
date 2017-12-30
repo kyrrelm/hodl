@@ -3,11 +3,10 @@ port module Ports exposing (..)
 import Models exposing (Jwt)
 
 
-
--- port for sending strings out to JavaScript
-
-
 port storeJwtToken : Jwt -> Cmd msg
+
+
+port deleteJwtToken : () -> Cmd msg
 
 
 port retrieveJwtToken : () -> Cmd msg

@@ -140,6 +140,9 @@ update msg model =
         Msgs.OnClickLogin ->
             ( model, loginCmd ( model.inputEmail, model.inputPassword ) )
 
+        Msgs.OnClickLogout ->
+            ( { model | jwt = Nothing }, deleteJwtToken () )
+
         Msgs.OnClickRegister ->
             ( model, registerCmd ( model.inputEmail, model.inputPassword ) )
 
