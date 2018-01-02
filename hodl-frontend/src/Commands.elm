@@ -1,6 +1,6 @@
 module Commands exposing (..)
 
-import Http
+import Http exposing (Header)
 import Json.Decode as Decode
 import Json.Decode.Pipeline exposing (decode, required)
 import Json.Encode as Encode
@@ -9,8 +9,22 @@ import Msgs exposing (Msg)
 import RemoteData
 
 
+apiKey =
+    "123"
+
+
+
+--baseUrl =
+--    "http://localhost:8080/"
+
+
 baseUrl =
-    "http://localhost:8080/"
+    "https://hodl-moe.herokuapp.com/"
+
+
+commonHeaders : Jwt -> List Header
+commonHeaders jwt =
+    [ Http.header "Authorization" (jwtHeader jwt), Http.header "api-key" apiKey ]
 
 
 jwtHeader : Jwt -> String
@@ -30,7 +44,7 @@ fetchPortfolioRequest jwt =
     Http.request
         { body = Http.emptyBody
         , expect = Http.expectJson portfolioDecoder
-        , headers = [ Http.header "Authorization" (jwtHeader jwt) ]
+        , headers = commonHeaders jwt
         , method = "GET"
         , timeout = Nothing
         , url = fetchPortfolioUrl
@@ -78,7 +92,7 @@ fetchSymbolsRequest jwt =
     Http.request
         { body = Http.emptyBody
         , expect = Http.expectJson symbolsDecoder
-        , headers = [ Http.header "Authorization" (jwtHeader jwt) ]
+        , headers = commonHeaders jwt
         , method = "GET"
         , timeout = Nothing
         , url = fetchSymbolsUrl
@@ -116,7 +130,7 @@ fetchCurrencyRequest jwt symbol =
     Http.request
         { body = Http.emptyBody
         , expect = Http.expectJson currencyDecoder
-        , headers = [ Http.header "Authorization" (jwtHeader jwt) ]
+        , headers = commonHeaders jwt
         , method = "GET"
         , timeout = Nothing
         , url = fetchCurrencyUrl symbol
@@ -150,7 +164,7 @@ saveCurrencyRequest jwt currency amount btcPrice =
         { body =
             currencyEncoder ( currency, amount, btcPrice ) |> Http.jsonBody
         , expect = Http.expectJson portfolioEntryDecoder
-        , headers = [ Http.header "Authorization" (jwtHeader jwt) ]
+        , headers = commonHeaders jwt
         , method = "POST"
         , timeout = Nothing
         , url = saveCurrencyUrl
@@ -194,7 +208,7 @@ loginRequest ( email, password ) =
         { body =
             loginEncoder ( email, password ) |> Http.jsonBody
         , expect = Http.expectJson loginDecoder
-        , headers = []
+        , headers = [ Http.header "api-key" apiKey ]
         , method = "POST"
         , timeout = Nothing
         , url = loginUrl
@@ -236,7 +250,7 @@ registerRequest ( email, password ) =
         { body =
             loginEncoder ( email, password ) |> Http.jsonBody
         , expect = Http.expectJson loginDecoder
-        , headers = []
+        , headers = [ Http.header "api-key" apiKey ]
         , method = "POST"
         , timeout = Nothing
         , url = registerUrl
