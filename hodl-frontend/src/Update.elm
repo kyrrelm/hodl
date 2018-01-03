@@ -155,10 +155,15 @@ update msg model =
         Msgs.OnLogin jwtResponse ->
             case jwtResponse of
                 Ok jwt ->
-                    ( model, storeJwtToken jwt )
+                    ( { model | inputLoginError = Nothing }, storeJwtToken jwt )
 
                 Err error ->
-                    ( model, Cmd.none )
+                    case maybeErrorMessage error of
+                        Nothing ->
+                            ( { model | inputLoginError = Just (toString error) }, Cmd.none )
+
+                        Just body ->
+                            ( { model | inputLoginError = Just body }, Cmd.none )
 
         Msgs.ReceiveJwtToken maybeJwt ->
             case maybeJwt of
@@ -261,3 +266,26 @@ isUnauthorizedError error =
 
         BadPayload toString a ->
             False
+
+
+maybeErrorMessage : Http.Error -> Maybe String
+maybeErrorMessage error =
+    case error of
+        BadUrl string ->
+            Nothing
+
+        Timeout ->
+            Nothing
+
+        NetworkError ->
+            Nothing
+
+        BadStatus responseError ->
+            if responseError.status.code == 400 || responseError.status.code == 409 then
+                Just responseError.body
+
+            else
+                Nothing
+
+        BadPayload toString a ->
+            Nothing

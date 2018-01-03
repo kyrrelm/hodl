@@ -111,6 +111,12 @@ button:active {
     position: relative;
 }
 
+.align-left {
+    display: flex;
+    justify-content: flex-start;
+    position: relative;
+}
+
 .space-bottom {
     margin-bottom: 3rem;
 }

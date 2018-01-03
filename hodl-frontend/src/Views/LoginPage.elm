@@ -19,14 +19,17 @@ view model =
                 , onInput Msgs.OnInputEmail
                 ]
                 []
-            , input
-                [ class "h1 space-bottom"
-                , type_ "password"
-                , placeholder "password"
-                , onInput Msgs.OnInputPassword
-                , onEnter Msgs.OnClickLogin
+            , div [ class "space-bottom" ]
+                [ input
+                    [ class "h1"
+                    , type_ "password"
+                    , placeholder "password"
+                    , onInput Msgs.OnInputPassword
+                    , onEnter Msgs.OnClickLogin
+                    ]
+                    []
+                , inputLoginErrorView model.inputLoginError
                 ]
-                []
             , button
                 [ class "h1 space-bottom-small"
                 , onClick Msgs.OnClickLogin
@@ -52,3 +55,13 @@ onEnter msg =
                 Json.fail "not ENTER"
     in
     on "keydown" (Json.andThen isEnter keyCode)
+
+
+inputLoginErrorView : Maybe String -> Html Msg
+inputLoginErrorView maybeError =
+    case maybeError of
+        Nothing ->
+            text ""
+
+        Just error ->
+            div [ class "align-left" ] [ div [ class "validation-error" ] [ text error ] ]
