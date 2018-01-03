@@ -30,6 +30,7 @@ mongo.connect(app)
     );
 
 const router = new Router();
+const routerNoApiKey = new Router();
 const secureRouter = new Router();
 
 router.use(error.errorHandler());
@@ -44,7 +45,7 @@ if (DISABLE_JWT !== 'true') {
 }
 
 authResource.register(router);
-healthResource.register(router);
+healthResource.register(routerNoApiKey);
 userResource.register(secureRouter);
 portfolioResource.register(secureRouter);
 currencyResource.register(secureRouter);
@@ -55,6 +56,7 @@ router.get("/", async function (ctx) {
 
 
 app.use(router.routes()).use(router.allowedMethods());
+app.use(routerNoApiKey.routes()).use(routerNoApiKey.allowedMethods());
 app.use(secureRouter.routes()).use(secureRouter.allowedMethods());
 
 app.listen(process.env.PORT || 8080);
