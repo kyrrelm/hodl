@@ -9,7 +9,7 @@ type alias Model =
     , currency : WebData CurrencyToSave
     , currencyToSave : WebData CurrencyBalance
     , route : Route
-    , searchCoins : String
+    , inputSearchCoins : String
     , inputCurrencyPrice : String
     , inputCurrencyPriceError : Maybe String
     , inputCurrencyAmount : String
@@ -28,7 +28,7 @@ initialModel route =
     , currency = RemoteData.NotAsked
     , currencyToSave = RemoteData.NotAsked
     , route = route
-    , searchCoins = ""
+    , inputSearchCoins = ""
     , inputCurrencyPrice = ""
     , inputCurrencyPriceError = Nothing
     , inputCurrencyAmount = ""

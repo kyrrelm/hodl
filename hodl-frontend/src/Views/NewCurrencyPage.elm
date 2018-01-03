@@ -27,25 +27,25 @@ maybeCoins model =
             text "Loading..."
 
         RemoteData.Success coins ->
-            coinsContainer ( model.searchCoins, coins )
+            coinsContainer ( model.inputSearchCoins, coins )
 
         RemoteData.Failure error ->
             text (toString error)
 
 
 coinsContainer : ( String, List Coin ) -> Html Msg
-coinsContainer ( searchCoins, coins ) =
-    div [ class "card-list-container" ] [ list ( searchCoins, coins ) ]
+coinsContainer ( inputSearchCoins, coins ) =
+    div [ class "card-list-container" ] [ list ( inputSearchCoins, coins ) ]
 
 
 list : ( String, List Coin ) -> Html Msg
-list ( searchCoins, coins ) =
+list ( inputSearchCoins, coins ) =
     let
         containsName symbol =
-            String.contains (String.toLower searchCoins) (String.toLower symbol.name)
+            String.contains (String.toLower inputSearchCoins) (String.toLower symbol.name)
 
         containsSymbol symbol =
-            String.contains (String.toLower searchCoins) (String.toLower symbol.symbol)
+            String.contains (String.toLower inputSearchCoins) (String.toLower symbol.symbol)
 
         filter symbol =
             containsName symbol || containsSymbol symbol

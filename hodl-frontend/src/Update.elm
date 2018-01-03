@@ -54,7 +54,7 @@ update msg model =
                     ( model, newUrl loginPath )
 
                 Just jwt ->
-                    ( model, Cmd.batch [ newUrl newCurrencyPath, fetchSymbolsCmd jwt ] )
+                    ( { model | inputSearchCoins = "" }, Cmd.batch [ newUrl newCurrencyPath, fetchSymbolsCmd jwt ] )
 
         Msgs.OnClickNavBarName ->
             case model.jwt of
@@ -73,7 +73,7 @@ update msg model =
                     ( { model | inputCurrencyAmountError = Nothing }, Cmd.batch [ newUrl (addCurrencyPath symbol), fetchCurrencyCmd jwt symbol ] )
 
         Msgs.OnInputSearchCoin input ->
-            ( { model | searchCoins = input }, Cmd.none )
+            ( { model | inputSearchCoins = input }, Cmd.none )
 
         Msgs.OnInputCurrencyPrice input ->
             ( { model | inputCurrencyPrice = input, inputCurrencyPriceError = Nothing }, Cmd.none )
