@@ -5,6 +5,7 @@ const logger = require('koa-logger');
 const koaValidator = require('koa-async-validator');
 const secure = require("./middleware/secure.js");
 const error = require("./middleware/error.js");
+const healthResource = require('./resource/healthResource.js');
 const authResource = require('./resource/authResource.js');
 const userResource = require('./resource/userResource.js');
 const portfolioResource = require('./resource/portfolioResource.js');
@@ -43,6 +44,7 @@ if (DISABLE_JWT !== 'true') {
 }
 
 authResource.register(router);
+healthResource.register(router);
 userResource.register(secureRouter);
 portfolioResource.register(secureRouter);
 currencyResource.register(secureRouter);
