@@ -168,22 +168,22 @@ update msg model =
                 Just jwt ->
                     case model.route of
                         Models.LoginRoute ->
-                            ( { model | jwt = Just jwt }, Cmd.batch [ fetchPortfolioCmd jwt, fetchSymbolsCmd jwt, newUrl portfolioPath ] )
+                            ( { model | jwt = Just jwt, inputEmail = "", inputPassword = "", inputPasswordRepeat = "" }, Cmd.batch [ fetchPortfolioCmd jwt, fetchSymbolsCmd jwt, newUrl portfolioPath ] )
 
                         Models.RegisterRoute ->
-                            ( { model | jwt = Just jwt }, Cmd.batch [ fetchPortfolioCmd jwt, fetchSymbolsCmd jwt, newUrl portfolioPath ] )
+                            ( { model | jwt = Just jwt, inputEmail = "", inputPassword = "", inputPasswordRepeat = "" }, Cmd.batch [ fetchPortfolioCmd jwt, fetchSymbolsCmd jwt, newUrl portfolioPath ] )
 
                         Models.PortfolioRoute ->
-                            ( { model | jwt = Just jwt }, Cmd.batch [ fetchPortfolioCmd jwt, fetchSymbolsCmd jwt ] )
+                            ( { model | jwt = Just jwt, inputEmail = "", inputPassword = "", inputPasswordRepeat = "" }, Cmd.batch [ fetchPortfolioCmd jwt, fetchSymbolsCmd jwt ] )
 
                         Models.CurrencyRoute ->
-                            ( { model | jwt = Just jwt }, Cmd.batch [ fetchPortfolioCmd jwt, fetchSymbolsCmd jwt ] )
+                            ( { model | jwt = Just jwt, inputEmail = "", inputPassword = "", inputPasswordRepeat = "" }, Cmd.batch [ fetchPortfolioCmd jwt, fetchSymbolsCmd jwt ] )
 
                         Models.AddCurrencyRoute symbol ->
-                            ( { model | jwt = Just jwt }, Cmd.batch [ fetchPortfolioCmd jwt, fetchCurrencyCmd jwt symbol ] )
+                            ( { model | jwt = Just jwt, inputEmail = "", inputPassword = "", inputPasswordRepeat = "" }, Cmd.batch [ fetchPortfolioCmd jwt, fetchCurrencyCmd jwt symbol ] )
 
                         Models.NotFoundRoute ->
-                            ( { model | jwt = Just jwt }, newUrl portfolioPath )
+                            ( { model | jwt = Just jwt, inputEmail = "", inputPassword = "", inputPasswordRepeat = "" }, newUrl portfolioPath )
 
 
 currencyIsValid : Model -> Bool
