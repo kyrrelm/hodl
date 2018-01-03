@@ -13,13 +13,13 @@ apiKey =
     "123"
 
 
+baseUrl =
+    "http://localhost:8080/"
+
+
 
 --baseUrl =
---    "http://localhost:8080/"
-
-
-baseUrl =
-    "https://hodl-moe.herokuapp.com/"
+--    "https://hodl-moe.herokuapp.com/"
 
 
 commonHeaders : Jwt -> List Header

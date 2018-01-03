@@ -8,7 +8,9 @@ module.exports.register =  (router) => {
 
     const currencies = await ctx.app.currency.find({}).toArray();
 
-    ctx.body = currencies.map(currency => {return {
+    ctx.body = currencies
+        .sort((a, b) => a.rank - b.rank)
+        .map(currency => {return {
       name: currency.name,
       symbol: currency.symbol,
     }});
