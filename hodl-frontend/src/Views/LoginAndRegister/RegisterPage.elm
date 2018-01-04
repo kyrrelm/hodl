@@ -1,4 +1,4 @@
-module Views.RegisterPage exposing (..)
+module Views.LoginAndRegister.RegisterPage exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (class, placeholder, type_)
@@ -6,6 +6,7 @@ import Html.Events exposing (keyCode, on, onClick, onInput)
 import Json.Decode as Json
 import Models exposing (Model)
 import Msgs exposing (Msg)
+import Views.LoginAndRegister.Common exposing (..)
 
 
 view : Model -> Html Msg
@@ -26,14 +27,17 @@ view model =
                 , onInput Msgs.OnInputPassword
                 ]
                 []
-            , input
-                [ class "h1 space-bottom"
-                , type_ "password"
-                , placeholder "confirm password"
-                , onInput Msgs.OnInputPasswordRepeat
-                , onEnter Msgs.OnClickRegister
+            , div [ class "space-bottom" ]
+                [ input
+                    [ class "h1"
+                    , type_ "password"
+                    , placeholder "confirm password"
+                    , onInput Msgs.OnInputPasswordRepeat
+                    , onEnter Msgs.OnClickRegister
+                    ]
+                    []
+                , inputLoginErrorView model.inputLoginError
                 ]
-                []
             , button
                 [ class "h1 space-bottom-small"
                 , onClick Msgs.OnClickRegister

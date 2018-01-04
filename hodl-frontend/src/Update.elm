@@ -2,6 +2,7 @@ module Update exposing (..)
 
 import Commands exposing (..)
 import Http exposing (Error(..))
+import Json.Decode as Decode exposing (decodeString, field, string)
 import Models exposing (CurrencyOverview, Jwt, Model, Route)
 import Msgs exposing (Msg)
 import Navigation exposing (..)
@@ -147,10 +148,10 @@ update msg model =
             ( model, registerCmd ( model.inputEmail, model.inputPassword ) )
 
         Msgs.OnClickToRegisterPage ->
-            ( model, newUrl registerPath )
+            ( { model | inputLoginError = Nothing }, newUrl registerPath )
 
         Msgs.OnClickCancelRegister ->
-            ( model, newUrl loginPath )
+            ( { model | inputLoginError = Nothing }, newUrl loginPath )
 
         Msgs.OnLogin jwtResponse ->
             case jwtResponse of
@@ -282,7 +283,12 @@ maybeErrorMessage error =
 
         BadStatus responseError ->
             if responseError.status.code == 400 || responseError.status.code == 409 then
-                Just responseError.body
+                case Decode.decodeString (field "error" string) responseError.body of
+                    Err e ->
+                        Just "Noe gikk galt i kontakten med serveren"
+
+                    Ok errorText ->
+                        Just errorText
 
             else
                 Nothing

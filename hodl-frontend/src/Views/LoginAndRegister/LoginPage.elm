@@ -1,4 +1,4 @@
-module Views.LoginPage exposing (..)
+module Views.LoginAndRegister.LoginPage exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (class, placeholder, type_)
@@ -6,6 +6,7 @@ import Html.Events exposing (keyCode, on, onClick, onInput)
 import Json.Decode as Json
 import Models exposing (Model)
 import Msgs exposing (Msg)
+import Views.LoginAndRegister.Common exposing (..)
 
 
 view : Model -> Html Msg
@@ -42,26 +43,3 @@ view model =
                 [ text "Register" ]
             ]
         ]
-
-
-onEnter : Msg -> Attribute Msg
-onEnter msg =
-    let
-        isEnter code =
-            if code == 13 then
-                Json.succeed msg
-
-            else
-                Json.fail "not ENTER"
-    in
-    on "keydown" (Json.andThen isEnter keyCode)
-
-
-inputLoginErrorView : Maybe String -> Html Msg
-inputLoginErrorView maybeError =
-    case maybeError of
-        Nothing ->
-            text ""
-
-        Just error ->
-            div [ class "align-left" ] [ div [ class "validation-error" ] [ text error ] ]

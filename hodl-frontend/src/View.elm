@@ -4,10 +4,10 @@ import Html exposing (Html, div, text)
 import Models exposing (Model)
 import Msgs exposing (Msg)
 import Views.AddCurrencyPage
-import Views.LoginPage
+import Views.LoginAndRegister.LoginPage as LoginPage
+import Views.LoginAndRegister.RegisterPage as RegisterPage
 import Views.NewCurrencyPage
 import Views.PortfolioPage
-import Views.RegisterPage
 
 
 view : Model -> Html Msg
@@ -21,30 +21,30 @@ page model =
         Nothing ->
             case model.route of
                 Models.RegisterRoute ->
-                    Views.RegisterPage.view model
+                    RegisterPage.view model
 
                 Models.LoginRoute ->
-                    Views.LoginPage.view model
+                    LoginPage.view model
 
                 Models.PortfolioRoute ->
-                    Views.LoginPage.view model
+                    LoginPage.view model
 
                 Models.CurrencyRoute ->
-                    Views.LoginPage.view model
+                    LoginPage.view model
 
                 Models.AddCurrencyRoute symbol ->
-                    Views.LoginPage.view model
+                    LoginPage.view model
 
                 Models.NotFoundRoute ->
-                    Views.LoginPage.view model
+                    LoginPage.view model
 
         Just jwt ->
             case model.route of
                 Models.RegisterRoute ->
-                    Views.RegisterPage.view model
+                    RegisterPage.view model
 
                 Models.LoginRoute ->
-                    Views.LoginPage.view model
+                    LoginPage.view model
 
                 Models.PortfolioRoute ->
                     Views.PortfolioPage.view model
