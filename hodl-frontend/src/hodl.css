@@ -37,6 +37,8 @@ input, select, textarea{
     padding-left: 0.5rem;
 }
 
+input,textarea{width:100%;display:block}
+
 button {
     background-color: #4b4b4b;
     border: none;
@@ -136,7 +138,7 @@ button:active {
 }
 
 .search-input {
-    font-size: 200%;
+    font-size: 2rem;
     margin-bottom: 20px;
     margin-top: 20px;
     width: 100%;
@@ -242,5 +244,12 @@ button:active {
     .logout-button {
         top: 1.2rem;
         right: 1rem;
+    }
+}
+
+
+@media (max-width: 320px) {
+    html {
+        font-size: 0.8em !important;
     }
 }
