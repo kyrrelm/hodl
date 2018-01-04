@@ -130,7 +130,7 @@ update msg model =
                     ( { model | currencyToSave = RemoteData.Failure error }, Cmd.none )
 
         Msgs.OnInputEmail input ->
-            ( { model | inputEmail = input }, Cmd.none )
+            ( { model | inputEmail = String.toLower input }, Cmd.none )
 
         Msgs.OnInputPassword input ->
             ( { model | inputPassword = input }, Cmd.none )
