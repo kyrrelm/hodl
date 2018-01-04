@@ -145,7 +145,12 @@ update msg model =
             ( { model | jwt = Nothing }, deleteJwtToken () )
 
         Msgs.OnClickRegister ->
-            ( model, registerCmd ( model.inputEmail, model.inputPassword ) )
+            case validatePassword model of
+                Nothing ->
+                    ( model, registerCmd ( model.inputEmail, model.inputPassword ) )
+
+                Just error ->
+                    ( { model | inputLoginError = Just error }, Cmd.none )
 
         Msgs.OnClickToRegisterPage ->
             ( { model | inputLoginError = Nothing }, newUrl registerPath )
@@ -190,6 +195,18 @@ update msg model =
 
                         Models.NotFoundRoute ->
                             ( { model | jwt = Just jwt, inputEmail = "", inputPassword = "", inputPasswordRepeat = "" }, newUrl portfolioPath )
+
+
+validatePassword : Model -> Maybe String
+validatePassword model =
+    if String.length model.inputPassword < 10 then
+        Just "Password must be at least 10 characters"
+
+    else if model.inputPassword /= model.inputPasswordRepeat then
+        Just "Passwords must match"
+
+    else
+        Nothing
 
 
 currencyIsValid : Model -> Bool
