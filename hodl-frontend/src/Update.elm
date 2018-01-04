@@ -153,10 +153,10 @@ update msg model =
                     ( { model | inputLoginError = Just error }, Cmd.none )
 
         Msgs.OnClickToRegisterPage ->
-            ( { model | inputLoginError = Nothing }, newUrl registerPath )
+            ( { model | inputEmail = "", inputPassword = "", inputPasswordRepeat = "", inputLoginError = Nothing }, newUrl registerPath )
 
         Msgs.OnClickCancelRegister ->
-            ( { model | inputLoginError = Nothing }, newUrl loginPath )
+            ( { model | inputEmail = "", inputPassword = "", inputPasswordRepeat = "", inputLoginError = Nothing }, newUrl loginPath )
 
         Msgs.OnLogin jwtResponse ->
             case jwtResponse of
