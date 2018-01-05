@@ -54,7 +54,7 @@ list ( inputSearchCoins, coins ) =
             List.filter filter coins
     in
     div [ class "card-list" ]
-        [ input [ class "search-input", placeholder "Find coin", onInput Msgs.OnInputSearchCoin ] []
+        [ input [ class "search-input", placeholder "Search coins...", onInput Msgs.OnInputSearchCoin ] []
         , div [] (List.map symbolCard filteredCoins)
         ]
 

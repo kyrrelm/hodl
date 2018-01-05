@@ -36,7 +36,7 @@ module.exports.register =  (router) => {
         .reduce((tot, value) => Big(tot).plus(Big(value)), Big(0));
 
     if (balance.plus(amount).cmp(0) < 0) {
-      ctx.throw(400, `This will result in a negative balance of ${symbol}. Current balance: ${balance}, Attempted deposit: ${amount}`);
+      ctx.throw(400, `This will result in a negative balance of ${symbol}.`);
     }
 
     await ctx.app.portfolio.insert({userId, symbol, amount: amount.toString(), priceBtc: price_btc});
@@ -68,18 +68,18 @@ module.exports.register =  (router) => {
     const balanceOverview = {};
 
     //Add currencies to balanceOverview if currency balance !== 0
-    allSymbols.forEach(currency => {
+    allSymbols.forEach(symbol => {
       const balance = Big(portfolio
-          .filter(entry => entry.symbol === currency)
+          .filter(entry => entry.symbol === symbol)
           .map(entry => entry.amount)
           .reduce((tot, value) => Big(tot).plus(Big(value))));
       if (!balance.eq(0)) {
-        balanceOverview[currency] = { balance };
+        balanceOverview[symbol] = { balance };
       }
     });
 
 
-    const currencies = await ctx.app.currency.find({symbol: {$in: allSymbols}}).toArray();
+    const currencies = await ctx.app.currency.find({symbol: {$in: Object.keys(balanceOverview)}}).toArray();
 
     const overview = {
       usdBalance: 0,

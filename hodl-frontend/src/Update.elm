@@ -103,7 +103,7 @@ update msg model =
                                 False ->
                                     ( { model
                                         | inputCurrencyAmountError =
-                                            validatePositiveNumber model.inputCurrencyAmount
+                                            validateNumber model.inputCurrencyAmount
                                         , inputCurrencyPriceError =
                                             validateEmptyStringOrPositiveNumber model.inputCurrencyPrice
                                       }
@@ -213,7 +213,7 @@ currencyIsValid : Model -> Bool
 currencyIsValid model =
     validateEmptyStringOrPositiveNumber model.inputCurrencyPrice
         == Nothing
-        && validatePositiveNumber model.inputCurrencyAmount
+        && validateNumber model.inputCurrencyAmount
         == Nothing
 
 
@@ -225,6 +225,21 @@ validateEmptyStringOrPositiveNumber value =
 
         False ->
             validatePositiveNumber value
+
+
+validateNumber : String -> Maybe String
+validateNumber value =
+    case String.isEmpty value of
+        True ->
+            Just "Missing value"
+
+        False ->
+            case String.toFloat value of
+                Ok amount ->
+                    Nothing
+
+                Err e ->
+                    Just "That is not a number"
 
 
 validatePositiveNumber : String -> Maybe String
