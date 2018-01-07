@@ -269,6 +269,12 @@ button:active {
     }
 }
 
+@media (max-width: 310px) {
+    html {
+        font-size: 0.7em !important;
+    }
+}
+
 
 
 /* The switch - the box around the slider */
