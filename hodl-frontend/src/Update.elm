@@ -72,7 +72,7 @@ update msg model =
                     ( model, newUrl loginPath )
 
                 Just jwt ->
-                    ( { model | inputCurrencyPrice = "", inputCurrencyAmount = "", inputCurrencyAmountError = Nothing, shouldSetTotal = False }, Cmd.batch [ newUrl (addCurrencyPath symbol), fetchCurrencyCmd jwt symbol, fetchPortfolioCmd jwt ] )
+                    ( { model | inputCurrencyPrice = "", inputCurrencyAmount = "", inputCurrencyAmountError = Nothing, shouldSetBalance = False }, Cmd.batch [ newUrl (addCurrencyPath symbol), fetchCurrencyCmd jwt symbol, fetchPortfolioCmd jwt ] )
 
         Msgs.OnInputSearchCoin input ->
             ( { model | inputSearchCoins = input }, Cmd.none )
@@ -100,16 +100,11 @@ update msg model =
                             ( model, Cmd.none )
 
                         RemoteData.Success currency ->
-                            case model.shouldSetTotal of
+                            case model.shouldSetBalance of
                                 True ->
                                     case currencyIsValid model of
                                         True ->
-                                            case calculateAmountFromNewTotal model currency.symbol of
-                                                Ok amount ->
-                                                    ( { model | currencyToSave = RemoteData.Loading }, saveCurrencyCmd jwt currency amount model.inputCurrencyPrice )
-
-                                                Err e ->
-                                                    ( { model | inputCurrencyAmountError = Just "Ops, something whent wrong!" }, Cmd.none )
+                                            ( { model | currencyToSave = RemoteData.Loading }, saveCurrencyCmd jwt currency model.inputCurrencyAmount model.inputCurrencyPrice model.shouldSetBalance )
 
                                         False ->
                                             ( { model
@@ -124,7 +119,7 @@ update msg model =
                                 False ->
                                     case currencyIsValid model of
                                         True ->
-                                            ( { model | currencyToSave = RemoteData.Loading }, saveCurrencyCmd jwt currency model.inputCurrencyAmount model.inputCurrencyPrice )
+                                            ( { model | currencyToSave = RemoteData.Loading }, saveCurrencyCmd jwt currency model.inputCurrencyAmount model.inputCurrencyPrice model.shouldSetBalance )
 
                                         False ->
                                             ( { model
@@ -181,8 +176,8 @@ update msg model =
         Msgs.OnClickCancelRegister ->
             ( { model | inputPassword = "", inputPasswordRepeat = "", inputLoginError = Nothing }, newUrl loginPath )
 
-        Msgs.OnToggleSetTotal ->
-            ( { model | shouldSetTotal = not model.shouldSetTotal }, Cmd.none )
+        Msgs.OnToggleSetBalance ->
+            ( { model | shouldSetBalance = not model.shouldSetBalance }, Cmd.none )
 
         Msgs.OnLogin jwtResponse ->
             case jwtResponse of
@@ -218,16 +213,6 @@ update msg model =
                             ( { model | jwt = Just jwt, inputEmail = "", inputPassword = "", inputPasswordRepeat = "" }, newUrl portfolioPath )
 
 
-calculateAmountFromNewTotal : Model -> String -> Result String String
-calculateAmountFromNewTotal model symbol =
-    case maybeYourBalance model symbol of
-        Nothing ->
-            Err "Cant find balance"
-
-        Just balance ->
-            precisionSubtract model.inputCurrencyAmount balance
-
-
 validatePassword : Model -> Maybe String
 validatePassword model =
     if String.length model.inputPassword < 10 then
@@ -246,7 +231,7 @@ currencyIsValid model =
         == Nothing
         && validateNumber model.inputCurrencyAmount
         == Nothing
-        && (not model.shouldSetTotal || validatePositiveNumber model.inputCurrencyAmount == Nothing)
+        && (not model.shouldSetBalance || validatePositiveNumber model.inputCurrencyAmount == Nothing)
 
 
 validateEmptyStringOrPositiveNumber : String -> Maybe String
@@ -283,7 +268,7 @@ validatePositiveNumber value =
         False ->
             case String.toFloat value of
                 Ok amount ->
-                    case amount > 0 of
+                    case amount >= 0 of
                         True ->
                             Nothing
 

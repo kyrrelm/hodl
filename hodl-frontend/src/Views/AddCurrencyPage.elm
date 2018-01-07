@@ -46,10 +46,10 @@ currencyContainer ( model, currency ) =
             ]
         , yourBalanceView model currency.symbol
         , div [ class "card-content h2 space-bottom" ]
-            [ div [] [ text "Set new total" ]
+            [ div [] [ text "Set balance" ]
             , div []
                 [ label [ class "switch" ]
-                    [ input [ type_ "checkbox", onClick Msgs.OnToggleSetTotal ] []
+                    [ input [ type_ "checkbox", onClick Msgs.OnToggleSetBalance ] []
                     , span [ class "slider round" ] []
                     ]
                 ]

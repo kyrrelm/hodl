@@ -13,14 +13,19 @@ module.exports.register =  (router) => {
 
     const userId = ctx.state.user._id;
     const symbol = ctx.request.body.symbol.toUpperCase();
-    const amount = Big(ctx.request.body.amount);
+    const shouldSetBalance = typeof ctx.query.shouldSetBalance !== 'undefined';
     const price_btc = ctx.request.body.price_btc;
+    let amount = Big(ctx.request.body.amount);
 
     if(price_btc !== '' && !isNumber(price_btc)){
       ctx.throw(400, `field priceBtc must be of type string and contain a number or be an empty string`);
     }
     else if (Number(price_btc) < 0) {
       ctx.throw(400, `field priceBtc must be of type string and represent a number > 0 or an empty string`);
+    }
+
+    if(shouldSetBalance && amount.cmp(0) < 0) {
+      ctx.throw(400, `New balance must be positive`);
     }
 
     const currencyExists = await ctx.app.currency.find({symbol}).limit(1).hasNext();
@@ -35,12 +40,15 @@ module.exports.register =  (router) => {
         .map(entry => entry.amount)
         .reduce((tot, value) => Big(tot).plus(Big(value)), Big(0));
 
+    if(shouldSetBalance) {
+      amount = amount.minus(balance)
+    }
     if (balance.plus(amount).cmp(0) < 0) {
       ctx.throw(400, `This will result in a negative balance of ${symbol}.`);
     }
 
     await ctx.app.portfolio.insert({userId, symbol, amount: amount.toString(), priceBtc: price_btc});
-    
+
 
     ctx.body = {
       symbol,

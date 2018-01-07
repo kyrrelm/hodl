@@ -152,14 +152,14 @@ currencyDecoder =
         |> required "price_usd" Decode.string
 
 
-saveCurrencyCmd : Jwt -> CurrencyToSave -> String -> String -> Cmd Msg
-saveCurrencyCmd jwt currency amount priceBtc =
-    saveCurrencyRequest jwt currency amount priceBtc
+saveCurrencyCmd : Jwt -> CurrencyToSave -> String -> String -> Bool -> Cmd Msg
+saveCurrencyCmd jwt currency amount priceBtc shouldSetBalance =
+    saveCurrencyRequest jwt currency amount priceBtc shouldSetBalance
         |> Http.send Msgs.OnCurrencySave
 
 
-saveCurrencyRequest : Jwt -> CurrencyToSave -> String -> String -> Http.Request CurrencyBalance
-saveCurrencyRequest jwt currency amount btcPrice =
+saveCurrencyRequest : Jwt -> CurrencyToSave -> String -> String -> Bool -> Http.Request CurrencyBalance
+saveCurrencyRequest jwt currency amount btcPrice shouldSetBalance =
     Http.request
         { body =
             currencyEncoder ( currency, amount, btcPrice ) |> Http.jsonBody
@@ -167,14 +167,18 @@ saveCurrencyRequest jwt currency amount btcPrice =
         , headers = commonHeaders jwt
         , method = "POST"
         , timeout = Nothing
-        , url = saveCurrencyUrl
+        , url = saveCurrencyUrl shouldSetBalance
         , withCredentials = False
         }
 
 
-saveCurrencyUrl : String
-saveCurrencyUrl =
-    baseUrl ++ "portfolio/"
+saveCurrencyUrl : Bool -> String
+saveCurrencyUrl shouldSetBalance =
+    if shouldSetBalance then
+        baseUrl ++ "portfolio/?shouldSetBalance"
+
+    else
+        baseUrl ++ "portfolio/"
 
 
 portfolioEntryDecoder : Decode.Decoder CurrencyBalance
