@@ -45,15 +45,7 @@ currencyContainer ( model, currency ) =
                 ]
             ]
         , yourBalanceView model currency.symbol
-        , div [ class "card-content h2 space-bottom-small" ]
-            [ div [] [ text "Set balance" ]
-            , div []
-                [ label [ class "switch" ]
-                    [ input [ type_ "checkbox", onClick Msgs.OnToggleSetBalance ] []
-                    , span [ class "slider round" ] []
-                    ]
-                ]
-            ]
+        , setBalanceView model currency.symbol
         , div [ class "card-content space-bottom-small" ]
             [ div [ class "h2" ] [ text "Price (BTC)" ]
             , div []
@@ -86,6 +78,24 @@ yourBalanceView model symbol =
                 [ div [] [ text "Your balance" ]
                 , div []
                     [ div [] [ text balance ]
+                    ]
+                ]
+
+
+setBalanceView : Model -> String -> Html Msg
+setBalanceView model symbol =
+    case maybeYourBalance model symbol of
+        Nothing ->
+            text ""
+
+        Just balance ->
+            div [ class "card-content h2 space-bottom-small" ]
+                [ div [] [ text "Set balance" ]
+                , div []
+                    [ label [ class "switch" ]
+                        [ input [ type_ "checkbox", onClick Msgs.OnToggleSetBalance ] []
+                        , span [ class "slider round" ] []
+                        ]
                     ]
                 ]
 
