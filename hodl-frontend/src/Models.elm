@@ -17,6 +17,7 @@ type alias Model =
     , inputEmail : String
     , inputPassword : String
     , inputPasswordRepeat : String
+    , shouldSetTotal : Bool
     , inputLoginError : Maybe String
     , jwt : Maybe Jwt
     }
@@ -37,6 +38,7 @@ initialModel route =
     , inputEmail = ""
     , inputPassword = ""
     , inputPasswordRepeat = ""
+    , shouldSetTotal = False
     , inputLoginError = Nothing
     , jwt = Nothing
     }

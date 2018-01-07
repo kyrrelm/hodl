@@ -28,5 +28,6 @@ type Msg
     | OnClickRegister
     | OnClickToRegisterPage
     | OnClickCancelRegister
+    | OnToggleSetTotal
     | OnLogin (Result Http.Error Jwt)
     | ReceiveJwtToken (Maybe Jwt)

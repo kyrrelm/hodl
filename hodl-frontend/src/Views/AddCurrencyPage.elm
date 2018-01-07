@@ -6,6 +6,7 @@ import Html.Events exposing (onClick, onInput)
 import Models exposing (Coin, CurrencyOverview, CurrencyToSave, Model)
 import Msgs exposing (Msg)
 import RemoteData exposing (WebData)
+import Utils exposing (..)
 import Views.NavBar exposing (view)
 
 
@@ -43,12 +44,12 @@ currencyContainer ( model, currency ) =
                 [ div [] [ text ("$ " ++ currency.usd) ]
                 ]
             ]
-        , maybeYourHoldings model currency.symbol
+        , yourBalanceView model currency.symbol
         , div [ class "card-content h2 space-bottom" ]
             [ div [] [ text "Set new total" ]
             , div []
                 [ label [ class "switch" ]
-                    [ input [ type_ "checkbox" ] []
+                    [ input [ type_ "checkbox", onClick Msgs.OnToggleSetTotal ] []
                     , span [ class "slider round" ] []
                     ]
                 ]
@@ -74,6 +75,21 @@ currencyContainer ( model, currency ) =
         ]
 
 
+yourBalanceView : Model -> String -> Html Msg
+yourBalanceView model symbol =
+    case maybeYourBalance model symbol of
+        Nothing ->
+            text ""
+
+        Just balance ->
+            div [ class "card-content h2 space-bottom" ]
+                [ div [] [ text "Your balance" ]
+                , div []
+                    [ div [] [ text balance ]
+                    ]
+                ]
+
+
 inputCurrencyAmountErrorView : Maybe String -> Html Msg
 inputCurrencyAmountErrorView maybeError =
     case maybeError of
@@ -82,33 +98,3 @@ inputCurrencyAmountErrorView maybeError =
 
         Just error ->
             div [ class "align-right" ] [ div [ class "validation-error" ] [ text error ] ]
-
-
-maybeYourHoldings : Model -> String -> Html Msg
-maybeYourHoldings model symbol =
-    case model.portfolio of
-        RemoteData.NotAsked ->
-            text ""
-
-        RemoteData.Loading ->
-            text ""
-
-        RemoteData.Failure error ->
-            text ""
-
-        RemoteData.Success portfolio ->
-            let
-                isCorrectCurrency currencyOverview =
-                    currencyOverview.symbol == symbol
-            in
-            case List.head (List.filter isCorrectCurrency portfolio.currencies) of
-                Nothing ->
-                    text ""
-
-                Just currencyOverview ->
-                    div [ class "card-content h2 space-bottom" ]
-                        [ div [] [ text "Your holdings" ]
-                        , div []
-                            [ div [] [ text currencyOverview.balance ]
-                            ]
-                        ]
