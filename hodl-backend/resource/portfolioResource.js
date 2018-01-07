@@ -90,9 +90,11 @@ module.exports.register =  (router) => {
     const currencies = await ctx.app.currency.find({symbol: {$in: Object.keys(balanceOverview)}}).toArray();
 
     const overview = {
-      usdBalance: 0,
-      btcBalance: 0,
+      usdBalance: Big(0),
+      btcBalance: Big(0),
     };
+
+    let totalUsdBalance24hAgo = Big(0);
 
     Object.keys(balanceOverview).forEach(symbol => {
       const currency = currencies.find(currency => currency.symbol === symbol);
@@ -104,10 +106,16 @@ module.exports.register =  (router) => {
       overview.usdBalance = Big(overview.usdBalance).add(Big(usdBalance));
       overview.btcBalance = Big(overview.btcBalance).add(Big(btcBalance));
 
+      totalUsdBalance24hAgo = totalUsdBalance24hAgo.add(usdBalance.div(Big(1).add(Big(currency.percent_change_24h).div(100))));
+
       currency.usdBalance = usdBalance.toFixed(2);
       currency.btcBalance = btcBalance.toFixed(8);
 
     });
+
+   const increase =  overview.usdBalance.minus(totalUsdBalance24hAgo);
+
+    overview.percent_change_24h = increase.div(totalUsdBalance24hAgo).times(100).toFixed(2);
 
     overview.usdBalance = overview.usdBalance.toFixed(2);
     overview.btcBalance = overview.btcBalance.toFixed(8);
