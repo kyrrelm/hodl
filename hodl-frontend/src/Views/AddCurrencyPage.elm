@@ -38,14 +38,14 @@ currencyContainer : ( Model, CurrencyToSave ) -> Html Msg
 currencyContainer ( model, currency ) =
     div [ class "currencyContainer" ]
         [ div [ class "card-content h1 space-bottom" ] [ text currency.symbol ]
-        , div [ class "card-content h2 space-bottom" ]
+        , div [ class "card-content h2 space-bottom-small" ]
             [ div [] [ text "Current price" ]
             , div []
                 [ div [] [ text ("$ " ++ currency.usd) ]
                 ]
             ]
         , yourBalanceView model currency.symbol
-        , div [ class "card-content h2 space-bottom" ]
+        , div [ class "card-content h2 space-bottom-small" ]
             [ div [] [ text "Set balance" ]
             , div []
                 [ label [ class "switch" ]
@@ -54,7 +54,7 @@ currencyContainer ( model, currency ) =
                     ]
                 ]
             ]
-        , div [ class "card-content space-bottom" ]
+        , div [ class "card-content space-bottom-small" ]
             [ div [ class "h2" ] [ text "Price (BTC)" ]
             , div []
                 [ input [ class "h2 text-right input-field", type_ "text", placeholder "(optional) 0.00", onInput Msgs.OnInputCurrencyPrice ] []
@@ -82,7 +82,7 @@ yourBalanceView model symbol =
             text ""
 
         Just balance ->
-            div [ class "card-content h2 space-bottom" ]
+            div [ class "card-content h2 space-bottom-small" ]
                 [ div [] [ text "Your balance" ]
                 , div []
                     [ div [] [ text balance ]

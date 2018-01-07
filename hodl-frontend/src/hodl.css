@@ -119,8 +119,12 @@ button:active {
     position: relative;
 }
 
-.space-bottom-small {
+.space-bottom-xsmall {
     margin-bottom: 1rem;
+}
+
+.space-bottom-small {
+    margin-bottom: 2rem;
 }
 
 .space-bottom {

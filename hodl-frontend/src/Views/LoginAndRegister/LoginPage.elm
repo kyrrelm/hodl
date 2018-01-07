@@ -32,7 +32,7 @@ view model =
                 , inputLoginErrorView model.inputLoginError
                 ]
             , button
-                [ class "h1 space-bottom-small"
+                [ class "h1 space-bottom-xsmall"
                 , onClick Msgs.OnClickLogin
                 ]
                 [ text "Login" ]
