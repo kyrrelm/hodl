@@ -92,7 +92,7 @@ button:active {
 }
 
 .total-balance {
-    padding-left: 2rem;
+    padding-left: 1rem;
 }
 
 .container {
@@ -239,7 +239,8 @@ button:active {
     }
 }
 
-@media (max-width: 400px) {
+
+@media (max-width: 500px) {
     .nav {
         padding-left: 0;
         padding-right: 2rem;
@@ -255,8 +256,14 @@ button:active {
     }
 }
 
+@media (max-width: 400px) {
+    html {
+        font-size: 0.9em !important;
+    }
+}
 
-@media (max-width: 320px) {
+
+@media (max-width: 340px) {
     html {
         font-size: 0.8em !important;
     }

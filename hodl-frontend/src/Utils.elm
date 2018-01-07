@@ -1,7 +1,10 @@
 module Utils exposing (..)
 
 import Debug exposing (..)
+import Html exposing (..)
+import Html.Attributes exposing (class)
 import Models exposing (Coin, CurrencyOverview, CurrencyToSave, Model)
+import Msgs exposing (Msg)
 import RemoteData exposing (WebData)
 
 
@@ -28,3 +31,21 @@ maybeYourBalance model symbol =
 
                 Just currencyOverview ->
                     Just currencyOverview.balance
+
+
+percentWithColor : String -> Html Msg
+percentWithColor percent =
+    let
+        firstCharMaybe =
+            List.head (String.toList percent)
+    in
+    case firstCharMaybe of
+        Nothing ->
+            text ""
+
+        Just firstChar ->
+            if firstChar == '-' then
+                span [ class "red" ] [ text (percent ++ " %") ]
+
+            else
+                span [ class "green" ] [ text (percent ++ " %") ]

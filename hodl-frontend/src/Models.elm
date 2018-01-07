@@ -64,7 +64,8 @@ type alias CurrencyToSave =
 
 type alias Portfolio =
     { usdBalance : String
-    , eurBalance : String
+    , btcBalance : String
+    , percentChange24h : String
     , currencies : List CurrencyOverview
     }
 

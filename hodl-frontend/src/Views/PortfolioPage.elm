@@ -6,6 +6,7 @@ import Html.Events exposing (onClick)
 import Models exposing (CurrencyOverview, Model, Portfolio)
 import Msgs exposing (Msg)
 import RemoteData exposing (WebData)
+import Utils exposing (percentWithColor)
 import Views.NavBar exposing (view)
 
 
@@ -89,21 +90,3 @@ ratesContainer currency =
         , div [] [ text (currency.usdPrice ++ " $") ]
         , div [] [ text (currency.btcPrice ++ " ฿") ]
         ]
-
-
-percentWithColor : String -> Html Msg
-percentWithColor percent =
-    let
-        firstCharMaybe =
-            List.head (String.toList percent)
-    in
-    case firstCharMaybe of
-        Nothing ->
-            text ""
-
-        Just firstChar ->
-            if firstChar == '-' then
-                div [ class "red" ] [ text (percent ++ " %") ]
-
-            else
-                div [ class "green" ] [ text (percent ++ " %") ]

@@ -6,6 +6,7 @@ import Html.Events exposing (onClick)
 import Models exposing (CurrencyOverview, Model, Portfolio)
 import Msgs exposing (Msg)
 import RemoteData exposing (WebData)
+import Utils exposing (percentWithColor)
 
 
 view : Model -> Html Msg
@@ -36,7 +37,8 @@ navBar portfolio =
         , div [ class "p2" ]
             [ span []
                 [ span [] [ text (portfolio.usdBalance ++ " $") ]
-                , span [ class "total-balance" ] [ text (portfolio.eurBalance ++ " ฿") ]
+                , span [ class "total-balance" ] [ text (portfolio.btcBalance ++ " ฿") ]
+                , span [ class "total-balance" ] [ percentWithColor portfolio.percentChange24h ]
                 ]
             , div [ class "icon logout-button", onClick Msgs.OnClickLogout ] [ img [ src "./assets/logout2.svg" ] [] ]
             ]
