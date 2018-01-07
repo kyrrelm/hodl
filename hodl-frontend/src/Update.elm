@@ -71,7 +71,7 @@ update msg model =
                     ( model, newUrl loginPath )
 
                 Just jwt ->
-                    ( { model | inputCurrencyPrice = "", inputCurrencyAmount = "", inputCurrencyAmountError = Nothing }, Cmd.batch [ newUrl (addCurrencyPath symbol), fetchCurrencyCmd jwt symbol ] )
+                    ( { model | inputCurrencyPrice = "", inputCurrencyAmount = "", inputCurrencyAmountError = Nothing }, Cmd.batch [ newUrl (addCurrencyPath symbol), fetchCurrencyCmd jwt symbol, fetchPortfolioCmd jwt ] )
 
         Msgs.OnInputSearchCoin input ->
             ( { model | inputSearchCoins = input }, Cmd.none )
