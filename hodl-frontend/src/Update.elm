@@ -127,7 +127,7 @@ update msg model =
                     ( { model | jwt = Nothing }, newUrl loginPath )
 
                 False ->
-                    ( { model | currencyToSave = RemoteData.Failure error }, Cmd.none )
+                    ( { model | currencyToSave = RemoteData.Failure error, inputCurrencyAmountError = Just (errorMessage error) }, Cmd.none )
 
         Msgs.OnInputEmail input ->
             ( { model | inputEmail = String.toLower input }, Cmd.none )
@@ -164,12 +164,7 @@ update msg model =
                     ( { model | inputLoginError = Nothing }, storeJwtToken jwt )
 
                 Err error ->
-                    case maybeErrorMessage error of
-                        Nothing ->
-                            ( { model | inputLoginError = Just (toString error) }, Cmd.none )
-
-                        Just body ->
-                            ( { model | inputLoginError = Just body }, Cmd.none )
+                    ( { model | inputLoginError = Just (errorMessage error) }, Cmd.none )
 
         Msgs.ReceiveJwtToken maybeJwt ->
             case maybeJwt of
@@ -301,29 +296,33 @@ isUnauthorizedError error =
             False
 
 
-maybeErrorMessage : Http.Error -> Maybe String
-maybeErrorMessage error =
+errorMessage : Http.Error -> String
+errorMessage error =
+    let
+        standardError =
+            "Noe gikk galt i kontakten med serveren"
+    in
     case error of
         BadUrl string ->
-            Nothing
+            standardError
 
         Timeout ->
-            Nothing
+            standardError
 
         NetworkError ->
-            Nothing
+            standardError
 
         BadStatus responseError ->
             if responseError.status.code == 400 || responseError.status.code == 409 then
                 case Decode.decodeString (field "error" string) responseError.body of
                     Err e ->
-                        Just "Noe gikk galt i kontakten med serveren"
+                        standardError
 
                     Ok errorText ->
-                        Just errorText
+                        errorText
 
             else
-                Nothing
+                standardError
 
         BadPayload toString a ->
-            Nothing
+            standardError

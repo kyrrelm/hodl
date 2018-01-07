@@ -27,22 +27,6 @@ maybeCurrency model =
             text "Loading..."
 
         RemoteData.Success currency ->
-            maybeSavingCurrency ( model, currency )
-
-        RemoteData.Failure error ->
-            text (toString error)
-
-
-maybeSavingCurrency : ( Model, CurrencyToSave ) -> Html Msg
-maybeSavingCurrency ( model, currency ) =
-    case model.currencyToSave of
-        RemoteData.NotAsked ->
-            currencyContainer ( model, currency )
-
-        RemoteData.Loading ->
-            text "Loading..."
-
-        RemoteData.Success c ->
             currencyContainer ( model, currency )
 
         RemoteData.Failure error ->
@@ -66,7 +50,7 @@ currencyContainer ( model, currency ) =
                 , inputCurrencyAmountErrorView model.inputCurrencyPriceError
                 ]
             ]
-        , div [ class "card-content space-bottom" ]
+        , div [ class "card-content space-bottom-large" ]
             [ div [ class "h2" ] [ text "Amount" ]
             , div []
                 [ input [ class "h2 text-right input-field", type_ "text", placeholder "0.00", onInput Msgs.OnInputCurrencyAmount ] []
