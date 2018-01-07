@@ -52,10 +52,10 @@ precisionSubtract a b =
                     Ok (insertDot totalNumberOfDecimals (toString sumInt))
 
                 Err e ->
-                    Err ("1" ++ e)
+                    Err e
 
         Err e ->
-            Err ("2" ++ e)
+            Err e
 
 
 insertDot : Int -> String -> String
