@@ -264,8 +264,8 @@ button:active {
 .switch {
     position: relative;
     display: inline-block;
-    width: 60px;
-    height: 34px;
+    width: 4rem;
+    height: 2.2rem;
 }
 
 /* Hide default HTML checkbox */
@@ -287,10 +287,8 @@ button:active {
 .slider:before {
     position: absolute;
     content: "";
-    height: 34px;
-    width: 34px;
-    left: 0px;
-    bottom: 0px;
+    height: 2.2rem;
+    width: 2.2rem;
     background-color: #c6c8ca;
     -webkit-transition: .4s;
     transition: .4s;
@@ -305,9 +303,9 @@ input:focus + .slider {
 }
 
 input:checked + .slider:before {
-    -webkit-transform: translateX(26px);
-    -ms-transform: translateX(26px);
-    transform: translateX(26px);
+    -webkit-transform: translateX(1.8rem);
+    -ms-transform: translateX(1.8rem);
+    transform: translateX(1.8rem);
 }
 
 /* Rounded sliders */
