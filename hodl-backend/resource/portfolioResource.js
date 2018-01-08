@@ -66,6 +66,7 @@ module.exports.register =  (router) => {
       ctx.body = {
         usdBalance: "0",
         btcBalance: "0",
+        percent_change_24h: "0",
         currencies: []
       };
       return;
