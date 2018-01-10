@@ -1,0 +1,46 @@
+{
+  "hosting": {
+    "public": "dist",
+    "headers": [
+      {
+        "source" : "**/*.@(jpg|jpeg|gif|png|svg)",
+        "headers" : [
+          {
+            "key" : "Cache-Control",
+            "value" : "max-age=4000"
+          },
+          {
+            "key": "Access-Control-Allow-Origin",
+            "value": "*"
+          }
+        ]
+      },
+      {
+        "source" : "**/**.@(jpg|jpeg|gif|png|svg)",
+        "headers" : [
+          {
+            "key" : "Cache-Control",
+            "value" : "max-age=4000"
+          },
+          {
+            "key": "Access-Control-Allow-Origin",
+            "value": "*"
+          }
+        ]
+      },
+      {
+        "source" : "**/*.@(css|js|html)",
+        "headers" : [
+          {
+            "key" : "Cache-Control",
+            "value" : "max-age=no-cache"
+          },
+          {
+            "key": "Access-Control-Allow-Origin",
+            "value": "*"
+          }
+        ]
+      }
+    ]
+  }
+}
