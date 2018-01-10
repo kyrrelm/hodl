@@ -1,7 +1,7 @@
 module Views.PortfolioPage exposing (..)
 
 import Html exposing (..)
-import Html.Attributes exposing (class, href, placeholder, src, style)
+import Html.Attributes exposing (alt, class, height, href, placeholder, src, style, width)
 import Html.Events exposing (onClick)
 import Models exposing (CurrencyOverview, Model, Portfolio)
 import Msgs exposing (Msg)
@@ -59,7 +59,10 @@ list currencies =
 currencyCard : CurrencyOverview -> Html Msg
 currencyCard currency =
     div [ class "card", onClick (Msgs.OnClickAddCurrency currency.symbol) ]
-        [ div [ class "card-symbol h3" ] [ text (currency.name ++ " (" ++ currency.symbol ++ ")") ]
+        [ div [ class "card-symbol" ]
+            [ img [ src ("https://files.coinmarketcap.com/static/img/coins/32x32/" ++ String.toLower currency.name ++ ".png"), alt "", height 32, width 32 ] []
+            , div [ class "h3", style [ ( "alignSelf", "center" ), ( "marginLeft", "0.5rem" ) ] ] [ text (currency.name ++ " (" ++ currency.symbol ++ ")") ]
+            ]
         , currencyCardContent currency
         ]
 
@@ -74,11 +77,11 @@ currencyCardContent currency =
 
 balanceContainer : CurrencyOverview -> Html Msg
 balanceContainer currency =
-    div [ class "container-right-align", style [ ( "flexBasis", "8rem" ) ] ]
+    div [ class "container-left-align", style [ ( "flexBasis", "8rem" ), ( "marginLeft", "2.5rem" ) ] ]
         [ div [ class "empty-line" ] []
         , div [] [ text currency.balance ]
-        , div [] [ text (currency.usdBalance ++ " $") ]
-        , div [] [ text (currency.btcBalance ++ " ฿") ]
+        , div [] [ text ("$" ++ currency.usdBalance) ]
+        , div [] [ text ("฿ " ++ currency.btcBalance) ]
         ]
 
 

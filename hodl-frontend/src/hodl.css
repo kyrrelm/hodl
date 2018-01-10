@@ -188,6 +188,7 @@ button:active {
 }
 
 .card-symbol {
+    display: flex;
     font-weight: bold;
     padding-bottom: 0.5rem;
 }
