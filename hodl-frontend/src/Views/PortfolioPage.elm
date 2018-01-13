@@ -7,7 +7,7 @@ import Models exposing (CurrencyOverview, Model, Portfolio)
 import Msgs exposing (Msg)
 import RemoteData exposing (WebData)
 import String.Extra exposing (replace)
-import Utils exposing (percentWithColor)
+import Utils exposing (dollarWithColor, percentWithColor)
 import Views.NavBar exposing (view)
 
 
@@ -61,8 +61,8 @@ currencyCard : CurrencyOverview -> Html Msg
 currencyCard currency =
     div [ class "card", onClick (Msgs.OnClickAddCurrency currency.symbol) ]
         [ div [ class "card-symbol" ]
-            [ div [ class "h3", style [ ( "alignSelf", "center" ) ] ] [ text (currency.name ++ " (" ++ currency.symbol ++ ")") ]
-            , img [ src ("https://files.coinmarketcap.com/static/img/coins/32x32/" ++ replace " " "-" (String.toLower currency.name) ++ ".png"), alt "", height 32, width 32 ] []
+            [ div [ class "h3" ] [ text (currency.name ++ " (" ++ currency.symbol ++ ")") ]
+            , div [ class "h3" ] [ text currency.balance ]
             ]
         , currencyCardContent currency
         ]
@@ -78,11 +78,11 @@ currencyCardContent currency =
 
 balanceContainer : CurrencyOverview -> Html Msg
 balanceContainer currency =
-    div [ class "container-left-align", style [ ( "flexBasis", "8rem" ) ] ]
+    div [ class "container-right-align", style [ ( "flexBasis", "8rem" ) ] ]
         [ div [ class "empty-line" ] []
-        , div [] [ text currency.balance ]
-        , div [] [ text ("$ " ++ currency.usdBalance) ]
-        , div [] [ text ("฿ " ++ currency.btcBalance) ]
+        , dollarWithColor currency.usdBalance
+        , div [] [ text (currency.usdBalance ++ " $") ]
+        , div [] [ text (currency.btcBalance ++ " ฿") ]
         ]
 
 
