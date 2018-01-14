@@ -63,6 +63,7 @@ portfolioDecoder =
         Portfolio
         |> required "usdBalance" Decode.string
         |> required "btcBalance" Decode.string
+        |> required "totalUsdDiff24hAgo" Decode.string
         |> required "percent_change_24h" Decode.string
         |> required "currencies" (Decode.list currencyBalanceDecoder)
 
@@ -78,6 +79,7 @@ currencyBalanceDecoder =
         |> required "btcBalance" Decode.string
         |> required "price_usd" Decode.string
         |> required "price_btc" Decode.string
+        |> required "usdDiff24hAgo" Decode.string
         |> required "percent_change_24h" Decode.string
 
 

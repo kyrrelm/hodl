@@ -45,10 +45,10 @@ percentWithColor percent =
 
         Just firstChar ->
             if firstChar == '-' then
-                span [ class "red" ] [ text percent, div [ style [ ( "display", "inline-block" ), ( "width", "1rem" ), ( "textAlign", "right" ) ] ] [ text "%" ] ]
+                span [ class "red" ] [ text percent, div [ class "icon-separator" ] [ text "%" ] ]
 
             else
-                span [ class "green" ] [ text percent, div [ style [ ( "display", "inline-block" ), ( "width", "1rem" ), ( "textAlign", "right" ) ] ] [ text "%" ] ]
+                span [ class "green" ] [ text percent, div [ class "icon-separator" ] [ text "%" ] ]
 
 
 dollarWithColor : String -> Html Msg
@@ -63,7 +63,7 @@ dollarWithColor amount =
 
         Just firstChar ->
             if firstChar == '-' then
-                span [ class "red" ] [ text amount ]
+                span [ class "red" ] [ text amount]
 
             else
                 span [ class "green" ] [ text ("+" ++ amount) ]

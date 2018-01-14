@@ -107,8 +107,12 @@ module.exports.register =  (router) => {
       overview.usdBalance = Big(overview.usdBalance).add(Big(usdBalance));
       overview.btcBalance = Big(overview.btcBalance).add(Big(btcBalance));
 
-      totalUsdBalance24hAgo = totalUsdBalance24hAgo.add(usdBalance.div(Big(1).add(Big(currency.percent_change_24h).div(100))));
+      const usdBalance24hAgo = usdBalance.div(Big(1).add(Big(currency.percent_change_24h).div(100)));
 
+      totalUsdBalance24hAgo = totalUsdBalance24hAgo.add(usdBalance24hAgo);
+
+
+      currency.usdDiff24hAgo = usdBalance.minus(usdBalance24hAgo).toFixed(2);
       currency.usdBalance = usdBalance.toFixed(2);
       currency.btcBalance = btcBalance.toFixed(8);
 
@@ -118,6 +122,7 @@ module.exports.register =  (router) => {
 
     overview.percent_change_24h = increase.div(totalUsdBalance24hAgo).times(100).toFixed(2);
 
+    overview.totalUsdDiff24hAgo = overview.usdBalance.minus(totalUsdBalance24hAgo).toFixed(2);
     overview.usdBalance = overview.usdBalance.toFixed(2);
     overview.btcBalance = overview.btcBalance.toFixed(8);
 

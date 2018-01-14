@@ -80,9 +80,9 @@ balanceContainer : CurrencyOverview -> Html Msg
 balanceContainer currency =
     div [ class "container-right-align", style [ ( "flexBasis", "8rem" ) ] ]
         [ div [ class "empty-line" ] []
-        , dollarWithColor currency.usdBalance
-        , div [] [ text (currency.usdBalance ++ " $") ]
-        , div [] [ text (currency.btcBalance ++ " ฿") ]
+        , div [] [ dollarWithColor currency.usdDiff24hAgo, div [ class "icon-separator" ] [ text "" ] ]
+        , div [] [ text currency.usdBalance, div [ class "icon-separator" ] [ text "$" ] ]
+        , div [] [ text currency.btcBalance, div [ class "icon-separator" ] [ text "฿" ] ]
         ]
 
 

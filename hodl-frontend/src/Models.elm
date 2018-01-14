@@ -65,6 +65,7 @@ type alias CurrencyToSave =
 type alias Portfolio =
     { usdBalance : String
     , btcBalance : String
+    , totalUsdDiff24hAgo : String
     , percentChange24h : String
     , currencies : List CurrencyOverview
     }
@@ -84,6 +85,7 @@ type alias CurrencyOverview =
     , btcBalance : String
     , usdPrice : String
     , btcPrice : String
+    , usdDiff24hAgo : String
     , percentChange24h : String
     }
 
