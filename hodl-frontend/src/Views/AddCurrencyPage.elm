@@ -45,21 +45,21 @@ currencyContainer ( model, currency ) =
                 ]
             ]
         , yourBalanceView model currency.symbol
-        , setBalanceView model currency.symbol
-        , div [ class "card-content space-bottom-small" ]
+        , div [ class "card-content space-bottom-small space-top-large" ]
             [ div [ class "h2" ] [ text "Price (BTC)" ]
             , div []
                 [ input [ class "h2 text-right input-field", type_ "text", placeholder "(optional) 0.00", onInput Msgs.OnInputCurrencyPrice ] []
                 , inputCurrencyAmountErrorView model.inputCurrencyPriceError
                 ]
             ]
-        , div [ class "card-content space-bottom-large" ]
+        , div [ class "card-content space-bottom-small" ]
             [ div [ class "h2" ] [ text "Amount" ]
             , div []
                 [ input [ class "h2 text-right input-field", type_ "text", placeholder "0.00", onInput Msgs.OnInputCurrencyAmount ] []
                 , inputCurrencyAmountErrorView model.inputCurrencyAmountError
                 ]
             ]
+        , setBalanceView model currency.symbol
         , div [ class "align-right" ]
             [ button [ class "space-right", onClick Msgs.OnClickCurrencySave ] [ text "Save" ]
             , button [ onClick (Msgs.OnGoBack 1) ] [ text "Cancel" ]
@@ -90,7 +90,7 @@ setBalanceView model symbol =
 
         Just balance ->
             div [ class "card-content h2 space-bottom-small" ]
-                [ div [] [ text "Set balance" ]
+                [ div [] [ text "Set as new balance" ]
                 , div []
                     [ label [ class "switch" ]
                         [ input [ type_ "checkbox", onClick Msgs.OnToggleSetBalance ] []
