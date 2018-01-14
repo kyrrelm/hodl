@@ -52,7 +52,7 @@ navBar portfolio =
             [ span []
                 [ span [] [ text (portfolio.btcBalance ++ " ฿") ]
                 , span [ class "total-balance" ] [ text (portfolio.usdBalance ++ " $") ]
-                , span [ class ("total-balance " ++ color) ] [ text "(", dollarWithColor portfolio.totalUsdDiff24hAgo, text " | " ]
+                , span [ class color ] [ text " (", dollarWithColor portfolio.totalUsdDiff24hAgo, text " | " ]
                 , span [ class color ] [ percentWithColor portfolio.percentChange24h, text ")" ]
                 ]
             , div [ class "icon logout-button", onClick Msgs.OnClickLogout ] [ img [ src "./assets/logout2.svg" ] [] ]

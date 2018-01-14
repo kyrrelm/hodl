@@ -67,6 +67,7 @@ module.exports.register =  (router) => {
         usdBalance: "0",
         btcBalance: "0",
         percent_change_24h: "0",
+        totalUsdDiff24hAgo: "0",
         currencies: []
       };
       return;
