@@ -4,6 +4,7 @@ import Html exposing (Html, div, text)
 import Models exposing (Model)
 import Msgs exposing (Msg)
 import Views.AddCurrencyPage
+import Views.CurrencyPage
 import Views.LoginAndRegister.LoginPage as LoginPage
 import Views.LoginAndRegister.RegisterPage as RegisterPage
 import Views.NewCurrencyPage
@@ -29,10 +30,13 @@ page model =
                 Models.PortfolioRoute ->
                     LoginPage.view model
 
-                Models.CurrencyRoute ->
+                Models.NewCurrencyRoute ->
                     LoginPage.view model
 
                 Models.AddCurrencyRoute symbol ->
+                    LoginPage.view model
+
+                Models.CurrencyRoute symbol ->
                     LoginPage.view model
 
                 Models.NotFoundRoute ->
@@ -49,11 +53,14 @@ page model =
                 Models.PortfolioRoute ->
                     Views.PortfolioPage.view model
 
-                Models.CurrencyRoute ->
+                Models.NewCurrencyRoute ->
                     Views.NewCurrencyPage.view model
 
                 Models.AddCurrencyRoute symbol ->
                     Views.AddCurrencyPage.view model
+
+                Models.CurrencyRoute symbol ->
+                    Views.CurrencyPage.view model
 
                 Models.NotFoundRoute ->
                     notFoundView

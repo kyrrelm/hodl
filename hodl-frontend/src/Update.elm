@@ -10,7 +10,6 @@ import Ports exposing (..)
 import RemoteData exposing (WebData)
 import Result exposing (Result)
 import Routing exposing (..)
-import Utils exposing (..)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -23,6 +22,14 @@ update msg model =
 
                 False ->
                     ( { model | portfolio = response, jwt = Nothing }, newUrl loginPath )
+
+        Msgs.OnFetchTransactions response ->
+            case isAuthorized response of
+                True ->
+                    ( { model | transactions = response }, Cmd.none )
+
+                False ->
+                    ( { model | transactions = response, jwt = Nothing }, newUrl loginPath )
 
         Msgs.OnFetchSymbols response ->
             case isAuthorized response of
@@ -211,11 +218,14 @@ update msg model =
                         Models.PortfolioRoute ->
                             ( { model | jwt = Just jwt, inputEmail = "", inputPassword = "", inputPasswordRepeat = "" }, Cmd.batch [ fetchPortfolioCmd jwt, fetchSymbolsCmd jwt ] )
 
-                        Models.CurrencyRoute ->
+                        Models.NewCurrencyRoute ->
                             ( { model | jwt = Just jwt, inputEmail = "", inputPassword = "", inputPasswordRepeat = "" }, Cmd.batch [ fetchPortfolioCmd jwt, fetchSymbolsCmd jwt ] )
 
                         Models.AddCurrencyRoute symbol ->
                             ( { model | jwt = Just jwt, inputEmail = "", inputPassword = "", inputPasswordRepeat = "" }, Cmd.batch [ fetchPortfolioCmd jwt, fetchCurrencyCmd jwt symbol ] )
+
+                        Models.CurrencyRoute symbol ->
+                            ( { model | jwt = Just jwt }, Cmd.batch [ fetchPortfolioCmd jwt, fetchTransactionsCmd jwt symbol ] )
 
                         Models.NotFoundRoute ->
                             ( { model | jwt = Just jwt, inputEmail = "", inputPassword = "", inputPasswordRepeat = "" }, newUrl portfolioPath )

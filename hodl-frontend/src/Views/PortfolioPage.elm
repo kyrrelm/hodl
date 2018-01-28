@@ -6,7 +6,6 @@ import Html.Events exposing (onClick)
 import Models exposing (CurrencyOverview, Model, Portfolio)
 import Msgs exposing (Msg)
 import RemoteData exposing (WebData)
-import String.Extra exposing (replace)
 import Utils exposing (dollarWithColor, percentWithColor)
 import Views.NavBar exposing (view)
 

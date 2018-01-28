@@ -2,6 +2,7 @@ const fetch = require('node-fetch');
 const Big = require('big.js');
 const validate = require('../utils.js').validate;
 const isNumber = require('../utils.js').isNumber;
+const ObjectId = require('mongodb').ObjectID;
 
 
 const path = '/portfolio';
@@ -144,7 +145,11 @@ module.exports.register =  (router) => {
     }
 
     const symbols = symbolsString.split(',');
-    ctx.body = await ctx.app.portfolio.find({ userId, symbol: { $in: symbols}}).toArray();
+    let transactions = await ctx.app.portfolio.find({ userId, symbol: { $in: symbols}}).toArray();
+
+    transactions = transactions.map(transaction => Object.assign({}, transaction, {created: ObjectId(transaction._id).getTimestamp()}));
+
+    ctx.body = transactions;
   });
 
 };

@@ -5,6 +5,7 @@ import RemoteData exposing (WebData)
 
 type alias Model =
     { portfolio : WebData Portfolio
+    , transactions : WebData (List Transaction)
     , coins : WebData (List Coin)
     , currency : WebData CurrencyToSave
     , currencyToSave : WebData CurrencyBalance
@@ -26,6 +27,7 @@ type alias Model =
 initialModel : Route -> Model
 initialModel route =
     { portfolio = RemoteData.Loading
+    , transactions = RemoteData.Loading
     , coins = RemoteData.Loading
     , currency = RemoteData.NotAsked
     , currencyToSave = RemoteData.NotAsked
@@ -90,10 +92,19 @@ type alias CurrencyOverview =
     }
 
 
+type alias Transaction =
+    { symbol : String
+    , amount : String
+    , priceBtc : String
+    , created : String
+    }
+
+
 type Route
     = PortfolioRoute
-    | CurrencyRoute
+    | NewCurrencyRoute
     | AddCurrencyRoute String
+    | CurrencyRoute String
     | NotFoundRoute
     | LoginRoute
     | RegisterRoute

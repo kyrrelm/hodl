@@ -1,13 +1,14 @@
 module Msgs exposing (..)
 
 import Http
-import Models exposing (Coin, CurrencyBalance, CurrencyToSave, Jwt, Portfolio)
+import Models exposing (Coin, CurrencyBalance, CurrencyToSave, Jwt, Portfolio, Transaction)
 import Navigation exposing (Location)
 import RemoteData exposing (WebData)
 
 
 type Msg
     = OnFetchPortfolio (WebData Portfolio)
+    | OnFetchTransactions (WebData (List Transaction))
     | OnFetchSymbols (WebData (List Coin))
     | OnFetchCurrency (WebData CurrencyToSave)
     | OnLocationChange Location

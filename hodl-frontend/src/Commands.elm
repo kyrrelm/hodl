@@ -4,7 +4,7 @@ import Http exposing (Header)
 import Json.Decode as Decode
 import Json.Decode.Pipeline exposing (decode, required)
 import Json.Encode as Encode
-import Models exposing (Coin, CurrencyBalance, CurrencyOverview, CurrencyToSave, Jwt, Portfolio)
+import Models exposing (Coin, CurrencyBalance, CurrencyOverview, CurrencyToSave, Jwt, Portfolio, Transaction)
 import Msgs exposing (Msg)
 import RemoteData
 
@@ -66,6 +66,46 @@ portfolioDecoder =
         |> required "totalUsdDiff24hAgo" Decode.string
         |> required "percent_change_24h" Decode.string
         |> required "currencies" (Decode.list currencyBalanceDecoder)
+
+
+fetchTransactionsCmd : Jwt -> String -> Cmd Msg
+fetchTransactionsCmd jwt symbol =
+    fetchTransactionsRequest jwt symbol
+        |> RemoteData.sendRequest
+        |> Cmd.map Msgs.OnFetchTransactions
+
+
+fetchTransactionsRequest : Jwt -> String -> Http.Request (List Transaction)
+fetchTransactionsRequest jwt symbol =
+    Http.request
+        { body = Http.emptyBody
+        , expect = Http.expectJson transactionsDecoder
+        , headers = commonHeaders jwt
+        , method = "GET"
+        , timeout = Nothing
+        , url = fetchTransactionsUrl symbol
+        , withCredentials = False
+        }
+
+
+fetchTransactionsUrl : String -> String
+fetchTransactionsUrl symbol =
+    baseUrl ++ "portfolio/transactions?symbols=" ++ symbol
+
+
+transactionsDecoder : Decode.Decoder (List Transaction)
+transactionsDecoder =
+    Decode.list transactionDecoder
+
+
+transactionDecoder : Decode.Decoder Transaction
+transactionDecoder =
+    decode
+        Transaction
+        |> required "symbol" Decode.string
+        |> required "amount" Decode.string
+        |> required "priceBtc" Decode.string
+        |> required "created" Decode.string
 
 
 currencyBalanceDecoder : Decode.Decoder CurrencyOverview
