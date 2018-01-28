@@ -80,7 +80,7 @@ balanceContainer : CurrencyOverview -> Html Msg
 balanceContainer currency =
     div [ class "container-right-align", style [ ( "flexBasis", "8rem" ) ] ]
         [ div [ class "empty-line" ] []
-        , div [] [ dollarWithColor currency.usdDiff24hAgo, div [ class "icon-separator" ] [ text "" ] ]
+        , div [] [ dollarWithColor currency.usdDiff24hAgo ]
         , div [] [ text currency.usdBalance, div [ class "icon-separator" ] [ text "$" ] ]
         , div [] [ text currency.btcBalance, div [ class "icon-separator" ] [ text "฿" ] ]
         ]
@@ -91,6 +91,6 @@ ratesContainer currency =
     div [ class "container-right-align" ]
         [ div [ class "empty-line" ] []
         , percentWithColor currency.percentChange24h
-        , div [] [ text (currency.usdPrice ++ " $") ]
-        , div [] [ text (currency.btcPrice ++ " ฿") ]
+        , div [] [ text currency.usdPrice, div [ class "icon-separator" ] [ text "$" ] ]
+        , div [] [ text currency.btcPrice, div [ class "icon-separator" ] [ text "฿" ] ]
         ]

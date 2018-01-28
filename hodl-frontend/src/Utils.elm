@@ -1,6 +1,5 @@
 module Utils exposing (..)
 
-import Debug exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (class, style)
 import Models exposing (Coin, CurrencyOverview, CurrencyToSave, Model)
@@ -63,7 +62,7 @@ dollarWithColor amount =
 
         Just firstChar ->
             if firstChar == '-' then
-                span [ class "red" ] [ text amount]
+                span [ class "red" ] [ text amount, div [ class "icon-separator" ] [ text "$" ] ]
 
             else
-                span [ class "green" ] [ text ("+" ++ amount) ]
+                span [ class "green" ] [ text ("+" ++ amount), div [ class "icon-separator" ] [ text "$" ] ]
