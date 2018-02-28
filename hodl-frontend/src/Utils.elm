@@ -22,8 +22,8 @@ maybeYourBalance model symbol =
                 Just currencyOverview ->
                     Just currencyOverview.balance
 
-                _ ->
-                    Nothing
+        _ ->
+            Nothing
 
 
 percentWithColor : String -> Html Msg
