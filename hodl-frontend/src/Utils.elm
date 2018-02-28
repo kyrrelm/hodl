@@ -10,15 +10,6 @@ import RemoteData exposing (WebData)
 maybeYourBalance : Model -> String -> Maybe String
 maybeYourBalance model symbol =
     case model.portfolio of
-        RemoteData.NotAsked ->
-            Nothing
-
-        RemoteData.Loading ->
-            Nothing
-
-        RemoteData.Failure error ->
-            Nothing
-
         RemoteData.Success portfolio ->
             let
                 isCorrectCurrency currencyOverview =
@@ -30,6 +21,9 @@ maybeYourBalance model symbol =
 
                 Just currencyOverview ->
                     Just currencyOverview.balance
+
+                _ ->
+                    Nothing
 
 
 percentWithColor : String -> Html Msg

@@ -300,39 +300,20 @@ validatePositiveNumber value =
 isAuthorized : WebData a -> Bool
 isAuthorized response =
     case response of
-        RemoteData.NotAsked ->
-            True
-
-        RemoteData.Loading ->
-            True
-
-        RemoteData.Success portfolio ->
-            True
-
         RemoteData.Failure error ->
             not (isUnauthorizedError error)
+
+        _ ->
+            True
 
 
 isUnauthorizedError : Http.Error -> Bool
 isUnauthorizedError error =
     case error of
-        BadUrl string ->
-            False
-
-        Timeout ->
-            False
-
-        NetworkError ->
-            False
-
         BadStatus responseError ->
-            if responseError.status.code == 401 then
-                True
+            responseError.status.code == 401
 
-            else
-                False
-
-        BadPayload toString a ->
+        _ ->
             False
 
 

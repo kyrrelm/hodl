@@ -83,7 +83,7 @@ module.exports.register =  (router) => {
       const balance = Big(portfolio
           .filter(entry => entry.symbol === symbol)
           .map(entry => entry.amount)
-          .reduce((tot, value) => Big(tot).plus(Big(value))));
+          .reduce((tot, value) => Big(tot).plus(Big(value))), Big(0));
       if (!balance.eq(0)) {
         balanceOverview[symbol] = { balance };
       }

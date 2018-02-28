@@ -24,22 +24,7 @@ page model =
                 Models.RegisterRoute ->
                     RegisterPage.view model
 
-                Models.LoginRoute ->
-                    LoginPage.view model
-
-                Models.PortfolioRoute ->
-                    LoginPage.view model
-
-                Models.NewCurrencyRoute ->
-                    LoginPage.view model
-
-                Models.AddCurrencyRoute symbol ->
-                    LoginPage.view model
-
-                Models.CurrencyRoute symbol ->
-                    LoginPage.view model
-
-                Models.NotFoundRoute ->
+                _ ->
                     LoginPage.view model
 
         Just jwt ->
