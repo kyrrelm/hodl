@@ -18,7 +18,7 @@ module.exports.apiKey = () => {
 };
 
 module.exports.issueJwt =  (payload) => {
-  return jsonwebtoken.sign(payload, JWT_SECRET, { expiresIn: '10d'});
+  return jsonwebtoken.sign(payload, JWT_SECRET, {});
 };
 
 module.exports.jwt = () => jwtInstance;
